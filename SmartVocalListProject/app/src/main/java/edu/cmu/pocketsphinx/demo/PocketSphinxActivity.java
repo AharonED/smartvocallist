@@ -38,13 +38,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
@@ -62,25 +63,26 @@ public class PocketSphinxActivity extends Activity implements
     private static final String DIGITS_SEARCH = "digits";
     private static final String BOOLEAN_SEARCH = "boolean";
 
-    /* Keyword we are looking for to activate list run */
-    private static final String START_LIST = "start list";
+    private static final String LIST_OPTIONS = "list options";
 
     /* Used to handle permission request */
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
 
+    private static int currentQuestionIndex;
+
     private SpeechRecognizer recognizer;
-    private HashMap<String, Integer> captions;
+    private LinkedHashMap<String, Integer> questions;
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
 
-        // Prepare the data for UI
-        captions = new HashMap<>();
-        captions.put(START_LIST, R.string.kws_caption);
-        captions.put(OPTIONS_SEARCH, R.string.options_caption);
-        captions.put(DIGITS_SEARCH, R.string.digits_caption);
-        captions.put(BOOLEAN_SEARCH, R.string.boolean_caption);
+        // Prepare the questions list for UI
+        questions = new LinkedHashMap<>();
+        questions.put(OPTIONS_SEARCH, R.string.options_caption);
+        questions.put(DIGITS_SEARCH, R.string.digits_caption);
+        questions.put(BOOLEAN_SEARCH, R.string.boolean_caption);
+
         setContentView(R.layout.main);
         ((TextView) findViewById(R.id.caption_text))
                 .setText("Preparing the recognizer");
@@ -118,7 +120,7 @@ public class PocketSphinxActivity extends Activity implements
                 ((TextView) activityReference.get().findViewById(R.id.caption_text))
                         .setText("Failed to init recognizer " + result);
             } else {
-                activityReference.get().switchSearch(START_LIST);
+                activityReference.get().switchDisplayedQuestion(currentQuestionIndex);
             }
         }
     }
@@ -160,8 +162,13 @@ public class PocketSphinxActivity extends Activity implements
             return;
 
         String text = hypothesis.getHypstr();
-        if (text.equals(START_LIST))
-            switchSearch(OPTIONS_SEARCH);
+        if(text.equals("set")){
+            listenToAnswerForCurrentQuestion();
+        } else if(text.equals("next")){
+            nextQuestion();
+        } else if(text.equals("back")){
+            previousQuestion();
+        }
 
         ((TextView) findViewById(R.id.result_text)).setText(text);
     }
@@ -187,19 +194,52 @@ public class PocketSphinxActivity extends Activity implements
      */
     @Override
     public void onEndOfSpeech() {
-        if (recognizer.getSearchName().equals(OPTIONS_SEARCH))
-            switchSearch(DIGITS_SEARCH);
-        else if(recognizer.getSearchName().equals(DIGITS_SEARCH))
-            switchSearch(BOOLEAN_SEARCH);
-        else if(recognizer.getSearchName().equals(BOOLEAN_SEARCH))
-            switchSearch(START_LIST);
+        if (questions.keySet().contains(recognizer.getSearchName())) {
+            listenToKeyWords();
+        }
     }
 
-    private void switchSearch(String searchName) {
+    private void nextQuestion(){
+        currentQuestionIndex++;
+
+        if(currentQuestionIndex >= questions.size())
+            currentQuestionIndex = 0;
+
+        switchDisplayedQuestion(currentQuestionIndex);
+    }
+
+    private void previousQuestion(){
+        currentQuestionIndex--;
+
+        if(currentQuestionIndex < 0)
+            currentQuestionIndex = questions.size() - 1;
+
+        switchDisplayedQuestion(currentQuestionIndex);
+    }
+
+    private void switchDisplayedQuestion(int questionIndex) {
+        String searchName = (String)questions.keySet().toArray()[questionIndex];
+
+        if(questions.keySet().contains(searchName)){
+            String caption = getResources().getString(questions.get(searchName));
+            ((TextView) findViewById(R.id.caption_text)).setText(caption);
+        }
+
+        listenToKeyWords();
+    }
+
+    private void listenToKeyWords(){
         recognizer.stop();
-        recognizer.startListening(searchName);
-        String caption = getResources().getString(captions.get(searchName));
-        ((TextView) findViewById(R.id.caption_text)).setText(caption);
+        recognizer.startListening(LIST_OPTIONS);
+        ((TextView) findViewById(R.id.listOptions_text)).setVisibility(View.VISIBLE);
+    }
+
+    private void listenToAnswerForCurrentQuestion(){
+        String searchName = (String)questions.keySet().toArray()[currentQuestionIndex];
+
+        recognizer.stop();
+        recognizer.startListening(searchName, 5000);
+        ((TextView) findViewById(R.id.listOptions_text)).setVisibility(View.INVISIBLE);
     }
 
     private void setupRecognizer(File assetsDir) throws IOException {
@@ -219,8 +259,9 @@ public class PocketSphinxActivity extends Activity implements
           They are added here for demonstration. You can leave just one.
          */
 
-        // Create keyword-activation search.
-        recognizer.addKeyphraseSearch(START_LIST, START_LIST);
+        // Create multiple keyword-activation search
+        File keywords = new File(assetsDir, "keywords.gram");
+        recognizer.addKeywordSearch(LIST_OPTIONS, keywords);
 
         // Create grammar-based search for selection between demos
         File optionsGrammar = new File(assetsDir, "options.gram");
@@ -230,7 +271,6 @@ public class PocketSphinxActivity extends Activity implements
         File digitsGrammar = new File(assetsDir, "digits.gram");
         recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
 
-        // Create multiple keyword-activation search
         File booleanKeys = new File(assetsDir, "boolean.gram");
         recognizer.addGrammarSearch(BOOLEAN_SEARCH, booleanKeys);
     }
@@ -242,6 +282,6 @@ public class PocketSphinxActivity extends Activity implements
 
     @Override
     public void onTimeout() {
-        switchSearch(START_LIST);
+        listenToKeyWords();
     }
 }
