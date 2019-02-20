@@ -6,4 +6,5 @@
     <string name="kws_caption">To start demonstration say \"start list\".</string>
     <string name="options_caption">Say \"easy\", \"medium\" or \"hard\".</string>
     <string name="digits_caption">To try recognition of digits: say something like \"one, two, three..\"</string>
+    <string name="boolean_caption">Do you wear pants? (True or False)</string>
 </resources>
