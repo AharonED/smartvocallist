@@ -41,6 +41,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.speech.tts.TextToSpeech;
+import java.util.Locale;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,6 +74,8 @@ public class PocketSphinxActivity extends Activity implements
 
     private SpeechRecognizer recognizer;
     private LinkedHashMap<String, Integer> questions;
+    private TextToSpeech textToSpeech;
+    private Boolean isListOptionKeyUsed;
 
     @Override
     public void onCreate(Bundle state) {
@@ -93,6 +97,7 @@ public class PocketSphinxActivity extends Activity implements
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSIONS_REQUEST_RECORD_AUDIO);
             return;
         }
+
         // Recognizer initialization is a time-consuming and it involves IO,
         // so we execute it in async task
         new SetupTask(this).execute();
@@ -108,6 +113,7 @@ public class PocketSphinxActivity extends Activity implements
             try {
                 Assets assets = new Assets(activityReference.get());
                 File assetDir = assets.syncAssets();
+                activityReference.get().setupTextToSpeech();
                 activityReference.get().setupRecognizer(assetDir);
             } catch (IOException e) {
                 return e;
@@ -162,15 +168,23 @@ public class PocketSphinxActivity extends Activity implements
             return;
 
         String text = hypothesis.getHypstr();
-        if(text.equals("set")){
-            listenToAnswerForCurrentQuestion();
-        } else if(text.equals("next")){
-            nextQuestion();
-        } else if(text.equals("back")){
-            previousQuestion();
-        }
-
         ((TextView) findViewById(R.id.result_text)).setText(text);
+
+        // Detect a list option key use
+        if(recognizer.getSearchName().equals(LIST_OPTIONS)){
+            if(text.equals("set") || text.equals("next") || text.equals("back")){
+                isListOptionKeyUsed = true;
+                playTextToSpeechNow(text);
+            }
+
+            if(text.equals("set")){
+                listenToAnswerForCurrentQuestion();
+            } else if(text.equals("next")){
+                nextQuestion();
+            } else if(text.equals("back")){
+                previousQuestion();
+            }
+        }
     }
 
     /**
@@ -182,11 +196,17 @@ public class PocketSphinxActivity extends Activity implements
         if (hypothesis != null) {
             String text = hypothesis.getHypstr();
             makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+
+            // Play the result when it is not a list option key use
+            if(!isListOptionKeyUsed){
+                playTextToSpeechNow(text);
+            }
         }
     }
 
     @Override
     public void onBeginningOfSpeech() {
+        isListOptionKeyUsed = false;
     }
 
     /**
@@ -194,7 +214,7 @@ public class PocketSphinxActivity extends Activity implements
      */
     @Override
     public void onEndOfSpeech() {
-        if (questions.keySet().contains(recognizer.getSearchName())) {
+        if(!recognizer.getSearchName().equals(LIST_OPTIONS)) {
             listenToKeyWords();
         }
     }
@@ -223,6 +243,7 @@ public class PocketSphinxActivity extends Activity implements
         if(questions.keySet().contains(searchName)){
             String caption = getResources().getString(questions.get(searchName));
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
+            playTextToSpeechWhenDoneSpeaking(caption);
         }
 
         listenToKeyWords();
@@ -238,7 +259,7 @@ public class PocketSphinxActivity extends Activity implements
         String searchName = (String)questions.keySet().toArray()[currentQuestionIndex];
 
         recognizer.stop();
-        recognizer.startListening(searchName, 5000);
+        recognizer.startListening(searchName, 3000);
         ((TextView) findViewById(R.id.listOptions_text)).setVisibility(View.INVISIBLE);
     }
 
@@ -250,7 +271,7 @@ public class PocketSphinxActivity extends Activity implements
                 .setAcousticModel(new File(assetsDir, "en-us-ptm"))
                 .setDictionary(new File(assetsDir, "cmudict-en-us.dict"))
 
-                .setRawLogDir(assetsDir) // To disable logging of raw audio comment out this call (takes a lot of space on the device)
+         //       .setRawLogDir(assetsDir) // To disable logging of raw audio comment out this call (takes a lot of space on the device)
 
                 .getRecognizer();
         recognizer.addListener(this);
@@ -273,6 +294,31 @@ public class PocketSphinxActivity extends Activity implements
 
         File booleanKeys = new File(assetsDir, "boolean.gram");
         recognizer.addGrammarSearch(BOOLEAN_SEARCH, booleanKeys);
+    }
+
+    private void setupTextToSpeech(){
+        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    textToSpeech.setLanguage(Locale.US);
+                }
+            }
+        });
+    }
+
+    private void playTextToSpeechNow(String text){
+        if(textToSpeech == null)
+            return;
+
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    private void playTextToSpeechWhenDoneSpeaking(String text){
+        if(textToSpeech == null)
+            return;
+
+        textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null);
     }
 
     @Override
