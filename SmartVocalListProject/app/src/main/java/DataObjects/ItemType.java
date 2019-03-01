@@ -1,4 +1,7 @@
 package DataObjects;
 
-public class ItemType {
-}
+public enum ItemType {
+    Boolean,
+    Numeric,
+    Text,
+ }

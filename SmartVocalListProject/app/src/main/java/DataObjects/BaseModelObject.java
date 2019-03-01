@@ -17,6 +17,30 @@ import org.json.*;
 public class BaseModelObject {
 
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public Double getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Double lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
     public String id;
     public String tableName = "BaseModelObject";
     public Double lastUpdate;

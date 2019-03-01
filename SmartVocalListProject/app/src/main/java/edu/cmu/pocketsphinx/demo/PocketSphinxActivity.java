@@ -49,6 +49,9 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
 
+import DataObjects.BaseModelObject;
+import DataObjects.ChecklistItems;
+import DataObjects.Checklists;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
@@ -79,10 +82,19 @@ public class PocketSphinxActivity extends Activity implements
 
     @Override
     public void onCreate(Bundle state) {
+        //BaseModelObject obj = new BaseModelObject("111");
+        Checklists chk = new Checklists("222","Say a Number","You should say a number","",null);
+        ChecklistItems item =new ChecklistItems("222.1",1,"Say a number between one to six","", "",null);
+        item.getOptions().add("True");
+        item.getOptions().add("False");
+        chk.getChecklistsItems().add(item);
+
         super.onCreate(state);
 
         // Prepare the questions list for UI
         questions = new LinkedHashMap<>();
+        questions.put(chk.getName(), R.string.options_caption);
+
         questions.put(OPTIONS_SEARCH, R.string.options_caption);
         questions.put(DIGITS_SEARCH, R.string.digits_caption);
         questions.put(BOOLEAN_SEARCH, R.string.boolean_caption);

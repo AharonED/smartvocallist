@@ -3,12 +3,54 @@ package DataObjects;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class ChecklistItems extends BaseModelObject {
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     private String name;
     private String description;
     private String url;
     private int index;
+    private ItemType itemType=ItemType.Boolean;
+
+    public ArrayList<String> getOptions() {
+        return options;
+    }
+
+    public final ArrayList<String> options = new ArrayList<>();
+
+    public ItemType getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(ItemType itemType) {
+        this.itemType = itemType;
+    }
+
 
     public int getIndex() {
         return index;
