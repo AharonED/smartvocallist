@@ -93,7 +93,7 @@ public class PocketSphinxActivity extends Activity implements
 
         // Prepare the questions list for UI
         questions = new LinkedHashMap<>();
-        questions.put(chk.getName(), R.string.options_caption);
+        //questions.put(chk.getName(), R.string.options_caption);
 
         questions.put(OPTIONS_SEARCH, R.string.options_caption);
         questions.put(DIGITS_SEARCH, R.string.digits_caption);
