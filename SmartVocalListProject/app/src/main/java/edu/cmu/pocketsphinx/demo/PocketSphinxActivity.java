@@ -324,7 +324,7 @@ public class PocketSphinxActivity extends Activity implements
 
     private void listenToKeyWords(){
         recognizer.stop();
-        recognizer.startListening(OPTIONS_SEARCH);
+        recognizer.startListening(LIST_OPTIONS);
         ((TextView) findViewById(R.id.listOptions_text)).setVisibility(View.VISIBLE);
     }
 
