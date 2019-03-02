@@ -32,13 +32,18 @@ package edu.cmu.pocketsphinx.demo;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.speech.*;
+import android.media.VolumeShaper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.speech.tts.TextToSpeech;
@@ -53,6 +58,7 @@ import DataObjects.BaseModelObject;
 import DataObjects.ChecklistItems;
 import DataObjects.Checklists;
 import edu.cmu.pocketsphinx.Assets;
+import edu.cmu.pocketsphinx.Config;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
@@ -67,6 +73,7 @@ public class PocketSphinxActivity extends Activity implements
     private static final String OPTIONS_SEARCH = "options";
     private static final String DIGITS_SEARCH = "digits";
     private static final String BOOLEAN_SEARCH = "boolean";
+    private static final String MODEL_LANGUAGE = "NEW_NGRAM";
 
     private static final String LIST_OPTIONS = "list options";
 
@@ -78,7 +85,7 @@ public class PocketSphinxActivity extends Activity implements
     private SpeechRecognizer recognizer;
     private LinkedHashMap<String, Integer> questions;
     private TextToSpeech textToSpeech;
-    private Boolean isListOptionKeyUsed;
+    private Boolean isListOptionKeyUsed = false;
 
     @Override
     public void onCreate(Bundle state) {
@@ -99,9 +106,11 @@ public class PocketSphinxActivity extends Activity implements
         questions.put(DIGITS_SEARCH, R.string.digits_caption);
         questions.put(BOOLEAN_SEARCH, R.string.boolean_caption);
 
+
         setContentView(R.layout.main);
         ((TextView) findViewById(R.id.caption_text))
                 .setText("Preparing the recognizer");
+        ((TextView) findViewById(R.id.resulst_text)).setText("alex was here");
 
         // Check if user has given permission to record audio
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
@@ -113,6 +122,24 @@ public class PocketSphinxActivity extends Activity implements
         // Recognizer initialization is a time-consuming and it involves IO,
         // so we execute it in async task
         new SetupTask(this).execute();
+
+
+        final Button button = findViewById(R.id.button2);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                recognizer.stop();
+                //recognizer.getDecoder().dicS
+
+
+               //int type = recognizer.getDecoder().getLm(MODEL_LANGUAGE).addWord("twenty one",1);
+                recognizer.getDecoder().getLm(MODEL_LANGUAGE).addWord("twenty two",2);
+                recognizer.getDecoder().getLm(MODEL_LANGUAGE).addWord("two hundred",3);
+                recognizer.getDecoder().getLm(MODEL_LANGUAGE).addWord("alex was here",4);
+                recognizer.startListening(MODEL_LANGUAGE);
+
+                ((TextView) findViewById(R.id.recognition_results)).setText("Recording the language model");
+            }
+        });
     }
 
     private static class SetupTask extends AsyncTask<Void, Void, Exception> {
@@ -180,21 +207,30 @@ public class PocketSphinxActivity extends Activity implements
             return;
 
         String text = hypothesis.getHypstr();
-        ((TextView) findViewById(R.id.result_text)).setText(text);
+        if (text.length() > 0) {
+            CharSequence temp = ((TextView) findViewById(R.id.resulst_text)).getText();
+            ((TextView) findViewById(R.id.resulst_text)).setText(temp + text);
+            ((TextView) findViewById(R.id.resulst_text)).setText(text);
 
-        // Detect a list option key use
-        if(recognizer.getSearchName().equals(LIST_OPTIONS)){
-            if(text.equals("set") || text.equals("next") || text.equals("back")){
-                isListOptionKeyUsed = true;
-                playTextToSpeechNow(text);
+
+            // Detect a list option key use
+            if (recognizer.getSearchName().equals(LIST_OPTIONS) ) {
+                if (text.equals("set") || text.equals("next") || text.equals("back")) {
+                    isListOptionKeyUsed = true;
+                    playTextToSpeechNow(text);
+                }
+
+                if (text.equals("set")) {
+                    listenToAnswerForCurrentQuestion();
+                } else if (text.equals("next")) {
+                    nextQuestion();
+                } else if (text.equals("back")) {
+                    previousQuestion();
+                }
             }
-
-            if(text.equals("set")){
-                listenToAnswerForCurrentQuestion();
-            } else if(text.equals("next")){
-                nextQuestion();
-            } else if(text.equals("back")){
-                previousQuestion();
+            else if (recognizer.getSearchName().equals(MODEL_LANGUAGE))
+            {
+                playTextToSpeechNow(text);
             }
         }
     }
@@ -204,14 +240,39 @@ public class PocketSphinxActivity extends Activity implements
      */
     @Override
     public void onResult(Hypothesis hypothesis) {
-        ((TextView) findViewById(R.id.result_text)).setText("");
+        ((TextView) findViewById(R.id.resulst_text)).setText("");
         if (hypothesis != null) {
-            String text = hypothesis.getHypstr();
-            makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+            if (recognizer.getSearchName().equals(MODEL_LANGUAGE))
+            {
+               // hypothesis.setBestScore(100);
+                //hypothesis.setProb(100);
+                int tmp  = hypothesis.getProb();
+                double res = recognizer.getDecoder().getLogmath().exp(hypothesis.getProb());
+                double res2 = recognizer.getDecoder().getLogmath().exp(hypothesis.getBestScore());
+                String[] title = {"alex","twenty one","ten"};
+                //Config c = recognizer.getDecoder()..getConfig();
 
-            // Play the result when it is not a list option key use
-            if(!isListOptionKeyUsed){
-                playTextToSpeechNow(text);
+                int p = recognizer.getDecoder().getLm(MODEL_LANGUAGE).prob(title);
+                //String s = recognizer.getDecoder().getLm(MODEL_LANGUAGE).typeToStr(type);
+                double ltitles = recognizer.getDecoder().getLogmath().exp(p);
+
+
+                int high_score = hypothesis.getBestScore();
+                //makeText(getApplicationContext(), high_score, Toast.LENGTH_SHORT).show();
+                String text = String.valueOf(high_score);
+                // Play the result when it is not a list option key use
+                if (!isListOptionKeyUsed) {
+                    playTextToSpeechNow(text);
+                }
+            }
+            else {
+                String text = hypothesis.getHypstr();
+                makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+
+                // Play the result when it is not a list option key use
+                if (!isListOptionKeyUsed) {
+                    playTextToSpeechNow(text);
+                }
             }
         }
     }
@@ -263,7 +324,7 @@ public class PocketSphinxActivity extends Activity implements
 
     private void listenToKeyWords(){
         recognizer.stop();
-        recognizer.startListening(LIST_OPTIONS);
+        recognizer.startListening(OPTIONS_SEARCH);
         ((TextView) findViewById(R.id.listOptions_text)).setVisibility(View.VISIBLE);
     }
 
@@ -283,10 +344,17 @@ public class PocketSphinxActivity extends Activity implements
                 .setAcousticModel(new File(assetsDir, "en-us-ptm"))
                 .setDictionary(new File(assetsDir, "cmudict-en-us.dict"))
 
+
+
+
          //       .setRawLogDir(assetsDir) // To disable logging of raw audio comment out this call (takes a lot of space on the device)
 
                 .getRecognizer();
         recognizer.addListener(this);
+        recognizer.addNgramSearch(MODEL_LANGUAGE,new File(assetsDir,"0667.lm"));
+
+
+        //recognizer.
 
         /* In your application you might not need to add all those searches.
           They are added here for demonstration. You can leave just one.
@@ -295,6 +363,9 @@ public class PocketSphinxActivity extends Activity implements
         // Create multiple keyword-activation search
         File keywords = new File(assetsDir, "keywords.gram");
         recognizer.addKeywordSearch(LIST_OPTIONS, keywords);
+
+
+
 
         // Create grammar-based search for selection between demos
         File optionsGrammar = new File(assetsDir, "options.gram");
