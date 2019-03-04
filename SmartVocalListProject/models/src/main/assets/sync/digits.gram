@@ -4,6 +4,12 @@ grammar digits;
 
 <digit> = one | two | three | four | five | six | seven | eight | nine;
 <dozens> = twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety;
-<others> = zero | eleven | twelve | thirteen | fourteen | sixteen | seventeen | eighteen | nineteen;
+<elevenToNineteen> = zero | eleven | twelve | thirteen | fourteen | sixteen | seventeen | eighteen | nineteen;
+<dozensNumber> = <dozens> [<digit>] | <elevenToNineteen>;
+<hundreds> = <digit> hundred;
+<hundredsNumber> = <hundreds> | <hundreds> [and] [<dozensNumber>];
 
-public <digits> = <digit> | <dozens> <digit> | <others>;
+public <digits> = zero |
+                  <digit> |
+                  <dozensNumber> |
+                  <hundredsNumber>;
