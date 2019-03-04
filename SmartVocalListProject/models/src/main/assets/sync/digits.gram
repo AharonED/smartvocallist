@@ -2,15 +2,8 @@
 
 grammar digits;
 
-<digit> = zero  |
-          one   |
-          two   |
-          three |
-          four  |
-          five  |
-          six   |
-          seven |
-          eight |
-          nine  ;
+<digit> = one | two | three | four | five | six | seven | eight | nine;
+<dozens> = twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety;
+<others> = zero | eleven | twelve | thirteen | fourteen | sixteen | seventeen | eighteen | nineteen;
 
-public <digits> = <digit>;
+public <digits> = <digit> | <dozens> <digit> | <others>;
