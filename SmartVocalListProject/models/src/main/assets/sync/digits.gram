@@ -4,12 +4,12 @@ grammar digits;
 
 <digit> = one | two | three | four | five | six | seven | eight | nine;
 <dozens> = twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety;
-<elevenToNineteen> = zero | eleven | twelve | thirteen | fourteen | sixteen | seventeen | eighteen | nineteen;
-<dozensNumber> = <dozens> [<digit>] | <elevenToNineteen>;
+<elevenToNineteen> = eleven | twelve | thirteen | fourteen | sixteen | seventeen | eighteen | nineteen;
 <hundreds> = <digit> hundred;
-<hundredsNumber> = <hundreds> | <hundreds> [and] [<dozensNumber>];
+<thousands> = <tillHundredsNumber> thousand;
 
-public <digits> = zero |
-                  <digit> |
-                  <dozensNumber> |
-                  <hundredsNumber>;
+<upTo99> = <dozens> [<digit>] | <elevenToNineteen> | <digit>;
+<upTo999> = <hundreds> | <hundreds> [and] <upTo99> | <upTo99>;
+<upTo999999> = <thousands> [<upTo999>] | <upTo999>;
+
+public <digits> = zero | <upTo999999>;
