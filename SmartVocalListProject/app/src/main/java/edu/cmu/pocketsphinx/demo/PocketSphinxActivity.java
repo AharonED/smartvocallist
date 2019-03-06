@@ -286,7 +286,7 @@ public class PocketSphinxActivity extends Activity implements
 
             ((TextView) findViewById(R.id.result_text)).setText("");
             if (hypothesis != null) {
-                String text = hypothesis.getHypstr();
+                 text = hypothesis.getHypstr();
                 makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
 
                 // Play the result when it is not a list option key use
