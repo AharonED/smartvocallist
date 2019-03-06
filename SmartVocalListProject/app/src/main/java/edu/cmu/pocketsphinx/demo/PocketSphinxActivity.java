@@ -332,7 +332,7 @@ public class PocketSphinxActivity extends Activity implements
         String searchName = (String)questions.keySet().toArray()[currentQuestionIndex];
 
         recognizer.stop();
-        recognizer.startListening(searchName, 3000);
+        recognizer.startListening(searchName, 5000);
         ((TextView) findViewById(R.id.listOptions_text)).setVisibility(View.INVISIBLE);
     }
 
