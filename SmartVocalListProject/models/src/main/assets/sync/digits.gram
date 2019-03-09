@@ -12,4 +12,4 @@ grammar digits;
 <upTo999> = <hundreds> | <hundreds> [and] <upTo99> | <upTo99>;
 <upTo999999> = <thousands> [<upTo999>] | <upTo999>;
 
-public <digits> = zero | <upTo999999>;
+public <digits> = <upTo999999>;
