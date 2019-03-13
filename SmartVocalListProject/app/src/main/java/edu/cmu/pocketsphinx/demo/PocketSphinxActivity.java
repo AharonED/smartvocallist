@@ -42,6 +42,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.speech.tts.TextToSpeech;
+
+import java.io.FileOutputStream;
+import java.util.List;
 import java.util.Locale;
 
 import java.io.File;
@@ -49,7 +52,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
 
-import DataObjects.BaseModelObject;
 import DataObjects.ChecklistItems;
 import DataObjects.Checklists;
 import edu.cmu.pocketsphinx.Assets;
@@ -297,8 +299,10 @@ public class PocketSphinxActivity extends Activity implements
          */
 
         // Create multiple keyword-activation search
-        File keywords = new File(assetsDir, "keywords.gram");
-        recognizer.addKeywordSearch(LIST_OPTIONS, keywords);
+        File keywordsFile = new File(assetsDir, "keywords.gram");
+        //List<String> keywords = Arrays.asList("set", "next", "back", "test");
+        //createKeyWordsFile(keywordsFile, keywords);
+        recognizer.addKeywordSearch(LIST_OPTIONS, keywordsFile);
 
         // Create grammar-based search for selection between demos
         File optionsGrammar = new File(assetsDir, "options.gram");
@@ -345,5 +349,22 @@ public class PocketSphinxActivity extends Activity implements
     @Override
     public void onTimeout() {
         listenToKeyWords();
+    }
+
+    // Create keywords file with the given key words list
+    private void createKeyWordsFile(File file, List<String> keyWords) {
+        StringBuilder textForFile = new StringBuilder();
+
+        for (String keyWord : keyWords) {
+            textForFile.append(keyWord + "/1e-1/\n");
+        }
+
+        try {
+            FileOutputStream stream = new FileOutputStream(file);
+            stream.write(textForFile.toString().getBytes());
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
