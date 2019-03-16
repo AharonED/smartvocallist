@@ -4,6 +4,6 @@
     <string name="app_name">PocketSphinx Demo, Ronen was here</string>
     
     <string name="options_caption">Say \"easy\", \"medium\" or \"hard\".</string>
-    <string name="digits_caption">To try recognition of a digit: say something like \"one, two, three... eight, nine.\"</string>
+    <string name="digits_caption">To try recognition of a number: (1 to 999,999)</string>
     <string name="boolean_caption">Do you wear pants? (True or False)</string>
 </resources>
