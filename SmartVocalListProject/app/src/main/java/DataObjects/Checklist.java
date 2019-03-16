@@ -6,9 +6,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.SortedSet;
 
-public class Checklists extends BaseModelObject {
+public class Checklist extends BaseModelObject {
 
     private String name;
     private String description;
@@ -39,24 +38,28 @@ public class Checklists extends BaseModelObject {
 
     private String url;
 
-    public final ArrayList<ChecklistItems> checklistsItems = new ArrayList<ChecklistItems>();
+    public final ArrayList<ChecklistItem> checklistItems = new ArrayList<>();
+    public final ArrayList<String> Options = new ArrayList<>();
 
-    public ArrayList<ChecklistItems> getSorted() {
-        Collections.sort(checklistsItems, new Comparator<ChecklistItems>() {
+    public ArrayList<ChecklistItem> getSorted() {
+//As lambda
+//      Collections.sort(checklistItems, (i1, i2) -> (i2.getIndex() > i1.getIndex() ? 1 : -1));
+
+        Collections.sort(checklistItems, new Comparator<ChecklistItem>() {
             @Override
-            public int compare(ChecklistItems i1, ChecklistItems i2) {
+            public int compare(ChecklistItem i1, ChecklistItem i2) {
                 return (i2.getIndex() > i1.getIndex() ? 1 : -1);
             }
         });
-        return checklistsItems;
+        return checklistItems;
     }
 
-    public ArrayList<ChecklistItems> getChecklistsItems() {
-        return checklistsItems;
+    public ArrayList<ChecklistItem> getChecklistItems() {
+        return checklistItems;
     }
 
 
-    public Checklists(String _id, String name, String description, String url, Double lastUpdate) {
+    public Checklist(String _id, String name, String description, String url, Double lastUpdate) {
         super(_id);
 
 
@@ -88,7 +91,7 @@ public class Checklists extends BaseModelObject {
         }
 
         super.BaseModelObject(json);
-        super.tableName="Checklists";
+        super.tableName="Checklist";
 
     }
 

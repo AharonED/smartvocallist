@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ChecklistItems extends BaseModelObject {
+public class ChecklistItem extends BaseModelObject {
 
     public String getName() {
         return name;
@@ -61,7 +61,7 @@ public class ChecklistItems extends BaseModelObject {
     }
 
 
-    public ChecklistItems(String _id, int index, String name, String description, String url, Double lastUpdate) {
+    public ChecklistItem(String _id, int index, String name, String description, String url, Double lastUpdate) {
         super(_id);
 
 
@@ -95,7 +95,7 @@ public class ChecklistItems extends BaseModelObject {
         }
 
         super.BaseModelObject(json);
-        super.tableName="Checklists";
+        super.tableName="Checklist";
 
     }
 
@@ -113,6 +113,25 @@ public class ChecklistItems extends BaseModelObject {
             e.printStackTrace();
         }
         return json;
+    }
+    public String toGrammar() {
+        String Gram="#JSGF V1.0;\n" +
+                "\n" +
+                "grammar menu;\n" +
+                "\n" +
+                "public <item> = back | next | set | skip | read |  ";
+
+        String opt=null;
+
+        for (int i=0;i<options.size();i++) {
+            opt=options.get(i);
+            Gram = Gram + opt ;
+            if(i<options.size()-1)
+               Gram = Gram + " | ";
+        }
+        Gram = Gram + ";\n";
+
+        return Gram;
     }
 
 }

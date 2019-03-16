@@ -1,18 +1,48 @@
 package Dialogs;
 
+import android.annotation.SuppressLint;
+
 import java.util.ArrayList;
+import java.util.function.Function;
 
-import DataObjects.ChecklistItems;
+public class DialogFlow<T> {
 
-public class DialogFlow {
-    public final ArrayList<String> items = new ArrayList<>();
+
+    public interface FunctionalInterface {
+        public void execute();
+    }
+
+    public interface SetInterface {
+        public boolean set(String value);
+    }
+
+    public  ArrayList<T> items = new ArrayList<>();
     public int step=0;
+    public String keywords;
 
     public DialogFlow()
     {
+        keywords="set/1e-1/\n" +
+                "start/1e-1/\n" +
+                "previous/1e-1/\n" +
+                "next/1e-1/\n" +
+                "back/1e-1/\n" +
+                "restart/1e-1/\n" +
+                "skip/1e-1/\n" +
+                "options/1e-1/\n" +
+                "read/1e-1/";
 
     }
 
+    public FunctionalInterface execute;
+    public FunctionalInterface read;
+    public FunctionalInterface eof;
+    public FunctionalInterface sof;
+    public SetInterface set;
+    public FunctionalInterface readOption;
+    public FunctionalInterface readItem;
+
+/*
     public void execute()
     {
 
@@ -35,6 +65,7 @@ public class DialogFlow {
     public void readOptions()
     {
     }
+*/
 
 //-------------------------------------------//
     //Navigation//
@@ -42,21 +73,21 @@ public class DialogFlow {
     public int start()
     {
         step=0;
-        execute();
+        execute.execute();
         return step;
     }
 
     public int next()
     {
-        if(step<items.size())
+        if(step<items.size()-1)
         {
             step++;
-            execute();
+            execute.execute();
         }
-        else if(step>=items.size())
+        else if(step>=items.size()-1)
         {
-            step=-1;
-            EOF();
+            //step=items.size()-1;
+            eof.execute();
         }
         return step;
     }
@@ -66,12 +97,12 @@ public class DialogFlow {
         if(step>0)
         {
             step--;
-            execute();
+            execute.execute();
         }
         else if(step<=0)
         {
-            step=-1;
-            SOF();
+            step=0;
+            sof.execute();
         }
         return step;
     }
@@ -82,6 +113,7 @@ public class DialogFlow {
     }
 
 
+    @SuppressLint("NewApi")
     public void setCommand(String command, String value)
     {
         switch (command)
@@ -90,6 +122,7 @@ public class DialogFlow {
                 start();
                 break;
             case "previous":
+            case "back":
                 previous();
                 break;
             case "next":
@@ -102,14 +135,16 @@ public class DialogFlow {
                 skip();
                 break;
             case "set":
-                set(value);
+                set.set(value);
                 break;
             case "read":
-            case "option":
-                readOptions();
+                readItem.execute();
+                break;
+            case "options":
+                readOption.execute();
                 break;
             default:
-                    start();
+                    //start();
 
         }
     }
