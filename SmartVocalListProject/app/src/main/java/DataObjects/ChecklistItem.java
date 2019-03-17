@@ -3,7 +3,11 @@ package DataObjects;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChecklistItem extends BaseModelObject {
 
@@ -134,4 +138,13 @@ public class ChecklistItem extends BaseModelObject {
         return Gram;
     }
 
+    public String toKeywords(){
+        StringBuilder textForFile = new StringBuilder();
+
+        for (String keyWord : options) {
+            textForFile.append(keyWord + "/1e-1/\n");
+        }
+
+        return textForFile.toString();
+    }
 }

@@ -2,11 +2,15 @@ package Dialogs;
 
 import android.annotation.SuppressLint;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.function.Function;
 
-public class DialogFlow<T> {
+import DataObjects.ChecklistItem;
 
+public class DialogFlow<T extends ChecklistItem> {
 
     public interface FunctionalInterface {
         public void execute();
@@ -19,6 +23,7 @@ public class DialogFlow<T> {
     public  ArrayList<T> items = new ArrayList<>();
     public int step=0;
     public String keywords;
+    public String Answers;
 
     public DialogFlow()
     {
@@ -30,7 +35,7 @@ public class DialogFlow<T> {
                 "restart/1e-1/\n" +
                 "skip/1e-1/\n" +
                 "options/1e-1/\n" +
-                "read/1e-1/";
+                "read/1e-1/\n";
 
     }
 
@@ -146,6 +151,26 @@ public class DialogFlow<T> {
             default:
                     //start();
 
+        }
+    }
+
+    // Create keywords file
+    public void createKeyWordsFile(File file) {
+        StringBuilder textForFile = new StringBuilder();
+        textForFile.append(keywords);
+
+        for (ChecklistItem checklistItem : items) {
+            textForFile.append(checklistItem.toKeywords());
+        }
+
+        Answers = textForFile.toString();
+
+        try {
+            FileOutputStream stream = new FileOutputStream(file);
+            stream.write(textForFile.toString().getBytes());
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

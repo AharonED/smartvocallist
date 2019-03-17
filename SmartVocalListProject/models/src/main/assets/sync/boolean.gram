@@ -1,8 +1,0 @@
-#JSGF V1.0;
-
-grammar digits;
-
-<digit> = true  |
-          false  ;
-
-public <digits> = <digit>;
