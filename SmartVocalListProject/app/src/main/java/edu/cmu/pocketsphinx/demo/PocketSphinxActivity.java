@@ -31,7 +31,6 @@
 package edu.cmu.pocketsphinx.demo;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -39,17 +38,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.speech.tts.TextToSpeech;
+
+import java.util.HashMap;
 import java.util.Locale;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.LinkedHashMap;
 
 import DataObjects.ChecklistItem;
 import DataObjects.Checklist;
@@ -67,21 +65,18 @@ public class PocketSphinxActivity extends Activity implements
         RecognitionListener {
 
     /* Named searches allow to quickly reconfigure the decoder */
-    //private static final String OPTIONS_SEARCH = "options";
     //private static final String DIGITS_SEARCH = "digits";
-    //private static final String BOOLEAN_SEARCH = "boolean";
-
     private static final String KEY_WORDS_SEARCH = "KEY_WORDS_SEARCH";
 
     /* Used to handle permission request */
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
 
     private SpeechRecognizer recognizer;
+    private HashMap<String, String> textToSpeechMap;
     private TextToSpeech textToSpeech;
     private Checklist chk = null;
     private DialogFlow<ChecklistItem> dlg = null;
 
-    @SuppressLint("NewApi")
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -89,7 +84,6 @@ public class PocketSphinxActivity extends Activity implements
         dlg = new DialogFlow<>();
         Model mdl = new Model();
         chk = mdl.getChecklists();
-
         dlg.items=chk.checklistItems;
 
         dlg.execute = ()-> {
@@ -123,7 +117,8 @@ public class PocketSphinxActivity extends Activity implements
             this.dlg.execute.execute();
         };
 
-        //dlg.start();
+        textToSpeechMap = new HashMap<String, String>();
+        textToSpeechMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID");
 
         setContentView(R.layout.main);
         ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
@@ -252,31 +247,14 @@ public class PocketSphinxActivity extends Activity implements
     public void onEndOfSpeech() {
     }
 
-    private void switchDisplayedQuestion(int questionIndex) {
-/*
-        String searchName = (String)questions.keySet().toArray()[questionIndex];
-
-        if(questions.keySet().contains(searchName)){
-             getResources().getString(questions.get(searchName));
-            ((TextView) findViewById(R.id.caption_text)).setText(caption);
-            playTextToSpeechWhenDoneSpeaking(caption);
-        }
-*/
-
-        dlg.execute.execute();
-    }
-
     private void listenToKeyWords(){
-        recognizer.stop();
-        recognizer.startListening(KEY_WORDS_SEARCH);
+        if(!textToSpeech.isSpeaking()){
+            recognizer.stop();
+            recognizer.startListening(KEY_WORDS_SEARCH);
+        }else{
+            new listenToKeyWordsWaiter().execute();
+        }
     }
-
-//    private void listenToAnswerForCurrentQuestion(){
-////        //String searchName = (String)questions.keySet().toArray()[currentQuestionIndex];
-////        recognizer.stop();
-////        recognizer.startListening(dlg.items.get(dlg.step).getName(), 3000);
-////        ((TextView) findViewById(R.id.listOptions_text)).setVisibility(View.INVISIBLE);
-////    }
 
     private void setupRecognizer(File assetsDir) throws IOException {
         // The recognizer can be configured to perform multiple searches
@@ -303,12 +281,26 @@ public class PocketSphinxActivity extends Activity implements
     }
 
     private void setupTextToSpeech(){
-        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(status != TextToSpeech.ERROR) {
-                    textToSpeech.setLanguage(Locale.US);
-                }
+        textToSpeech = new TextToSpeech(getApplicationContext(), status -> {
+            if(status != TextToSpeech.ERROR) {
+                textToSpeech.setLanguage(Locale.US);
+//                textToSpeech.setOnUtteranceCompletedListener(utteranceId ->
+//                    recognizer.startListening(KEY_WORDS_SEARCH)
+//                );
+//                textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+//                    @Override
+//                    public void onDone(String utteranceId) {
+//                        recognizer.startListening(KEY_WORDS_SEARCH);
+//                    }
+//
+//                    @Override
+//                    public void onError(String utteranceId) {
+//                    }
+//
+//                    @Override
+//                    public void onStart(String utteranceId) {
+//                    }
+//                });
             }
         });
     }
@@ -317,14 +309,16 @@ public class PocketSphinxActivity extends Activity implements
         if(textToSpeech == null)
             return;
 
-        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+        recognizer.stop();
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, textToSpeechMap);
     }
 
     private void playTextToSpeechWhenDoneSpeaking(String text){
         if(textToSpeech == null)
             return;
 
-        textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, null);
+        recognizer.stop();
+        textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, textToSpeechMap);
     }
 
     @Override
@@ -335,5 +329,20 @@ public class PocketSphinxActivity extends Activity implements
     @Override
     public void onTimeout() {
         listenToKeyWords();
+    }
+
+    class listenToKeyWordsWaiter extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            while (textToSpeech.isSpeaking()){
+                try{Thread.sleep(200);}catch (Exception e){}
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            listenToKeyWords();
+        }
     }
 }
