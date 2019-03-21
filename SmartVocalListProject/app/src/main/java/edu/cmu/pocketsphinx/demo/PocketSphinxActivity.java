@@ -34,8 +34,11 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
@@ -51,6 +54,7 @@ import java.lang.ref.WeakReference;
 
 import DataObjects.ChecklistItem;
 import DataObjects.Checklist;
+import DataObjects.ItemType;
 import Dialogs.DialogFlow;
 import Model.Model;
 import edu.cmu.pocketsphinx.Assets;
@@ -86,12 +90,41 @@ public class PocketSphinxActivity extends Activity implements
         chk = mdl.getChecklists();
         dlg.items=chk.checklistItems;
 
-        dlg.execute = ()-> {
-            String text =  this.dlg.items.get(this.dlg.step).getName();
+        dlg.execute = (item)-> {
+            ChecklistItem itm =((ChecklistItem)item);
+            String text = itm.getName(); //this.dlg.items.get(this.dlg.step).getName();
             String caption = "Step Number " + dlg.step + ". " + text;
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
             playTextToSpeechWhenDoneSpeaking(caption);
+
+//            if(itm.getItemType() == ItemType.Numeric) {
+//                // Create grammar-based search for digit recognition
+//                Assets assets = null;
+//                try {
+//                    assets = new Assets(this.getApplicationContext());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                File digitsGrammar = null;
+//                try {
+//                    digitsGrammar = new File(assets.syncAssets(), "digits.gram");
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                recognizer.addGrammarSearch("digits", digitsGrammar);
+//
+//                if(!textToSpeech.isSpeaking()){
+//                    recognizer.stop();
+//                    recognizer.startListening("digits");
+//                }else{
+//                    new listenToKeyWordsWaiter().execute();
+//                }
+//
+//            }
+//            else {
             listenToKeyWords();
+//            }
         };
 
         dlg.set = value -> {
@@ -99,22 +132,22 @@ public class PocketSphinxActivity extends Activity implements
             return true;
         };
 
-        dlg.sof  = ()->{
+        dlg.sof  = (item)->{
             String caption ="This is the first item";
             playTextToSpeechWhenDoneSpeaking(caption);
             makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
             listenToKeyWords();
         };
 
-        dlg.eof  = ()->{
+        dlg.eof  = (item)->{
             String caption = "This is the last item";
             playTextToSpeechWhenDoneSpeaking(caption);
             makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
             listenToKeyWords();
         };
 
-        dlg.readItem = ()->{
-            this.dlg.execute.execute();
+        dlg.readItem = (item)->{
+            this.dlg.execute.execute(((ChecklistItem)item));
         };
 
         textToSpeechMap = new HashMap<String, String>();
@@ -164,7 +197,7 @@ public class PocketSphinxActivity extends Activity implements
                 ((TextView) activityReference.get().findViewById(R.id.caption_text))
                         .setText("Failed to init recognizer " + result);
             } else {
-                activityReference.get().dlg.execute.execute();
+                activityReference.get().dlg.setCommand("read","");
             }
         }
     }
@@ -276,31 +309,45 @@ public class PocketSphinxActivity extends Activity implements
         recognizer.addKeywordSearch(KEY_WORDS_SEARCH, keywords);
 
         // Create grammar-based search for digit recognition
-  //      File digitsGrammar = new File(assetsDir, "digits.gram");
-  //      recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
+        //      File digitsGrammar = new File(assetsDir, "digits.gram");
+        //      recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
     }
 
+    //   @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
     private void setupTextToSpeech(){
         textToSpeech = new TextToSpeech(getApplicationContext(), status -> {
             if(status != TextToSpeech.ERROR) {
+
                 textToSpeech.setLanguage(Locale.US);
-//                textToSpeech.setOnUtteranceCompletedListener(utteranceId ->
-//                    recognizer.startListening(KEY_WORDS_SEARCH)
-//                );
-//                textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-//                    @Override
-//                    public void onDone(String utteranceId) {
-//                        recognizer.startListening(KEY_WORDS_SEARCH);
-//                    }
-//
-//                    @Override
-//                    public void onError(String utteranceId) {
-//                    }
-//
-//                    @Override
-//                    public void onStart(String utteranceId) {
-//                    }
-//                });
+
+                //******* That cause the listener to listen himself agan!!! :-(
+                String caption = chk.getName();
+                playTextToSpeechWhenDoneSpeaking(caption);
+                dlg.setCommand("read","");
+                playTextToSpeechWhenDoneSpeaking(dlg.items.get(dlg.step).getName());
+
+                textToSpeech.setOnUtteranceCompletedListener(utteranceId ->
+                        recognizer.startListening(KEY_WORDS_SEARCH)
+
+                );
+ /*
+                textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onDone(String utteranceId) {
+                       // recognizer.startListening(KEY_WORDS_SEARCH);
+
+                    }
+
+                    @Override
+                    public void onError(String utteranceId) {
+                    }
+
+                    @Override
+                    public void onStart(String utteranceId) {
+                    }
+
+                });
+*/
             }
         });
     }

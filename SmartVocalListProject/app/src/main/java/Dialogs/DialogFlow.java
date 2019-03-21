@@ -12,8 +12,8 @@ import DataObjects.ChecklistItem;
 
 public class DialogFlow<T extends ChecklistItem> {
 
-    public interface FunctionalInterface {
-        public void execute();
+    public interface FunctionalInterface<T> {
+        public void execute(T item);
     }
 
     public interface SetInterface {
@@ -78,7 +78,7 @@ public class DialogFlow<T extends ChecklistItem> {
     public int start()
     {
         step=0;
-        execute.execute();
+        execute.execute(items.get(step));
         return step;
     }
 
@@ -87,12 +87,12 @@ public class DialogFlow<T extends ChecklistItem> {
         if(step<items.size()-1)
         {
             step++;
-            execute.execute();
+            execute.execute(items.get(step));
         }
         else if(step>=items.size()-1)
         {
             //step=items.size()-1;
-            eof.execute();
+            eof.execute(items.get(step));
         }
         return step;
     }
@@ -102,12 +102,12 @@ public class DialogFlow<T extends ChecklistItem> {
         if(step>0)
         {
             step--;
-            execute.execute();
+            execute.execute(items.get(step));
         }
         else if(step<=0)
         {
             step=0;
-            sof.execute();
+            sof.execute(items.get(step));
         }
         return step;
     }
@@ -143,10 +143,10 @@ public class DialogFlow<T extends ChecklistItem> {
                 set.set(value);
                 break;
             case "read":
-                readItem.execute();
+                readItem.execute(items.get(step));
                 break;
             case "options":
-                readOption.execute();
+                readOption.execute(items.get(step));
                 break;
             default:
                     //start();
