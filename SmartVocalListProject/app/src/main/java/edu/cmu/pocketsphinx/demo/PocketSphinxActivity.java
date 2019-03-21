@@ -35,8 +35,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -44,6 +46,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
+
 import java.util.Locale;
 
 import java.io.File;
@@ -64,7 +68,7 @@ import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 import static android.widget.Toast.makeText;
 
 public class PocketSphinxActivity extends Activity implements
-        RecognitionListener {
+        RecognitionListener , TextToSpeech.OnInitListener {
 
     /* Named searches allow to quickly reconfigure the decoder */
     //private static final String OPTIONS_SEARCH = "options";
@@ -142,6 +146,14 @@ public class PocketSphinxActivity extends Activity implements
         tsk.execute();
     }
 
+
+
+    @SuppressLint("NewApi")
+    @Override
+    public void onInit(int i) {
+    }
+
+
     private static class SetupTask extends AsyncTask<Void, Void, Exception> {
         public DialogFlow<ChecklistItem> dlg=null;
         WeakReference<PocketSphinxActivity> activityReference;
@@ -150,6 +162,7 @@ public class PocketSphinxActivity extends Activity implements
             this.activityReference = new WeakReference<>(activity);
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
         @Override
         protected Exception doInBackground(Void... params) {
             try {
@@ -250,6 +263,7 @@ public class PocketSphinxActivity extends Activity implements
      */
     @Override
     public void onEndOfSpeech() {
+
     }
 
     private void switchDisplayedQuestion(int questionIndex) {
@@ -302,15 +316,78 @@ public class PocketSphinxActivity extends Activity implements
   //      recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
     private void setupTextToSpeech(){
         textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+
+
             @Override
             public void onInit(int status) {
                 if(status != TextToSpeech.ERROR) {
                     textToSpeech.setLanguage(Locale.US);
                 }
+
+
+
+                textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onStart(String s) {
+
+                        final String keyword = s;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Toast.makeText(getApplicationContext(), "Started" + keyword, Toast.LENGTH_SHORT).show();
+
+                                makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
+
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onDone(String s) {
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                               // Toast.makeText(getApplicationContext(), "Done ", Toast.LENGTH_SHORT).show();
+                                makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+                    }
+
+
+                    @Override
+                    public void onError(String s) {
+
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Error ", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                });
+
+                textToSpeech.setOnUtteranceCompletedListener( new TextToSpeech.OnUtteranceCompletedListener (){
+                    @Override
+                    public void onUtteranceCompleted(String s) {
+                       // Toast.makeText(getApplicationContext(), "onUtteranceCompleted ", Toast.LENGTH_SHORT).show();
+                        makeText(getApplicationContext(), "onUtteranceCompleted", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                });
+
+
             }
         });
+
     }
 
     private void playTextToSpeechNow(String text){
