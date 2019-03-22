@@ -324,12 +324,12 @@ public class PocketSphinxActivity extends Activity implements
                 String caption = chk.getName();
                 playTextToSpeechWhenDoneSpeaking(caption);
                 dlg.setCommand("read","");
-                playTextToSpeechWhenDoneSpeaking(dlg.items.get(dlg.step).getName());
+                //playTextToSpeechWhenDoneSpeaking(dlg.items.get(dlg.step).getName());
 
-                textToSpeech.setOnUtteranceCompletedListener(utteranceId ->
-                        recognizer.startListening(KEY_WORDS_SEARCH)
-
-                );
+//                textToSpeech.setOnUtteranceCompletedListener(utteranceId ->
+//                        recognizer.startListening(KEY_WORDS_SEARCH)
+//
+//                );
  /*
                 textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override
