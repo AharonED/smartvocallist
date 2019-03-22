@@ -128,7 +128,7 @@ public class PocketSphinxActivity extends Activity implements
         };
 
         dlg.set = value -> {
-            PocketSphinxActivity.this.playTextToSpeechWhenDoneSpeaking(value);
+            playTextToSpeechWhenDoneSpeaking(value);
             return true;
         };
 
@@ -148,6 +148,20 @@ public class PocketSphinxActivity extends Activity implements
 
         dlg.readItem = (item)->{
             this.dlg.execute.execute(((ChecklistItem)item));
+        };
+
+        dlg.readOptions = (item)->{
+            ChecklistItem itm =((ChecklistItem)item);
+            StringBuilder optionsString = new StringBuilder();
+            optionsString.append("The options are:");
+
+            for (String option : itm.options) {
+                optionsString.append(" ");
+                optionsString.append(option);
+            }
+
+            playTextToSpeechWhenDoneSpeaking(optionsString.toString());
+            listenToKeyWords();
         };
 
         textToSpeechMap = new HashMap<String, String>();

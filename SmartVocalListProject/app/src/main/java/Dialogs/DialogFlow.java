@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.function.Function;
 
 import DataObjects.ChecklistItem;
 
@@ -44,7 +43,7 @@ public class DialogFlow<T extends ChecklistItem> {
     public FunctionalInterface eof;
     public FunctionalInterface sof;
     public SetInterface set;
-    public FunctionalInterface readOption;
+    public FunctionalInterface readOptions;
     public FunctionalInterface readItem;
 
 /*
@@ -146,7 +145,7 @@ public class DialogFlow<T extends ChecklistItem> {
                 readItem.execute(items.get(step));
                 break;
             case "options":
-                readOption.execute(items.get(step));
+                readOptions.execute(items.get(step));
                 break;
             default:
                     //start();
