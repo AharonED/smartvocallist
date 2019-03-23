@@ -41,8 +41,13 @@ public class Checklist extends BaseModelObject {
 
     private String url;
 
-    public final ArrayList<ChecklistItem> checklistItems = new ArrayList<>();
+    public  ArrayList<ChecklistItem> checklistItems = new ArrayList<>();
     public final ArrayList<String> Options = new ArrayList<>();
+
+    public Checklist(String id)
+    {
+        super(id);
+    }
 
     public ArrayList<ChecklistItem> getSorted() {
 //As lambda
