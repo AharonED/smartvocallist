@@ -34,11 +34,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
@@ -54,7 +51,6 @@ import java.lang.ref.WeakReference;
 
 import DataObjects.ChecklistItem;
 import DataObjects.Checklist;
-import DataObjects.ItemType;
 import Dialogs.DialogFlow;
 import Model.Model;
 import edu.cmu.pocketsphinx.Assets;
@@ -118,7 +114,7 @@ public class PocketSphinxActivity extends Activity implements
 //                    recognizer.stop();
 //                    recognizer.startListening("digits");
 //                }else{
-//                    new listenToKeyWordsWaiter().execute();
+//                    new ListenToKeyWordsWaiter().execute();
 //                }
 //
 //            }
@@ -128,7 +124,8 @@ public class PocketSphinxActivity extends Activity implements
         };
 
         dlg.set = value -> {
-            PocketSphinxActivity.this.playTextToSpeechWhenDoneSpeaking(value);
+            playTextToSpeechWhenDoneSpeaking(value);
+            listenToKeyWords();
             return true;
         };
 
@@ -148,6 +145,20 @@ public class PocketSphinxActivity extends Activity implements
 
         dlg.readItem = (item)->{
             this.dlg.execute.execute(((ChecklistItem)item));
+        };
+
+        dlg.readOptions = (item)->{
+            ChecklistItem itm =((ChecklistItem)item);
+            StringBuilder optionsString = new StringBuilder();
+            optionsString.append("The options are:");
+
+            for (String option : itm.options) {
+                optionsString.append(" ");
+                optionsString.append(option);
+            }
+
+            playTextToSpeechWhenDoneSpeaking(optionsString.toString());
+            listenToKeyWords();
         };
 
         textToSpeechMap = new HashMap<String, String>();
@@ -285,7 +296,7 @@ public class PocketSphinxActivity extends Activity implements
             recognizer.stop();
             recognizer.startListening(KEY_WORDS_SEARCH);
         }else{
-            new listenToKeyWordsWaiter().execute();
+            new ListenToKeyWordsWaiter().execute();
         }
     }
 
@@ -378,7 +389,7 @@ public class PocketSphinxActivity extends Activity implements
         listenToKeyWords();
     }
 
-    class listenToKeyWordsWaiter extends AsyncTask<Void,Void,Void>{
+    class ListenToKeyWordsWaiter extends AsyncTask<Void,Void,Void>{
         @Override
         protected Void doInBackground(Void... voids) {
             while (textToSpeech.isSpeaking()){
