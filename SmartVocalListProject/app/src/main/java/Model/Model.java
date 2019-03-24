@@ -8,12 +8,17 @@ import DataObjects.ChecklistItem;
 
 public class Model implements IModel {
 
-    private ArrayList<Checklist> checklists = new ArrayList<>();
-
-    public Model() {
+    public static Model model;
+    public static Model getinstance()
+    {
+          if(model == null)
+              model = new Model();
+          return  model;
     }
 
     public ArrayList<Checklist> getChecklists() {
+        ArrayList<Checklist> checklists = new ArrayList<>();
+
         checklists.add(getChecklistByID("Ch1"));
         checklists.add(getChecklistByID("Ch2"));
 
