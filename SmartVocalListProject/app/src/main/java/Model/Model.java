@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.os.Build;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -25,16 +27,14 @@ public class Model<T extends BaseModelObject> implements IModel {
     }
 */
 
-    T type;
+    Class<T> getType(){return type;}
 
-    public Class getGenericType() {
-        return type.getClass();
-    }
-
-    public Model()
+    private Class<T> type;
+    public Model(Class<T> cls)
     {
+        type= cls;
         if(items.size()==0) {
-            switch (getGenericType().getName()) {
+            switch (getType().getName()) {
                 case "DataObjects.Checklist":
                     items = (ArrayList<T>) Repository.GetChecklists();
                     break;

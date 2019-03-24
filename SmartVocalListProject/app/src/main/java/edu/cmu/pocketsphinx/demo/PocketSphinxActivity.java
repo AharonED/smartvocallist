@@ -83,7 +83,7 @@ public class PocketSphinxActivity extends Activity implements
         super.onCreate(state);
 
         dlg = new DialogFlow<>();
-        Model<Checklist> mdl = new Model();
+        Model<Checklist> mdl = new Model(Checklist.class);
         ArrayList<Checklist> items = mdl.getItems();
         chk = items.get(0);
         dlg.items=chk.checklistItems;

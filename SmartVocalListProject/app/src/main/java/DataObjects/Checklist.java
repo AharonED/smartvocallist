@@ -118,4 +118,9 @@ public class Checklist extends BaseModelObject {
         }
         return json;
     }
+
+    public Checklist getInstance()
+    {
+        return new Checklist("--");
+    }
 }
