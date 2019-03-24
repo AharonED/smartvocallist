@@ -1,16 +1,28 @@
 package Model;
 
+import java.util.ArrayList;
+
 import DataObjects.BaseModelObject;
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
 
 public class Model implements IModel {
+
+    private ArrayList<Checklist> checklists = new ArrayList<>();
+
     public Model() {
     }
 
-    public Checklist getChecklists()
+    public ArrayList<Checklist> getChecklists() {
+        checklists.add(getChecklistByID("Ch1"));
+        checklists.add(getChecklistByID("Ch2"));
+
+        return checklists;
+    }
+
+    public Checklist getChecklistByID(String ID)
     {
-        Checklist chk = new Checklist("options","Checklist #1","You should perform this checklist","",null);
+        Checklist chk = new Checklist("options_" + ID,"Checklist #" + ID,"You should perform this checklist","",null);
         ChecklistItem item =new ChecklistItem("item_1",1,"Say \"easy\", \"medium\" or \"hard\"","", "",null);
         item.getOptions().add("easy");
         item.getOptions().add("medium");
