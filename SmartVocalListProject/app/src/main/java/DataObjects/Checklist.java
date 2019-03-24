@@ -84,6 +84,7 @@ public class Checklist extends BaseModelObject {
         }
 
         Checklists(json);
+        super.tableName="Checklist";
 
      }
 
