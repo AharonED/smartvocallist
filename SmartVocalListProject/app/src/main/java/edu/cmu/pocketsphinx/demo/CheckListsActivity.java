@@ -12,15 +12,18 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
 
 import DataObjects.Checklist;
 import Model.Model;
-
 
 public class CheckListsActivity extends AppCompatActivity {
     private ListView checkListsView;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> checkListsDisplay;
+    private HashMap<String, Checklist> checkListsHashMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,30 +45,32 @@ public class CheckListsActivity extends AppCompatActivity {
         checkListsView.setClickable(true);
         checkListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), checkListsDisplay.get(position), Toast.LENGTH_SHORT).show();
+                String checklistName = checkListsDisplay.get(position);
+                Toast.makeText(getApplicationContext(), checklistName, Toast.LENGTH_SHORT).show();
+                Checklist checkList = checkListsHashMap.get(checklistName);
+                startCheckListPlay(checkList);
             }
         });
     }
 
     private ArrayList<String> getCheckListsToDisplay(){
-        ArrayList<String> temp = new ArrayList<>();
-        temp.add("first item");
-        temp.add("2 item");
-        temp.add("3 item");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        temp.add("ronen is the best");
-        return temp;
+        ArrayList<String> checkListsToDisplay = new ArrayList<>();
+        checkListsHashMap = new HashMap<>();
+        Model model = new Model<>(Checklist.class);
+        ArrayList<Checklist> checkLists = model.getItems();
+
+        for (Checklist checkList : checkLists) {
+            String checklistName = checkList.getName();
+            checkListsToDisplay.add(checklistName);
+            checkListsHashMap.put(checklistName, checkList);
+        }
+
+        return checkListsToDisplay;
+    }
+
+    private void startCheckListPlay(Checklist checkList){
+        Intent myIntent = new Intent(CheckListsActivity.this, PocketSphinxActivity.class);
+        myIntent.putExtra("checkListId", checkList.getId());
+        startActivity(myIntent);
     }
 }

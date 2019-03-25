@@ -84,8 +84,8 @@ public class PocketSphinxActivity extends Activity implements
 
         dlg = new DialogFlow<>();
         Model<Checklist> mdl = new Model(Checklist.class);
-        ArrayList<Checklist> items = mdl.getItems();
-        chk = items.get(0);
+        String checkListId = (String)getIntent().getExtras().get("checkListId");
+        chk = mdl.getItemByID(checkListId);
         dlg.items=chk.checklistItems;
 
         dlg.execute = (item)-> {
