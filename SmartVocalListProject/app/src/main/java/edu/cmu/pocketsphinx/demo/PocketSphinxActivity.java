@@ -42,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.speech.tts.TextToSpeech;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -82,8 +83,9 @@ public class PocketSphinxActivity extends Activity implements
         super.onCreate(state);
 
         dlg = new DialogFlow<>();
-        Model mdl =  Model.getinstance();
-        chk = mdl.getChecklistByID("Ch1");
+        Model<Checklist> mdl = new Model(Checklist.class);
+        ArrayList<Checklist> items = mdl.getItems();
+        chk = items.get(0);
         dlg.items=chk.checklistItems;
 
         dlg.execute = (item)-> {

@@ -84,6 +84,7 @@ public class Checklist extends BaseModelObject {
         }
 
         Checklists(json);
+        super.tableName="Checklist";
 
      }
 
@@ -116,5 +117,10 @@ public class Checklist extends BaseModelObject {
             e.printStackTrace();
         }
         return json;
+    }
+
+    public Checklist getInstance()
+    {
+        return new Checklist("--");
     }
 }

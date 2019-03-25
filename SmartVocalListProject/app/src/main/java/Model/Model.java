@@ -1,52 +1,72 @@
 package Model;
 
+import android.annotation.TargetApi;
+import android.os.Build;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 import java.util.ArrayList;
+import java.util.Optional;
 
 import DataObjects.BaseModelObject;
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
 
-public class Model implements IModel {
+public class Model<T extends BaseModelObject> implements IModel {
 
-    public static Model model;
-    public static Model getinstance()
+    //public static Model model;
+    public  ArrayList<T> items = new ArrayList<>();
+
+/*
+    public static Model getInstance()
     {
           if(model == null)
               model = new Model();
           return  model;
     }
+*/
 
-    public ArrayList<Checklist> getChecklists() {
-        ArrayList<Checklist> checklists = new ArrayList<>();
+    Class<T> getType(){return type;}
 
-        checklists.add(getChecklistByID("Ch1"));
-        checklists.add(getChecklistByID("Ch2"));
+    private Class<T> type;
+    public Model(Class<T> cls)
+    {
+        type= cls;
+        if(items.size()==0) {
+            switch (getType().getName()) {
+                case "DataObjects.Checklist":
+                    items = (ArrayList<T>) Repository.GetChecklists();
+                    break;
+            }
+        }
 
-        return checklists;
     }
 
-    public Checklist getChecklistByID(String ID)
+    public void addItem(T chk)
     {
-        Checklist chk = new Checklist("options_" + ID,"Checklist #" + ID,"You should perform this checklist","",null);
-        ChecklistItem item =new ChecklistItem("item_1",1,"Say \"easy\", \"medium\" or \"hard\"","", "",null);
-        item.getOptions().add("easy");
-        item.getOptions().add("medium");
-        item.getOptions().add("hard");
-        chk.getChecklistItems().add(item);
+        //fairebase.addChild( chk.tableName  , chk);
+        items.add(chk);
 
-        item =new ChecklistItem("boolean",2,"Do you wear pants? (True or False)","", "",null);
-        item.getOptions().add("true");
-        item.getOptions().add("false");
-        chk.getChecklistItems().add(item);
+    }
 
-        item =new ChecklistItem("digit",3,"What is your age?","", "",null);
-        item.getOptions().add("one");
-        item.getOptions().add("two");
-        item.getOptions().add("three");
-        item.getOptions().add("four");
-        chk.getChecklistItems().add(item);
 
-        return chk;
+    public ArrayList<T> getItems() {
+        return items;
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    public T getItemByID(String id)
+    {
+        if( items.stream().filter(o -> o.getId().equals(id)).findFirst().isPresent())
+        {
+            Optional<T> item =  items.stream().filter(o -> o.getId().equals(id)).findFirst();
+            return item.get();
+        }
+        else {
+            return null;
+        }
     }
 
 }
+
