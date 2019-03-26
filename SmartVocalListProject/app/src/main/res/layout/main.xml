@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="add_list"
-            android:text="Button" />
+            android:text="Button"
+            android:visibility="visible" />
 
     </LinearLayout>
 

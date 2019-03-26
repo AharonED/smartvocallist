@@ -40,7 +40,17 @@
             android:inputType="textWebEditText|textMultiLine"
             android:selectAllOnFocus="false"
             android:singleLine="false"
-            android:text="List Name" />
+            android:text="List Name"
+            android:textColor="@android:color/black" />
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:textColor="@android:color/black"
+            tools:text="description" />
 
         <TextView
             android:id="@+id/items"
