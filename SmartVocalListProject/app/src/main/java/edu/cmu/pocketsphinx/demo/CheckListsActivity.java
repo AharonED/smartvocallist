@@ -39,9 +39,6 @@ public class CheckListsActivity extends AppCompatActivity {
         });
 
         checkListsView = findViewById(R.id.checkListsView);
-        checkListsDisplay = getCheckListsToDisplay();
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
-        checkListsView.setAdapter(adapter);
         checkListsView.setClickable(true);
         checkListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -51,6 +48,14 @@ public class CheckListsActivity extends AppCompatActivity {
                 startCheckListPlay(checkList);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkListsDisplay = getCheckListsToDisplay();
+        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
+        checkListsView.setAdapter(adapter);
     }
 
     private ArrayList<String> getCheckListsToDisplay(){
