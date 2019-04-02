@@ -69,7 +69,13 @@ public class CheckListsActivity extends AppCompatActivity {
                 String checklistName = checkListsDisplay.get(position);
                 Toast.makeText(getApplicationContext(), checklistName, Toast.LENGTH_SHORT).show();
                 Checklist checkList = checkListsHashMap.get(checklistName);
-                startCheckListPlay(checkList);
+                if(checkList.getChecklistItems().size()>0) {
+                    startCheckListPlay(checkList);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "No Items to display for " + checklistName, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
