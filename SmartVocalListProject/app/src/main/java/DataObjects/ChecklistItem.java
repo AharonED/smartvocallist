@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChecklistItem extends BaseModelObject {
@@ -40,6 +41,51 @@ public class ChecklistItem extends BaseModelObject {
     private String url;
     private int index;
     private ItemType itemType=ItemType.Boolean;
+
+    //Parent Checklist ID
+    public String getChecklistId() {
+        return checklistId;
+    }
+
+    public void setChecklistId(String checklistId) {
+        this.checklistId = checklistId;
+    }
+
+    //Owner user
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    private String checklistId;
+    private String owner;
+    private String result;
+
+
+    public String getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
+        String [] seperated = attributes.split(";");
+        options.addAll(Arrays.asList(seperated));
+
+    }
+
+    private String attributes;
+
 
     public ArrayList<String> getOptions() {
         return options;
@@ -93,7 +139,7 @@ public class ChecklistItem extends BaseModelObject {
             description = (String) json.get("description");
             url = (String) json.get("url");
             if (json.has("lastUpdate") && json.get("lastUpdate") != null)
-                lastUpdate = (Double) json.get("lastUpdate");
+                lastUpdate =  Double.parseDouble(json.get("lastUpdate").toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

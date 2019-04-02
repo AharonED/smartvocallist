@@ -27,7 +27,12 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:typeface="serif"
+            android:textColor="@android:color/black"
+            />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -37,10 +42,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        android:textColor="@android:color/black"
+
         <ListView
             android:id="@+id/checkListsView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:typeface="serif"
+            android:textColor="@android:color/black"
+            >
         </ListView>
     </LinearLayout>
 

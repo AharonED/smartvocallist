@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -18,6 +22,8 @@ import java.util.HashMap;
 
 import DataObjects.Checklist;
 import Model.Model;
+
+import static android.content.ContentValues.TAG;
 
 public class CheckListsActivity extends AppCompatActivity {
     private ListView checkListsView;
@@ -28,6 +34,24 @@ public class CheckListsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//This Firebase init code should be moved to global place....
+        try {
+            FirebaseOptions.Builder builder = new FirebaseOptions.Builder()
+                    .setApplicationId("1:0123456789012:android:0123456789abcdef")
+                    .setApiKey("AIzaSyDMIVUTpX7i0L__KDhiQb4zfzvMxmjwNec ")
+                    .setDatabaseUrl("https://smartvocallist1.firebaseio.com/")
+                    .setStorageBucket("smartvocallist1.appspot.com");
+            FirebaseApp.initializeApp(this, builder.build());
+
+        }
+        catch (Exception ex)
+        {
+            Log.d(TAG, "Value is: " + ex.getMessage());
+        }
+
+
+
         setContentView(R.layout.activity_check_lists);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,16 +77,26 @@ public class CheckListsActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        checkListsDisplay = getCheckListsToDisplay();
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
-        checkListsView.setAdapter(adapter);
+
+        Model model = new Model<>(Checklist.class);
+        //Get data Async.
+        model.getItemsLsnr = this::checkListsToDisplay;
+        //When data returned from Firebase, it will rise event onDataChange
+        // - which execute the injected method-checkListsToDisplay
+        model.getItems();
+
+        if (checkListsDisplay != null) {
+             adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
+             checkListsView.setAdapter(adapter);
+        }
     }
 
-    private ArrayList<String> getCheckListsToDisplay(){
+    private void  checkListsToDisplay(ArrayList<Checklist> checkLists ) {
         ArrayList<String> checkListsToDisplay = new ArrayList<>();
+
+        Log.w(TAG, "checkListsToDisplay" + checkLists.size() );
+
         checkListsHashMap = new HashMap<>();
-        Model model = new Model<>(Checklist.class);
-        ArrayList<Checklist> checkLists = model.getItems();
 
         for (Checklist checkList : checkLists) {
             String checklistName = checkList.getName();
@@ -70,10 +104,12 @@ public class CheckListsActivity extends AppCompatActivity {
             checkListsHashMap.put(checklistName, checkList);
         }
 
-        return checkListsToDisplay;
+        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsToDisplay);
+        checkListsView.setAdapter(adapter);
+
     }
 
-    private void startCheckListPlay(Checklist checkList){
+        private void startCheckListPlay(Checklist checkList){
         Intent myIntent = new Intent(CheckListsActivity.this, PocketSphinxActivity.class);
         myIntent.putExtra("checkListId", checkList.getId());
         startActivity(myIntent);

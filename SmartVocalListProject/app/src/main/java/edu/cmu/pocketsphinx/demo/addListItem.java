@@ -43,7 +43,7 @@ public class addListItem extends AppCompatActivity {
                 TextView twType  =  (TextView)findViewById(R.id.item_type);
                 TextView twtypes = (TextView)findViewById(R.id.atributes);
                 String atributes = twtypes.getText().toString();
-                String [] seperated = atributes.split(";");
+               // String [] seperated = atributes.split(";");
 
                 String name = twname.getText().toString();
                 String description = twdesc.getText().toString();
@@ -74,10 +74,16 @@ public class addListItem extends AppCompatActivity {
                 str.append(id);
 
                 ChecklistItem item =new ChecklistItem(str.toString(),id,name,description, "",tmp);
+                /*
                 for (int a =0; a< seperated.length ; a++)
                 {
                     item.options.add(seperated[a]);
                 }
+                */
+                //use item.setAttributes(atributes); instead of  above loop...
+                item.setAttributes(atributes);
+
+
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("Item", item.toJson().toString());
                 setResult(0, resultIntent);

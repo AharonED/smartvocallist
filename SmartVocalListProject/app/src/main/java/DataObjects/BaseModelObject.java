@@ -113,7 +113,10 @@ public class BaseModelObject {
             }
 
             if (json.has("lastUpdate") && json.get("lastUpdate") != null)
-                lastUpdate = (Double) json.get("lastUpdate");
+               // if (json.get("lastUpdate") instanceof Long)
+                    lastUpdate =  Double.parseDouble(json.get("lastUpdate").toString());
+
+            //lastUpdate = (Double) json.get("lastUpdate");
 
             } catch (JSONException e) {
             e.printStackTrace();

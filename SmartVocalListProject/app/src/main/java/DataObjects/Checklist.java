@@ -41,8 +41,40 @@ public class Checklist extends BaseModelObject {
 
     private String url;
 
+    private String groupId;
+    private String owner;
+    private String checklistType;
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getChecklistType() {
+        return checklistType;
+    }
+
+    public void setChecklistType(String checklistType) {
+        this.checklistType = checklistType;
+    }
+
+    public void setChecklistItems(ArrayList<ChecklistItem> checklistItems) {
+        this.checklistItems = checklistItems;
+    }
+
+
     public  ArrayList<ChecklistItem> checklistItems = new ArrayList<>();
-    public final ArrayList<String> Options = new ArrayList<>();
 
     public Checklist(String id)
     {
@@ -94,7 +126,7 @@ public class Checklist extends BaseModelObject {
             description = (String) json.get("description");
             url = (String) json.get("url");
             if (json.has("lastUpdate") && json.get("lastUpdate") != null)
-                lastUpdate = (Double) json.get("lastUpdate");
+                lastUpdate =  Double.parseDouble(json.get("lastUpdate").toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

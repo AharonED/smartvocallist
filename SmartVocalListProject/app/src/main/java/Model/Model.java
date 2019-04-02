@@ -3,6 +3,8 @@ package Model;
 import android.annotation.TargetApi;
 import android.os.Build;
 
+import com.google.firebase.FirebaseApp;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -14,6 +16,14 @@ import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
 
 public class Model<T extends BaseModelObject> implements IModel {
+
+    public  String tableName="";
+
+    public interface ItemsLsnr<E extends BaseModelObject> {
+        public void getItemsLsnr(ArrayList<E> items );
+    }
+
+    public ItemsLsnr<T> getItemsLsnr;
 
     //public static Model model;
     public  ArrayList<T> items = new ArrayList<>();
@@ -36,7 +46,8 @@ public class Model<T extends BaseModelObject> implements IModel {
         if(items.size()==0) {
             switch (getType().getName()) {
                 case "DataObjects.Checklist":
-                    items = (ArrayList<T>) Repository.GetChecklists();
+                    //items = (ArrayList<T>) rep.GetChecklists((ItemsLsnr<Checklist>) getItemsLsnr);
+                    tableName = "Checklist";
                     break;
             }
         }
@@ -52,6 +63,9 @@ public class Model<T extends BaseModelObject> implements IModel {
 
 
     public ArrayList<T> getItems() {
+        Repository rep = new Repository();
+        items = (ArrayList<T>) rep.GetChecklists((ItemsLsnr<Checklist>) getItemsLsnr);
+
         return items;
     }
 
