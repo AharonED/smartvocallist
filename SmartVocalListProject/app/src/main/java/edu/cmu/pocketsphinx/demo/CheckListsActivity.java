@@ -92,7 +92,7 @@ public class CheckListsActivity extends AppCompatActivity {
     }
 
     private void  checkListsToDisplay(ArrayList<Checklist> checkLists ) {
-        ArrayList<String> checkListsToDisplay = new ArrayList<>();
+        checkListsDisplay = new ArrayList<>();
 
         Log.w(TAG, "checkListsToDisplay" + checkLists.size() );
 
@@ -100,11 +100,11 @@ public class CheckListsActivity extends AppCompatActivity {
 
         for (Checklist checkList : checkLists) {
             String checklistName = checkList.getName();
-            checkListsToDisplay.add(checklistName);
+            checkListsDisplay.add(checklistName);
             checkListsHashMap.put(checklistName, checkList);
         }
 
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsToDisplay);
+        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
         checkListsView.setAdapter(adapter);
 
     }
