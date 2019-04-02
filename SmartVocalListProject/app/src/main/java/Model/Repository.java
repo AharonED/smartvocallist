@@ -28,6 +28,7 @@ public class Repository extends AppCompatActivity {
 
 
     //public Model.ItemsLsnr<Checklist> getItemsLsnr;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
 
 
     public Repository(){
@@ -57,68 +58,80 @@ public class Repository extends AppCompatActivity {
 
 
         try {
-    // Write a message to the database
-    //DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-
-
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("/Checklists");
-   // myRef.setValue("Hello, World!");
-
-
-            Log.w(TAG, "GetChecklists-"  );
+            DatabaseReference myRef = database.getReference("/Checklists");
+            // myRef.setValue("Hello, World!");
 
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot snapshot) {
-            Log.w(TAG, "onDataChange---" + snapshot.getChildrenCount() );
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    //Log.w(TAG, "onDataChange---" + snapshot.getChildrenCount() );
 
-
-            int i = 2;
-            for (DataSnapshot dataSnapshot : snapshot.getChildren())
-            {
-                Checklist chk = convertSnapshot2Json(dataSnapshot);
-                if(chk!=null)
-                items.add(chk);
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    if(child.getKey()!=null && child.getValue() != null) {
-                        String value = (String) child.getValue().toString();
-                        String key = (String) child.getKey();
-                       // Log.w(TAG, key + "-" + value);
+                    Checklist chk = null;
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        chk = new Checklist("-");
+                        chk.Checklists(convertSnapshot2Json(dataSnapshot));
+                        items.add(chk);
                     }
+                    getItemsLsnr.getItemsLsnr(items);
+
                 }
 
-                i++;
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
 
-            }
-            //items.add(getChecklistByID("Ch3"));
+            });
 
-            getItemsLsnr.getItemsLsnr(items);
+        } catch (Exception ex) {
+            Log.d(TAG, "Value is: " + ex.getMessage());
 
         }
 
-        @Override
-        public void onCancelled(DatabaseError error) {
-            // Failed to read value
-            Log.w(TAG, "Failed to read value.", error.toException());
-        }
-
-        });
-
-}
-catch (Exception ex)
-{
-    Log.d(TAG, "Value is: " + ex.getMessage());
-
-}
-
-        return  items;
+        return items;
     }
 
+    public  ArrayList<ChecklistItem> GetChecklistItems(Model.ItemsLsnr<ChecklistItem> getItemsLsnr) {
 
-    private static Checklist convertSnapshot2Json(DataSnapshot dataSnapshot ){
+        ArrayList<ChecklistItem> items = new ArrayList<>();
 
-        Checklist chk =null;
+        try {
+            DatabaseReference myRef = database.getReference("/ChecklistItems");
+
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    //Log.w(TAG, "onDataChange---" + snapshot.getChildrenCount() );
+
+                    ChecklistItem chk = null;
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        chk = new ChecklistItem("-",0," "," ","", (double) 0);
+                        chk.ChecklistItems(convertSnapshot2Json(dataSnapshot));
+                        items.add(chk);
+                    }
+                    getItemsLsnr.getItemsLsnr(items);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+
+            });
+
+        } catch (Exception ex) {
+            Log.d(TAG, "Value is: " + ex.getMessage());
+
+        }
+
+        return items;
+    }
+
+    private static JSONObject convertSnapshot2Json(DataSnapshot dataSnapshot ){
+
 
         JSONObject json;
         json = new JSONObject();
@@ -137,13 +150,11 @@ catch (Exception ex)
                     Log.w(TAG, e.getMessage());
 
                 }
-                chk = new Checklist("-");
-                chk.Checklists(json);
             }
 
         }
 
-        return chk;
+        return json;
     }
 
     public static Checklist getChecklistByID(String ID)
