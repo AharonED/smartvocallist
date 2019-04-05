@@ -3,11 +3,10 @@ package edu.cmu.pocketsphinx.demo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import DataObjects.Checklist;
+
 import DataObjects.ChecklistItem;
 import android.widget.TextView;
 
@@ -38,7 +37,7 @@ public class addListItem extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView twname   = (TextView)findViewById(R.id.name);
+                TextView twname   = (TextView)findViewById(R.id.checkListName);
                 TextView twdesc   = (TextView)findViewById(R.id.description);
                 TextView twType  =  (TextView)findViewById(R.id.item_type);
                 TextView twtypes = (TextView)findViewById(R.id.atributes);

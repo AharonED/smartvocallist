@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Vector;
 
 import DataObjects.Checklist;
 import Model.Model;
@@ -26,10 +29,14 @@ import Model.Model;
 import static android.content.ContentValues.TAG;
 
 public class CheckListsActivity extends AppCompatActivity {
-    private ListView checkListsView;
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> checkListsDisplay;
-    private HashMap<String, Checklist> checkListsHashMap;
+    RecyclerView checkListsRecyclerView;
+    RecyclerView.LayoutManager layoutManager;
+    CheckListsAdapter adapter;
+    ArrayList<Checklist> mData = new ArrayList<>();
+    //private ListView checkListsView;
+    //private ArrayAdapter<String> adapter;
+    ArrayList<String> checkListsDisplay;
+    //private HashMap<String, Checklist> checkListsHashMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +58,6 @@ public class CheckListsActivity extends AppCompatActivity {
         }
 
 
-
         setContentView(R.layout.activity_check_lists);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,22 +68,25 @@ public class CheckListsActivity extends AppCompatActivity {
             startActivity(myIntent);
         });
 
-        checkListsView = findViewById(R.id.checkListsView);
-        checkListsView.setClickable(true);
-        checkListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String checklistName = checkListsDisplay.get(position);
-                Toast.makeText(getApplicationContext(), checklistName, Toast.LENGTH_SHORT).show();
-                Checklist checkList = checkListsHashMap.get(checklistName);
-                if(checkList.getChecklistItems().size()>0) {
-                    startCheckListPlay(checkList);
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(), "No Items to display for " + checklistName, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        checkListsRecyclerView = findViewById(R.id.checkListsRecyclerView);
+        checkListsRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        checkListsRecyclerView.setLayoutManager(layoutManager);
+
+//        checkListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String checklistName = checkListsDisplay.get(position);
+//                Toast.makeText(getApplicationContext(), checklistName, Toast.LENGTH_SHORT).show();
+//                Checklist checkList = checkListsHashMap.get(checklistName);
+//                if(checkList.getChecklistItems().size()>0) {
+//                    startCheckListPlay(checkList);
+//                }
+//                else
+//                {
+//                    Toast.makeText(getApplicationContext(), "No Items to display for " + checklistName, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -91,28 +100,33 @@ public class CheckListsActivity extends AppCompatActivity {
         // - which execute the injected method-checkListsToDisplay
         model.getItems();
 
-        if (checkListsDisplay != null) {
-             adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
-             checkListsView.setAdapter(adapter);
-        }
+//        if (checkListsDisplay != null) {
+//             adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
+//             checkListsView.setAdapter(adapter);
+//        }
     }
 
-    private void  checkListsToDisplay(ArrayList<Checklist> checkLists ) {
-        checkListsDisplay = new ArrayList<>();
+    private void checkListsToDisplay(ArrayList<Checklist> checkLists) {
+        mData = checkLists;
+        adapter = new CheckListsAdapter(mData);
+        checkListsRecyclerView.setAdapter(adapter);
 
-        Log.w(TAG, "checkListsToDisplay" + checkLists.size() );
+        adapter.setOnItemClickedListener(new CheckListsAdapter.OnItemClickedListener() {
+            @Override
+            public void onClick(int index) {
+                Checklist clickedCheckList = mData.get(index);
 
-        checkListsHashMap = new HashMap<>();
-
-        for (Checklist checkList : checkLists) {
-            String checklistName = checkList.getName();
-            checkListsDisplay.add(checklistName);
-            checkListsHashMap.put(checklistName, checkList);
-        }
-
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
-        checkListsView.setAdapter(adapter);
-
+                if(clickedCheckList.getChecklistItems().size()>0) {
+                    startCheckListPlay(clickedCheckList);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),
+                            "No Items to display for " + clickedCheckList.getName(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
         private void startCheckListPlay(Checklist checkList){
