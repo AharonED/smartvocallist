@@ -51,10 +51,7 @@ public class CheckListsActivity extends AppCompatActivity {
             Log.d(TAG, "Value is: " + ex.getMessage());
         }
 
-
         setContentView(R.layout.activity_check_lists);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         FloatingActionButton AddCheckListButton = findViewById(R.id.fab);
         AddCheckListButton.setOnClickListener(view -> {
