@@ -9,12 +9,13 @@
 
 package DataObjects;
 
+import java.io.Serializable;
 import java.lang.*;
 import java.lang.Double;
 import java.util.ArrayList;
 import org.json.*;
 
-public class BaseModelObject {
+public class BaseModelObject implements Serializable {
 
 
     public String getId() {
