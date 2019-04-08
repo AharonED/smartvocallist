@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:visibility="visible"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="edu.cmu.pocketsphinx.demo.addListItem"
+    tools:context="edu.cmu.pocketsphinx.demo.AddListItemActivity"
     tools:showIn="@layout/activity_add_list_item">
 
     <EditText

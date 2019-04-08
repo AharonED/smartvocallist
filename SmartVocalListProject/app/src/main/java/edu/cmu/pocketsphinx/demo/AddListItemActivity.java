@@ -24,7 +24,7 @@ import java.util.Date;
 
 //import edu.cmu.sphinx.pocketsphinx.R;
 
-public class addListItem extends AppCompatActivity {
+public class AddListItemActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

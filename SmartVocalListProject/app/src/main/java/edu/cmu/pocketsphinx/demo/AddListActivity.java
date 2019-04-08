@@ -89,7 +89,7 @@ public class AddListActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(AddListActivity.this, addListItem.class);
+                Intent myIntent = new Intent(AddListActivity.this, AddListItemActivity.class);
 
                 AddListActivity.this.startActivity(myIntent);
                 String result = myIntent.getStringArrayExtra("Item")[0];
