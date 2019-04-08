@@ -91,9 +91,9 @@ public class Repository extends AppCompatActivity {
         return items;
     }
 
-    public  ArrayList<BaseModelObject> GetChecklistItems(Model.ItemsLsnr<BaseModelObject> getItemsLsnr) {
+    public  ArrayList<ChecklistItem> GetChecklistItems(Model.ItemsLsnr<ChecklistItem> getItemsLsnr) {
 
-        ArrayList<BaseModelObject> items = new ArrayList<>();
+        ArrayList<ChecklistItem> items = new ArrayList<>();
 
         try {
             DatabaseReference myRef = database.getReference("/ChecklistItems");

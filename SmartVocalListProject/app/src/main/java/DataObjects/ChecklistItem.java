@@ -135,10 +135,26 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
 
     public void ChecklistItems(JSONObject json) {
         try {
-            index = (int) json.get("index");
+            //index = (int) json.get("index");
             name = (String) json.get("name");
             description = (String) json.get("description");
-            url = (String) json.get("url");
+            if (json.has("url") && json.get("url") != null)
+                url = (String) json.get("url");
+
+            if (json.has("attributes") && json.get("attributes") != null)
+                this.setAttributes( (String) json.get("attributes"));
+            if (json.has("checklistId") && json.get("checklistId") != null)
+                this.setChecklistId( (String) json.get("checklistId"));
+            if (json.has("itemType") && json.get("itemType") != null)
+                this.setItemType(ItemType.Text );//(String) json.get("itemType")
+            if (json.has("owner") && json.get("owner") != null)
+                this.setOwner( (String) json.get("owner"));
+            if (json.has("result") && json.get("result") != null)
+                this.setResult( (String) json.get("result"));
+
+            if (json.has("itemIndex") && json.get("itemIndex") != null)
+                this.setIndex( Integer.parseInt(  json.get("itemIndex").toString()));
+
             if (json.has("lastUpdate") && json.get("lastUpdate") != null)
                 lastUpdate =  Double.parseDouble(json.get("lastUpdate").toString());
         } catch (JSONException e) {
@@ -146,7 +162,7 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
         }
 
         super.BaseModelObject(json);
-        super.tableName="Checklist";
+        super.tableName="ChecklistItems";
 
     }
 
