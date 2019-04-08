@@ -16,7 +16,7 @@ import com.google.firebase.FirebaseOptions;
 import java.util.ArrayList;
 
 import DataObjects.Checklist;
-import Model.Model;
+import Model.ModelChecklists;
 
 import static android.content.ContentValues.TAG;
 
@@ -30,7 +30,7 @@ public class CheckListsActivity extends AppCompatActivity {
     ArrayList<String> checkListsDisplay;
     //private HashMap<String, Checklist> checkListsHashMap;
 
-    Model model=null;
+    ModelChecklists model=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,7 @@ public class CheckListsActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-       model = new Model<>(Checklist.class);
+       model =  ModelChecklists.getInstance();
         //Get data Async.
         //When data returned from Firebase, it will rise event onDataChange
         // - which execute the injected method-checkListsToDisplay
@@ -125,7 +125,7 @@ public class CheckListsActivity extends AppCompatActivity {
     private void startCheckListPlay(Checklist checkList){
         Intent myIntent = new Intent(CheckListsActivity.this, PocketSphinxActivity.class);
         myIntent.putExtra("checkListId", checkList.getId());
-        myIntent.putExtra("model", model);
+        //myIntent.putExtra("model", model);
         startActivity(myIntent);
     }
 }

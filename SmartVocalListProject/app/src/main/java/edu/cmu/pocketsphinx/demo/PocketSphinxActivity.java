@@ -52,7 +52,7 @@ import java.lang.ref.WeakReference;
 import DataObjects.ChecklistItem;
 import DataObjects.Checklist;
 import Dialogs.DialogFlow;
-import Model.Model;
+import Model.ModelChecklists;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
@@ -83,7 +83,8 @@ public class PocketSphinxActivity extends Activity implements
 
         dlg = new DialogFlow<>();
         String checkListId = (String)getIntent().getExtras().get("checkListId");
-        Model<Checklist> mdl = (Model)getIntent().getSerializableExtra("model");
+        ModelChecklists mdl =  ModelChecklists.getInstance();
+        //(Model)getIntent().getSerializableExtra("model");
         chk = mdl.getItemByID(checkListId);
         dlg.items=chk.checklistItems;
 

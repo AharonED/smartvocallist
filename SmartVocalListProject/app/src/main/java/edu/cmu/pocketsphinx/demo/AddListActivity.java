@@ -24,7 +24,7 @@ import java.util.Scanner;
 
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
-import Model.Model;
+import Model.ModelChecklists;
 
 
 public class AddListActivity extends AppCompatActivity {
@@ -80,7 +80,7 @@ public class AddListActivity extends AppCompatActivity {
                 Double tmp = time.doubleValue();
                 Checklist temp = new Checklist(str.toString(),ListName,twDescripton.getText().toString(),"", tmp);
                 temp.checklistItems.addAll(Items);
-                Model<Checklist> mod = new Model<Checklist>(Checklist.class);
+                Model.ModelChecklists mod =  ModelChecklists.getInstance();
                 mod.addItem(temp);
             }
         });
