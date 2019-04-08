@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import DataObjects.BaseModelObject;
-import DataObjects.Checklist;
 
 public class Model<T extends BaseModelObject> implements IModel, Serializable {
 
@@ -32,22 +31,13 @@ public class Model<T extends BaseModelObject> implements IModel, Serializable {
     }
 
     public interface ItemsLsnr<E extends BaseModelObject> {
-        public void getItemsLsnr(ArrayList<E> items );
+        void getItemsLsnr(ArrayList<E> items );
     }
 
     private ItemsLsnr<T> ItemsLsnr;
 
     //public static Model model;
     public  ArrayList<T> items = new ArrayList<>();
-
-/*
-    public static Model getInstance()
-    {
-          if(model == null)
-              model = new Model();
-          return  model;
-    }
-*/
 
     Class<T> getType(){return type;}
 
@@ -58,7 +48,6 @@ public class Model<T extends BaseModelObject> implements IModel, Serializable {
         if(items.size()==0) {
             switch (getType().getName()) {
                 case "DataObjects.Checklist":
-                    //items = (ArrayList<T>) rep.GetChecklists((ItemsLsnr<Checklist>) getItemsLsnr);
                     setTableName("Checklist");
                     break;
             }
