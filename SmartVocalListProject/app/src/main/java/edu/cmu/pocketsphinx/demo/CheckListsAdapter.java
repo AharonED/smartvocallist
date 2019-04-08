@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 import DataObjects.Checklist;
 
@@ -32,7 +31,7 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.St
     @NonNull
     @Override
     public StudentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.student_row, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.checklist_row, viewGroup, false);
         StudentViewHolder studentViewHolder = new StudentViewHolder(view, mListener);
         return studentViewHolder;
     }
