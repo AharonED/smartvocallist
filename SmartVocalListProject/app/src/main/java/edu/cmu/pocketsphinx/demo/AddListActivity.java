@@ -38,8 +38,6 @@ public class AddListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.Items = new ArrayList<ChecklistItem>();
                 setContentView(R.layout.activity_add_list);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +87,7 @@ public class AddListActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(AddListActivity.this, addListItem.class);
+                Intent myIntent = new Intent(AddListActivity.this, AddListItemActivity.class);
 
                 AddListActivity.this.startActivity(myIntent);
                 String result = myIntent.getStringArrayExtra("Item")[0];

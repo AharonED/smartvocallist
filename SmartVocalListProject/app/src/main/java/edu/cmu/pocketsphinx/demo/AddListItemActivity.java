@@ -24,14 +24,12 @@ import java.util.Date;
 
 //import edu.cmu.sphinx.pocketsphinx.R;
 
-public class addListItem extends AppCompatActivity {
+public class AddListItemActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_list_item);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

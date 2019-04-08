@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".addListItem"
+            android:name=".AddListItemActivity"
             android:label="@string/title_activity_add_list_item"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
