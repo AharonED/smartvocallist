@@ -50,9 +50,9 @@ public class Repository extends AppCompatActivity {
 */
     }
 
-    public  ArrayList<Checklist> GetChecklists(Model.ItemsLsnr<Checklist> getItemsLsnr) {
+    public  ArrayList<BaseModelObject> GetChecklists(Model.ItemsLsnr<BaseModelObject> itemsLsnr) {
 
-        ArrayList<Checklist> items = new ArrayList<>();
+        ArrayList<BaseModelObject> items = new ArrayList<>();
         items.add(CreateTempCheckList("Ch1"));
         items.add(CreateTempCheckList("Ch2"));
 
@@ -72,7 +72,7 @@ public class Repository extends AppCompatActivity {
                         chk.Checklists(convertSnapshot2Json(dataSnapshot));
                         items.add(chk);
                     }
-                    getItemsLsnr.getItemsLsnr(items);
+                    itemsLsnr.getItemsLsnr(items);
 
                 }
 
@@ -92,9 +92,9 @@ public class Repository extends AppCompatActivity {
         return items;
     }
 
-    public  ArrayList<ChecklistItem> GetChecklistItems(Model.ItemsLsnr<ChecklistItem> getItemsLsnr) {
+    public  ArrayList<BaseModelObject> GetChecklistItems(Model.ItemsLsnr<BaseModelObject> getItemsLsnr) {
 
-        ArrayList<ChecklistItem> items = new ArrayList<>();
+        ArrayList<BaseModelObject> items = new ArrayList<>();
 
         try {
             DatabaseReference myRef = database.getReference("/ChecklistItems");

@@ -97,10 +97,9 @@ public class CheckListsActivity extends AppCompatActivity {
 
        model = new Model<>(Checklist.class);
         //Get data Async.
-        model.setItemsLsnr( this::checkListsToDisplay);
         //When data returned from Firebase, it will rise event onDataChange
         // - which execute the injected method-checkListsToDisplay
-        model.getItems();
+        model.getItemsAsync(this::checkListsToDisplay);
 
 //        if (checkListsDisplay != null) {
 //             adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);

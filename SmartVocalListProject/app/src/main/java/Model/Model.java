@@ -73,9 +73,9 @@ public class Model<T extends BaseModelObject> implements IModel, Serializable {
     }
 
 
-    public ArrayList<T> getItems() {
+    public ArrayList<T> getItemsAsync(Model.ItemsLsnr<BaseModelObject> lsnr) {
         Repository rep = new Repository();
-        items = (ArrayList<T>) rep.GetChecklists((ItemsLsnr<Checklist>) getItemsLsnr());
+        items = (ArrayList<T>) rep.GetChecklists(lsnr);
 
         return items;
     }
