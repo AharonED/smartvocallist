@@ -133,7 +133,7 @@ public class CheckListsActivity extends AppCompatActivity {
     private void startCheckListPlay(Checklist checkList){
         Intent myIntent = new Intent(CheckListsActivity.this, PocketSphinxActivity.class);
         myIntent.putExtra("checkListId", checkList.getId());
-        //myIntent.putex
+        myIntent.putExtra("model", model);
         startActivity(myIntent);
     }
 }
