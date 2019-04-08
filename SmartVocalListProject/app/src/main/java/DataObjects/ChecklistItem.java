@@ -140,7 +140,7 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
             description = (String) json.get("description");
             if (json.has("url") && json.get("url") != null)
                 url = (String) json.get("url");
-
+//
             if (json.has("attributes") && json.get("attributes") != null)
                 this.setAttributes( (String) json.get("attributes"));
             if (json.has("checklistId") && json.get("checklistId") != null)
