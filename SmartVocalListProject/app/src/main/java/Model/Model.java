@@ -6,6 +6,7 @@ import android.os.Build;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import DataObjects.BaseModelObject;
 import DataObjects.Checklist;
@@ -73,17 +74,24 @@ public class Model<T extends BaseModelObject> implements IModel, Serializable {
     }
 
 
-    public ArrayList<T> getItemsAsync(Model.ItemsLsnr<BaseModelObject> lsnr) {
+    public void getItemsAsync(Model.ItemsLsnr<BaseModelObject> lsnr) {
         Repository rep = new Repository();
         items = (ArrayList<T>) rep.GetChecklists(lsnr);
 
-        return items;
     }
 
     @TargetApi(Build.VERSION_CODES.N)
     public T getItemByID(String id)
     {
-        return items.stream().filter(o -> o.getId().equals(id)).findAny().orElse(null);
+        //return items.stream().filter(o -> o.getId().equals(id)).findAny().orElse(null);
+        Iterator<T> iterator = items.iterator();
+        while (iterator.hasNext()) {
+        T item = iterator.next();
+        if (item.getId().equals(id)) {
+            return item;
+            }
+        }
+        return null;
     }
 
 }
