@@ -38,6 +38,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.speech.tts.TextToSpeech;
@@ -93,7 +95,7 @@ public class PocketSphinxActivity extends Activity implements
             String text = itm.getName(); //this.dlg.items.get(this.dlg.step).getName();
             String caption = "Step Number " + dlg.step + ". " + text;
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
-            playTextToSpeechWhenDoneSpeaking(caption);
+            playTextToSpeechNow(caption);
 
 //            if(itm.getItemType() == ItemType.Numeric) {
 //                // Create grammar-based search for digit recognition
@@ -126,21 +128,21 @@ public class PocketSphinxActivity extends Activity implements
         };
 
         dlg.set = value -> {
-            playTextToSpeechWhenDoneSpeaking(value);
+            playTextToSpeechNow(value);
             listenToKeyWords();
             return true;
         };
 
         dlg.sof  = (item)->{
             String caption ="This is the first item";
-            playTextToSpeechWhenDoneSpeaking(caption);
+            playTextToSpeechNow(caption);
             makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
             listenToKeyWords();
         };
 
         dlg.eof  = (item)->{
             String caption = "This is the last item";
-            playTextToSpeechWhenDoneSpeaking(caption);
+            playTextToSpeechNow(caption);
             makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
             listenToKeyWords();
         };
@@ -159,7 +161,7 @@ public class PocketSphinxActivity extends Activity implements
                 optionsString.append(option);
             }
 
-            playTextToSpeechWhenDoneSpeaking(optionsString.toString());
+            playTextToSpeechNow(optionsString.toString());
             listenToKeyWords();
         };
 
@@ -169,6 +171,20 @@ public class PocketSphinxActivity extends Activity implements
         setContentView(R.layout.activity_pocket_sphinx);
         ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
         ((TextView) findViewById(R.id.listening_text)).setText("");
+
+        ((Button)findViewById(R.id.back_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.previous();
+            }
+        });
+
+        ((Button)findViewById(R.id.next_Button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.next();
+            }
+        });
 
         // Check if user has given permission to record audio
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
@@ -210,8 +226,6 @@ public class PocketSphinxActivity extends Activity implements
             if (result != null) {
                 ((TextView) activityReference.get().findViewById(R.id.caption_text))
                         .setText("Failed to init recognizer " + result);
-            } else {
-                activityReference.get().dlg.setCommand("read","");
             }
         }
     }
@@ -335,7 +349,6 @@ public class PocketSphinxActivity extends Activity implements
 
                 //******* That cause the listener to listen himself agan!!! :-(
                 String caption = chk.getName();
-                playTextToSpeechWhenDoneSpeaking(caption);
                 dlg.setCommand("read","");
                 //playTextToSpeechWhenDoneSpeaking(dlg.items.get(dlg.step).getName());
 
@@ -366,20 +379,23 @@ public class PocketSphinxActivity extends Activity implements
     }
 
     private void playTextToSpeechNow(String text){
-        if(textToSpeech == null)
+        if(textToSpeech == null || text == "")
             return;
 
         recognizer.stop();
+        ((TextView) findViewById(R.id.listening_text)).setText("");
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, textToSpeechMap);
+        while(!textToSpeech.isSpeaking());
     }
 
     private void playTextToSpeechWhenDoneSpeaking(String text){
-        if(textToSpeech == null)
+        if(textToSpeech == null || text == "")
             return;
 
         recognizer.stop();
         ((TextView) findViewById(R.id.listening_text)).setText("");
         textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, textToSpeechMap);
+        while(!textToSpeech.isSpeaking());
     }
 
     @Override
