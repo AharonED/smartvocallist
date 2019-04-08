@@ -4,25 +4,21 @@ import android.annotation.TargetApi;
 import android.os.Build;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import DataObjects.BaseModelObject;
 
-public  abstract class Model <T extends BaseModelObject> implements IModel, Serializable {
+public class ModelGeneric<T extends BaseModelObject> implements IModel, Serializable {
 
     private String tableName="";
 
-    public Model.ItemsLsnr<T> getItemsLsnr() {
+    public ItemsLsnr<T> getItemsLsnr() {
         return ItemsLsnr;
     }
-    public interface ItemsLsnr<E extends BaseModelObject> {
-        void getItemsLsnr(ArrayList<E> items);
-    }
 
-    private ItemsLsnr<T> ItemsLsnr;
-
-    public void setItemsLsnr(Model.ItemsLsnr<T> itemsLsnr) {
+    public void setItemsLsnr(ItemsLsnr<T> itemsLsnr) {
         ItemsLsnr = itemsLsnr;
     }
 
@@ -34,27 +30,45 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
         this.tableName = tableName;
     }
 
+    public interface ItemsLsnr<E extends BaseModelObject> {
+        void getItemsLsnr(ArrayList<E> items );
+    }
+
+    private ItemsLsnr<T> ItemsLsnr;
 
     //public static Model model;
     public  ArrayList<T> items = new ArrayList<>();
 
+    Class<T> getType(){return type;}
 
-    public Model()
+    private Class<T> type;
+    public ModelGeneric(Class<T> cls)
     {
+        type= cls;
+        if(items.size()==0) {
+            switch (getType().getName()) {
+                case "DataObjects.Checklist":
+                    setTableName("Checklist");
+                    break;
+            }
+        }
 
     }
 
     public void addItem(T chk)
     {
         //fairebase.addChild( chk.tableName  , chk);
+
+        // myRef.setValue("Hello, World!");
+
         items.add(chk);
 
     }
 
 
-    public void getItemsAsync(Model.ItemsLsnr<T> lsnr) {
+    public void getItemsAsync(ItemsLsnr<BaseModelObject> lsnr) {
         Repository rep = new Repository();
-        ////items = (ArrayList<T>) rep.GetChecklists(lsnr);
+        //items = (ArrayList<T>) rep.GetChecklists((Model.ItemsLsnr<BaseModelObject>) lsnr);
 
     }
 
@@ -65,8 +79,8 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
         Iterator<T> iterator = items.iterator();
         while (iterator.hasNext()) {
             T item = iterator.next();
-        if (item.getId().equals(id)) {
-            return item;
+            if (item.getId().equals(id)) {
+                return item;
             }
         }
         return null;

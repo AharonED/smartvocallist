@@ -50,16 +50,15 @@ public class Repository extends AppCompatActivity {
 */
     }
 
-    public  ArrayList<BaseModelObject> GetChecklists(Model.ItemsLsnr<BaseModelObject> itemsLsnr) {
+    public  ArrayList<Checklist> GetChecklists(Model.ItemsLsnr<Checklist> itemsLsnr) {
 
-        ArrayList<BaseModelObject> items = new ArrayList<>();
+        ArrayList<Checklist> items = new ArrayList<>();
         items.add(CreateTempCheckList("Ch1"));
         items.add(CreateTempCheckList("Ch2"));
 
 
         try {
             DatabaseReference myRef = database.getReference("/Checklists");
-            // myRef.setValue("Hello, World!");
 
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
