@@ -3,21 +3,16 @@ package Model;
 import android.annotation.TargetApi;
 import android.os.Build;
 
-import com.google.firebase.FirebaseApp;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 import DataObjects.BaseModelObject;
 import DataObjects.Checklist;
-import DataObjects.ChecklistItem;
 
-public class Model<T extends BaseModelObject> implements IModel {
+public class Model<T extends BaseModelObject> implements IModel, Serializable {
 
-    public  String tableName="";
+    private String tableName="";
 
     public Model.ItemsLsnr<T> getItemsLsnr() {
         return ItemsLsnr;
@@ -25,6 +20,14 @@ public class Model<T extends BaseModelObject> implements IModel {
 
     public void setItemsLsnr(Model.ItemsLsnr<T> itemsLsnr) {
         ItemsLsnr = itemsLsnr;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
     public interface ItemsLsnr<E extends BaseModelObject> {
@@ -55,7 +58,7 @@ public class Model<T extends BaseModelObject> implements IModel {
             switch (getType().getName()) {
                 case "DataObjects.Checklist":
                     //items = (ArrayList<T>) rep.GetChecklists((ItemsLsnr<Checklist>) getItemsLsnr);
-                    tableName = "Checklist";
+                    setTableName("Checklist");
                     break;
             }
         }
