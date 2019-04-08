@@ -3,10 +3,8 @@ package edu.cmu.pocketsphinx.demo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.JsonReader;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -29,7 +27,7 @@ import DataObjects.ChecklistItem;
 import Model.Model;
 
 
-public class Add_list_activity extends AppCompatActivity {
+public class AddListActivity extends AppCompatActivity {
     private Checklist NewChecklist;
     private ArrayList<ChecklistItem> Items;
 
@@ -39,7 +37,7 @@ public class Add_list_activity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         this.Items = new ArrayList<ChecklistItem>();
-                setContentView(R.layout.activity_add_list_activity);
+                setContentView(R.layout.activity_add_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -91,9 +89,9 @@ public class Add_list_activity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(Add_list_activity.this, addListItem.class);
+                Intent myIntent = new Intent(AddListActivity.this, addListItem.class);
 
-                Add_list_activity.this.startActivity(myIntent);
+                AddListActivity.this.startActivity(myIntent);
                 String result = myIntent.getStringArrayExtra("Item")[0];
 
                 try {

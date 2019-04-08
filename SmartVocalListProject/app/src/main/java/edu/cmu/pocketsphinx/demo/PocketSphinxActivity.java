@@ -42,7 +42,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.speech.tts.TextToSpeech;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -166,8 +165,9 @@ public class PocketSphinxActivity extends Activity implements
         textToSpeechMap = new HashMap<String, String>();
         textToSpeechMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID");
 
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_pocket_sphinx);
         ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
+        ((TextView) findViewById(R.id.listening_text)).setText("");
 
         // Check if user has given permission to record audio
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
@@ -274,8 +274,6 @@ public class PocketSphinxActivity extends Activity implements
      */
     @Override
     public void onResult(Hypothesis hypothesis) {
-        ((TextView) findViewById(R.id.result_text)).setText("");
-
         if (hypothesis != null) {
             String text = hypothesis.getHypstr();
             //
@@ -297,6 +295,7 @@ public class PocketSphinxActivity extends Activity implements
         if(!textToSpeech.isSpeaking()){
             recognizer.stop();
             recognizer.startListening(KEY_WORDS_SEARCH);
+            ((TextView) findViewById(R.id.listening_text)).setText("Listening :)");
         }else{
             new ListenToKeyWordsWaiter().execute();
         }
@@ -378,6 +377,7 @@ public class PocketSphinxActivity extends Activity implements
             return;
 
         recognizer.stop();
+        ((TextView) findViewById(R.id.listening_text)).setText("");
         textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, textToSpeechMap);
     }
 

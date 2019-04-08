@@ -8,20 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Vector;
 
 import DataObjects.Checklist;
 import Model.Model;
@@ -64,9 +56,9 @@ public class CheckListsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            Intent myIntent = new Intent(CheckListsActivity.this, Add_list_activity.class);
+        FloatingActionButton AddCheckListButton = findViewById(R.id.fab);
+        AddCheckListButton.setOnClickListener(view -> {
+            Intent myIntent = new Intent(CheckListsActivity.this, AddListActivity.class);
             startActivity(myIntent);
         });
 
