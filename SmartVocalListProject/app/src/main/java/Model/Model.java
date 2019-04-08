@@ -19,11 +19,19 @@ public class Model<T extends BaseModelObject> implements IModel {
 
     public  String tableName="";
 
+    public Model.ItemsLsnr<T> getItemsLsnr() {
+        return ItemsLsnr;
+    }
+
+    public void setItemsLsnr(Model.ItemsLsnr<T> itemsLsnr) {
+        ItemsLsnr = itemsLsnr;
+    }
+
     public interface ItemsLsnr<E extends BaseModelObject> {
         public void getItemsLsnr(ArrayList<E> items );
     }
 
-    public ItemsLsnr<T> getItemsLsnr;
+    private ItemsLsnr<T> ItemsLsnr;
 
     //public static Model model;
     public  ArrayList<T> items = new ArrayList<>();
@@ -64,7 +72,7 @@ public class Model<T extends BaseModelObject> implements IModel {
 
     public ArrayList<T> getItems() {
         Repository rep = new Repository();
-        items = (ArrayList<T>) rep.GetChecklists((ItemsLsnr<Checklist>) getItemsLsnr);
+        items = (ArrayList<T>) rep.GetChecklists((ItemsLsnr<Checklist>) getItemsLsnr());
 
         return items;
     }
@@ -72,14 +80,7 @@ public class Model<T extends BaseModelObject> implements IModel {
     @TargetApi(Build.VERSION_CODES.N)
     public T getItemByID(String id)
     {
-        if( items.stream().filter(o -> o.getId().equals(id)).findFirst().isPresent())
-        {
-            Optional<T> item =  items.stream().filter(o -> o.getId().equals(id)).findFirst();
-            return item.get();
-        }
-        else {
-            return null;
-        }
+        return items.stream().filter(o -> o.getId().equals(id)).findAny().orElse(null);
     }
 
 }

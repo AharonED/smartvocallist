@@ -53,8 +53,8 @@ public class Repository extends AppCompatActivity {
     public  ArrayList<Checklist> GetChecklists(Model.ItemsLsnr<Checklist> getItemsLsnr) {
 
         ArrayList<Checklist> items = new ArrayList<>();
-        items.add(getChecklistByID("Ch1"));
-        items.add(getChecklistByID("Ch2"));
+        items.add(CreateTempCheckList("Ch1"));
+        items.add(CreateTempCheckList("Ch2"));
 
 
         try {
@@ -157,7 +157,7 @@ public class Repository extends AppCompatActivity {
         return json;
     }
 
-    public static Checklist getChecklistByID(String ID)
+    public static Checklist CreateTempCheckList(String ID)
     {
         Checklist chk = new Checklist("options_" + ID,"Checklist #" + ID,"You should perform this checklist","",null);
         ChecklistItem item =new ChecklistItem("item_1",1,"Say \"easy\", \"medium\" or \"hard\"","", "",null);

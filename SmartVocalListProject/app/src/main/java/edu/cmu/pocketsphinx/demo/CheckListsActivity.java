@@ -38,6 +38,8 @@ public class CheckListsActivity extends AppCompatActivity {
     ArrayList<String> checkListsDisplay;
     //private HashMap<String, Checklist> checkListsHashMap;
 
+    Model model=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,9 +95,9 @@ public class CheckListsActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        Model model = new Model<>(Checklist.class);
+       model = new Model<>(Checklist.class);
         //Get data Async.
-        model.getItemsLsnr = this::checkListsToDisplay;
+        model.setItemsLsnr( this::checkListsToDisplay);
         //When data returned from Firebase, it will rise event onDataChange
         // - which execute the injected method-checkListsToDisplay
         model.getItems();
@@ -132,6 +134,7 @@ public class CheckListsActivity extends AppCompatActivity {
         private void startCheckListPlay(Checklist checkList){
         Intent myIntent = new Intent(CheckListsActivity.this, PocketSphinxActivity.class);
         myIntent.putExtra("checkListId", checkList.getId());
+        //myIntent.putex
         startActivity(myIntent);
     }
 }
