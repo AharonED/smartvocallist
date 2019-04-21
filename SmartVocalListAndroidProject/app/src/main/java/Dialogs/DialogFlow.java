@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import DataObjects.ChecklistItem;
 
@@ -22,7 +23,6 @@ public class DialogFlow<T extends ChecklistItem> {
     public  ArrayList<T> items = new ArrayList<>();
     public int step=0;
     public String keywords;
-    public String Answers;
 
     public DialogFlow()
     {
@@ -153,23 +153,42 @@ public class DialogFlow<T extends ChecklistItem> {
         }
     }
 
-    // Create keywords file
-    public void createKeyWordsFile(File file) {
-        StringBuilder textForFile = new StringBuilder();
-        textForFile.append(keywords);
+    public String getCurrentItemKeyWordsFileName(){
+        return getItemFileName(items.get(step));
+    }
 
-        for (ChecklistItem checklistItem : items) {
-            textForFile.append(checklistItem.toKeywords());
+    private String getItemFileName(T item){
+        return item.getId() + ".keys";
+    }
+
+    // Create keywords file for each checklist item
+    public List<File> createKeyWordsFiles(File assetsDir){
+        List<File> createdFiles = new ArrayList<>();
+
+        for (T checklistItem : items) {
+            //String fileName = checklistItem.getIndex() + ".lst";
+            String fileName = getItemFileName(checklistItem);
+            File itemWordsListFile = new File(assetsDir, fileName);
+            createdFiles.add(itemWordsListFile);
+
+            try {
+                FileOutputStream stream = new FileOutputStream(itemWordsListFile);
+                String textForFile = keywords + checklistItem.toKeywords();
+                stream.write(textForFile.getBytes());
+                stream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
-        Answers = textForFile.toString();
+        return createdFiles;
+    }
 
-        try {
-            FileOutputStream stream = new FileOutputStream(file);
-            stream.write(textForFile.toString().getBytes());
-            stream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void removeKeyWordsFiles(File assetsDir){
+        for (File f : assetsDir.listFiles()) {
+            if (f.getName().endsWith(".keys")) {
+                f.delete();
+            }
         }
     }
 }
