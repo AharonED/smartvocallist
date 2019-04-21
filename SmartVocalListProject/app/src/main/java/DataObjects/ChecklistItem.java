@@ -80,7 +80,7 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
 
     public void setAttributes(String attributes) {
         this.attributes = attributes;
-        String [] seperated = attributes.split(";");
+        String [] seperated = attributes.split(";|,|/");
         options.addAll(Arrays.asList(seperated));
 
     }
@@ -205,7 +205,7 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
         StringBuilder textForFile = new StringBuilder();
 
         for (String keyWord : options) {
-            textForFile.append(keyWord + "/1e-1/\n");
+            textForFile.append(keyWord.trim() + "/1e-1/\n");
         }
 
         return textForFile.toString();

@@ -157,7 +157,7 @@ public class PocketSphinxActivity extends Activity implements
             optionsString.append("The options are:");
 
             for (String option : itm.options) {
-                optionsString.append(" ");
+                optionsString.append(";");
                 optionsString.append(option);
             }
 
