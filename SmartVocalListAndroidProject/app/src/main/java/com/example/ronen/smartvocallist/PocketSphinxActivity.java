@@ -42,6 +42,7 @@ import android.widget.Toast;
 import android.speech.tts.TextToSpeech;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import java.io.File;
@@ -65,11 +66,6 @@ import static android.widget.Toast.makeText;
 
 public class PocketSphinxActivity extends Activity implements
         RecognitionListener {
-
-    /* Named searches allow to quickly reconfigure the decoder */
-    //private static final String DIGITS_SEARCH = "digits";
-    private static final String KEY_WORDS_SEARCH = "KEY_WORDS_SEARCH";
-
     /* Used to handle permission request */
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
 
@@ -254,6 +250,14 @@ public class PocketSphinxActivity extends Activity implements
             recognizer.cancel();
             recognizer.shutdown();
         }
+
+        try {
+            Assets assets = new Assets(this);
+            File assetDir = assets.syncAssets();
+            dlg.removeKeyWordsFiles(assetDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -309,7 +313,8 @@ public class PocketSphinxActivity extends Activity implements
     private void listenToKeyWords(){
         if(!textToSpeech.isSpeaking()){
             recognizer.stop();
-            recognizer.startListening(KEY_WORDS_SEARCH);
+            //recognizer.startListening(dlg.step + ".lst");
+            recognizer.startListening(dlg.getCurrentItemKeyWordsFileName());
             ((TextView) findViewById(R.id.listening_text)).setText("Listening :)");
         }else{
             new ListenToKeyWordsWaiter().execute();
@@ -331,9 +336,11 @@ public class PocketSphinxActivity extends Activity implements
          */
 
         // Create multiple keyword-activation search
-        File keywords = new File(assetsDir, "keywords.lst");
-        dlg.createKeyWordsFile(keywords);
-        recognizer.addKeywordSearch(KEY_WORDS_SEARCH, keywords);
+        List<File> createdFiles = dlg.createKeyWordsFiles(assetsDir);
+
+        for (File file : createdFiles) {
+            recognizer.addKeywordSearch(file.getName(), file);
+        }
 
         // Create grammar-based search for digit recognition
         //      File digitsGrammar = new File(assetsDir, "digits.gram");
