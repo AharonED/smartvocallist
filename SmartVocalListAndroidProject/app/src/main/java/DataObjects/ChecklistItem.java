@@ -171,7 +171,7 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
         json = super.toJson();
         try {
             json = new JSONObject();
-            json.put("index",index);
+            json.put("itemIndex",index);
             json.put("name",name);
             json.put("description",description);
             json.put("url",url);
