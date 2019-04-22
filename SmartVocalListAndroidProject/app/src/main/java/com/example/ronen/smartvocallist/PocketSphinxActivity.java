@@ -56,6 +56,7 @@ import Model.ModelChecklists;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
@@ -179,6 +180,13 @@ public class PocketSphinxActivity extends Activity implements
             @Override
             public void onClick(View v) {
                 dlg.next();
+            }
+        });
+
+        ((Button)findViewById(R.id.options_Button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.setCommand("options", "");
             }
         });
 
