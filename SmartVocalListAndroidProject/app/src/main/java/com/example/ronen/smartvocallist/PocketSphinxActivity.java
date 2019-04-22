@@ -75,6 +75,7 @@ public class PocketSphinxActivity extends Activity implements
     private TextToSpeech textToSpeech;
     private Checklist chk = null;
     private DialogFlow<ChecklistItem> dlg = null;
+    private AsyncTask<Void,Void,Void> listenToKeyWordsWaiterTask = null;
 
     @Override
     public void onCreate(Bundle state) {
@@ -254,6 +255,16 @@ public class PocketSphinxActivity extends Activity implements
     public void onDestroy() {
         super.onDestroy();
 
+        if (textToSpeech != null){
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
+
+        if(listenToKeyWordsWaiterTask != null &&
+                listenToKeyWordsWaiterTask.getStatus() == AsyncTask.Status.RUNNING){
+            listenToKeyWordsWaiterTask.cancel(true);
+        }
+
         if (recognizer != null) {
             recognizer.cancel();
             recognizer.shutdown();
@@ -320,12 +331,15 @@ public class PocketSphinxActivity extends Activity implements
 
     private void listenToKeyWords(){
         if(!textToSpeech.isSpeaking()){
-            recognizer.stop();
-            //recognizer.startListening(dlg.step + ".lst");
-            recognizer.startListening(dlg.getCurrentItemKeyWordsFileName());
-            ((TextView) findViewById(R.id.listening_text)).setText("Listening :)");
+            if(recognizer != null){
+                recognizer.stop();
+                //recognizer.startListening(dlg.step + ".lst");
+                recognizer.startListening(dlg.getCurrentItemKeyWordsFileName());
+                ((TextView) findViewById(R.id.listening_text)).setText("Listening :)");
+            }
         }else{
-            new ListenToKeyWordsWaiter().execute();
+            listenToKeyWordsWaiterTask = new ListenToKeyWordsWaiter();
+            listenToKeyWordsWaiterTask.execute();
         }
     }
 
