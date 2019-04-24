@@ -56,6 +56,7 @@ import Model.ModelChecklists;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
@@ -74,6 +75,7 @@ public class PocketSphinxActivity extends Activity implements
     private TextToSpeech textToSpeech;
     private Checklist chk = null;
     private DialogFlow<ChecklistItem> dlg = null;
+    private AsyncTask<Void,Void,Void> listenToKeyWordsWaiterTask = null;
 
     @Override
     public void onCreate(Bundle state) {
@@ -182,6 +184,13 @@ public class PocketSphinxActivity extends Activity implements
             }
         });
 
+        ((Button)findViewById(R.id.options_Button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.setCommand("options", "");
+            }
+        });
+
         // Check if user has given permission to record audio
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -245,6 +254,16 @@ public class PocketSphinxActivity extends Activity implements
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        if (textToSpeech != null){
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
+
+        if(listenToKeyWordsWaiterTask != null &&
+                listenToKeyWordsWaiterTask.getStatus() == AsyncTask.Status.RUNNING){
+            listenToKeyWordsWaiterTask.cancel(true);
+        }
 
         if (recognizer != null) {
             recognizer.cancel();
@@ -312,12 +331,15 @@ public class PocketSphinxActivity extends Activity implements
 
     private void listenToKeyWords(){
         if(!textToSpeech.isSpeaking()){
-            recognizer.stop();
-            //recognizer.startListening(dlg.step + ".lst");
-            recognizer.startListening(dlg.getCurrentItemKeyWordsFileName());
-            ((TextView) findViewById(R.id.listening_text)).setText("Listening :)");
+            if(recognizer != null){
+                recognizer.stop();
+                //recognizer.startListening(dlg.step + ".lst");
+                recognizer.startListening(dlg.getCurrentItemKeyWordsFileName());
+                ((TextView) findViewById(R.id.listening_text)).setText("Listening :)");
+            }
         }else{
-            new ListenToKeyWordsWaiter().execute();
+            listenToKeyWordsWaiterTask = new ListenToKeyWordsWaiter();
+            listenToKeyWordsWaiterTask.execute();
         }
     }
 
