@@ -38,7 +38,7 @@ public class DialogFlow<T extends ChecklistItem> {
 
         keywords= "next/1e-1/\n" +
                   "back/1e-1/\n" +
-                  "restart/1e-1/\n" +
+                  "start/1e-1/\n" +
                   "options/1e-1/\n" +
                   "read/1e-1/\n";
     }
@@ -50,6 +50,7 @@ public class DialogFlow<T extends ChecklistItem> {
     public SetInterface set;
     public FunctionalInterface readOptions;
     public FunctionalInterface readItem;
+    public FunctionalInterface mustAnswerItem;
 
 /*
     public void execute()
@@ -88,14 +89,18 @@ public class DialogFlow<T extends ChecklistItem> {
 
     public int next()
     {
-        if(step<items.size()-1)
+        T item = items.get(step);
+
+        if(item.getResult() == null || item.getResult() == ""){
+            mustAnswerItem.execute(items.get(step));
+        }
+        else if(step<items.size()-1)
         {
             step++;
             execute.execute(items.get(step));
         }
         else if(step>=items.size()-1)
         {
-            //step=items.size()-1;
             eof.execute(items.get(step));
         }
         return step;
@@ -127,7 +132,7 @@ public class DialogFlow<T extends ChecklistItem> {
             case "next":
                 next();
                 break;
-            case "restart":
+            case "start":
                 start();
                 break;
             case "set":
@@ -140,9 +145,7 @@ public class DialogFlow<T extends ChecklistItem> {
                 readOptions.execute(items.get(step));
                 break;
             default:
-                    //start();
                 break;
-
         }
     }
 

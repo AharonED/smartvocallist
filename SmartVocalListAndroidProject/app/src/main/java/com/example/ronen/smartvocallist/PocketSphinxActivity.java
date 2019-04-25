@@ -56,7 +56,6 @@ import Model.ModelChecklists;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
@@ -94,35 +93,8 @@ public class PocketSphinxActivity extends Activity implements
             String caption = "Step Number " + dlg.step + ". " + text;
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
             playTextToSpeechNow(caption);
-
-//            if(itm.getItemType() == ItemType.Numeric) {
-//                // Create grammar-based search for digit recognition
-//                Assets assets = null;
-//                try {
-//                    assets = new Assets(this.getApplicationContext());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                File digitsGrammar = null;
-//                try {
-//                    digitsGrammar = new File(assets.syncAssets(), "digits.gram");
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                recognizer.addGrammarSearch("digits", digitsGrammar);
-//
-//                if(!textToSpeech.isSpeaking()){
-//                    recognizer.stop();
-//                    recognizer.startListening("digits");
-//                }else{
-//                    new ListenToKeyWordsWaiter().execute();
-//                }
-//
-//            }
-//            else {
+            displayAnswerToTheQuestion((ChecklistItem) item);
             listenToKeyWords();
-//            }
         };
 
         dlg.set = value -> {
@@ -142,6 +114,7 @@ public class PocketSphinxActivity extends Activity implements
             String caption = "This is the last item";
             playTextToSpeechNow(caption);
             makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
+            displayAnswerToTheQuestion((ChecklistItem) item);
             listenToKeyWords();
         };
 
@@ -163,12 +136,20 @@ public class PocketSphinxActivity extends Activity implements
             listenToKeyWords();
         };
 
+        dlg.mustAnswerItem = (item)->{
+            String text = "You must answer to continue";
+            playTextToSpeechNow(text);
+            listenToKeyWords();
+        };
+
         textToSpeechMap = new HashMap<String, String>();
         textToSpeechMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID");
 
         setContentView(R.layout.activity_pocket_sphinx);
         ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
         ((TextView) findViewById(R.id.listening_text)).setText("");
+        ((TextView) findViewById(R.id.result_label)).setVisibility(View.INVISIBLE);
+        ((TextView) findViewById(R.id.answer_textView)).setVisibility(View.INVISIBLE);
 
         ((Button)findViewById(R.id.back_button)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,6 +184,20 @@ public class PocketSphinxActivity extends Activity implements
         SetupTask tsk= new SetupTask(this);
         tsk.dlg = this.dlg;
         tsk.execute();
+    }
+
+    private void displayAnswerToTheQuestion(ChecklistItem item) {
+        String answerToQuestion = item.getResult();
+
+        if(answerToQuestion == null || answerToQuestion == "") {
+            ((TextView) findViewById(R.id.result_label)).setVisibility(View.INVISIBLE);
+            ((TextView) findViewById(R.id.answer_textView)).setVisibility(View.INVISIBLE);
+        }
+        else {
+            ((TextView) findViewById(R.id.result_label)).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.answer_textView)).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.answer_textView)).setText(answerToQuestion);
+        }
     }
 
     private static class SetupTask extends AsyncTask<Void, Void, Exception> {
@@ -290,9 +285,9 @@ public class PocketSphinxActivity extends Activity implements
             return;
 
         String text = hypothesis.getHypstr();
+        text = text.split(" ")[0];
 
         if(dlg.keywords.contains(text)) {
-            playTextToSpeechNow(text);
             makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
             dlg.setCommand(text, "");
         }
@@ -301,7 +296,7 @@ public class PocketSphinxActivity extends Activity implements
             listenToKeyWords();
         }
         else {
-            playTextToSpeechNow(text);
+            dlg.items.get(dlg.step).setResult(text);
             makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
             dlg.next();
         }
