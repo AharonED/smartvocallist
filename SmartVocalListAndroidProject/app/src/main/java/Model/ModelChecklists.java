@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import DataObjects.BaseModelObject;
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
 
@@ -34,20 +33,19 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
     @Override
     @TargetApi(Build.VERSION_CODES.N)
     public void getItemsAsync(ItemsLsnr<Checklist> lsnr) {
-        Repository rep = new Repository();
+        //Repository rep = new Repository();
         //items =  rep.GetChecklists(lsnr);
 
         items =  rep.GetChecklists(new ItemsLsnr<Checklist>() {
                                        @Override
-                                       public void getItemsLsnr(ArrayList<Checklist> items) {
-
-                                           ArrayList < Checklist > chks = items;
+                                       public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
+                                            //Get All Checklists
+                                           ArrayList <Checklist> chks = items;
+                                           //For each Checklist get its all ChecklistItems
                                            ModelChecklistItems.getInstance().getItemsAsync(new ItemsLsnr<ChecklistItem>() {
                                                @Override
-                                               public void getItemsLsnr(ArrayList<ChecklistItem> items) {
+                                               public void OnDataChangeItemsLsnr(ArrayList<ChecklistItem> items) {
                                                    for (Checklist chk: chks) {
-//                    ArrayList<ChecklistItem> tmp = (ArrayList<ChecklistItem>) items.stream().filter(o -> o.getChecklistId().equals(chk.getId()));
-
                                                        Iterator<ChecklistItem> iterator = items.iterator();
                                                        while (iterator.hasNext()) {
                                                            ChecklistItem item = iterator.next();
@@ -59,13 +57,28 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
                                                }
                                            });
 
-                                           lsnr.getItemsLsnr(items);
+                                           //Call the callback function (usually rise from GUI/Controller)
+                                           lsnr.OnDataChangeItemsLsnr(items);
                                            //::items = items;
                                        }
                                    });
 
 
     }
-//
+
+    @Override
+    public void addItem(Checklist chk){
+        if(chk.id=="-1") {
+            chk.id = java.util.UUID.randomUUID().toString();
+        }
+
+        for (ChecklistItem itm: chk.checklistItems) {
+            itm.id = java.util.UUID.randomUUID().toString();
+            itm.setChecklistId(chk.id);
+            ModelChecklistItems.getInstance().addItem(itm);
+        }
+        super.addItem(chk);
+    }
+
 }
 

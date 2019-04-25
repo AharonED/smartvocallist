@@ -1,15 +1,11 @@
 package Model;
 
-import android.app.Activity;
 import android.util.Log;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
@@ -17,7 +13,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import DataObjects.BaseModelObject;
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
 
@@ -26,7 +21,7 @@ import static android.content.ContentValues.TAG;
 public class Repository {
 
 
-    //public Model.ItemsLsnr<Checklist> getItemsLsnr;
+    //public Model.ItemsLsnr<Checklist> OnDataChangeItemsLsnr;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
 
@@ -70,7 +65,7 @@ public class Repository {
                         chk.Checklists(convertSnapshot2Json(dataSnapshot));
                         items.add(chk);
                     }
-                    itemsLsnr.getItemsLsnr(items);
+                    itemsLsnr.OnDataChangeItemsLsnr(items);
 
                 }
 
@@ -108,7 +103,7 @@ public class Repository {
                         chk.ChecklistItems(convertSnapshot2Json(dataSnapshot));
                         items.add(chk);
                     }
-                    getItemsLsnr.getItemsLsnr(items);
+                    getItemsLsnr.OnDataChangeItemsLsnr(items);
  //
                 }
 

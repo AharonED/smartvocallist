@@ -27,9 +27,12 @@ public class ModelChecklistItems extends Model<ChecklistItem> implements Seriali
 
     @Override
     public void getItemsAsync(ItemsLsnr<ChecklistItem> lsnr) {
-        Repository rep = new Repository();
         items =  rep.GetChecklistItems(lsnr);
+    }
 
+    @Override
+    public void addItem(ChecklistItem chk){
+        super.addItem(chk);
     }
 
 }
