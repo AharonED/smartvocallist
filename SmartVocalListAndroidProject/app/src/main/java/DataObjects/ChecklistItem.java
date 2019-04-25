@@ -181,25 +181,6 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
         }
         return json;
     }
-    public String toGrammar() {
-        String Gram="#JSGF V1.0;\n" +
-                "\n" +
-                "grammar menu;\n" +
-                "\n" +
-                "public <item> = back | next | set | skip | read |  ";
-
-        String opt=null;
-
-        for (int i=0;i<options.size();i++) {
-            opt=options.get(i);
-            Gram = Gram + opt ;
-            if(i<options.size()-1)
-               Gram = Gram + " | ";
-        }
-        Gram = Gram + ";\n";
-
-        return Gram;
-    }
 
     public String toKeywords(){
         StringBuilder textForFile = new StringBuilder();

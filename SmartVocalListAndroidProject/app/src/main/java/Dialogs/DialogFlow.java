@@ -26,16 +26,21 @@ public class DialogFlow<T extends ChecklistItem> {
 
     public DialogFlow()
     {
-        keywords="set/1e-1/\n" +
-                "start/1e-1/\n" +
-                "previous/1e-1/\n" +
-                "next/1e-1/\n" +
-                "back/1e-1/\n" +
-                "restart/1e-1/\n" +
-                "skip/1e-1/\n" +
-                "options/1e-1/\n" +
-                "read/1e-1/\n";
+//        keywords="set/1e-1/\n" +
+//                "start/1e-1/\n" +
+//                "previous/1e-1/\n" +
+//                "next/1e-1/\n" +
+//                "back/1e-1/\n" +
+//                "restart/1e-1/\n" +
+//                "skip/1e-1/\n" +
+//                "options/1e-1/\n" +
+//                "read/1e-1/\n";
 
+        keywords= "next/1e-1/\n" +
+                  "back/1e-1/\n" +
+                  "restart/1e-1/\n" +
+                  "options/1e-1/\n" +
+                  "read/1e-1/\n";
     }
 
     public FunctionalInterface execute;
@@ -111,21 +116,11 @@ public class DialogFlow<T extends ChecklistItem> {
         return step;
     }
 
-    public int skip()
-    {
-        return next();
-    }
-
-
     @SuppressLint("NewApi")
     public void setCommand(String command, String value)
     {
         switch (command)
         {
-            case "start":
-                start();
-                break;
-            case "previous":
             case "back":
                 previous();
                 break;
@@ -134,9 +129,6 @@ public class DialogFlow<T extends ChecklistItem> {
                 break;
             case "restart":
                 start();
-                break;
-            case "skip":
-                skip();
                 break;
             case "set":
                 set.set(value);
@@ -149,6 +141,7 @@ public class DialogFlow<T extends ChecklistItem> {
                 break;
             default:
                     //start();
+                break;
 
         }
     }
