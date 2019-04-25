@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/checkListsFragment">
+
+    <fragment
+        android:id="@+id/checkListsFragment"
+        android:name="com.example.ronen.smartvocallist.CheckListsFragment"
+        android:label="fragment_check_lists"
+        tools:layout="@layout/fragment_check_lists" />
+    <fragment
+        android:id="@+id/reportsListFragment"
+        android:name="com.example.ronen.smartvocallist.ReportsListFragment"
+        android:label="fragment_reports_list"
+        tools:layout="@layout/fragment_reports_list" />
+</navigation>
