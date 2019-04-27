@@ -51,21 +51,6 @@ public class CheckListsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_check_lists, container, false);
 
-        //This Firebase init code should be moved to global place....
-        try {
-            FirebaseOptions.Builder builder = new FirebaseOptions.Builder()
-                    .setApplicationId("1:0123456789012:android:0123456789abcdef")
-                    .setApiKey("AIzaSyDMIVUTpX7i0L__KDhiQb4zfzvMxmjwNec ")
-                    .setDatabaseUrl("https://smartvocallist1.firebaseio.com/")
-                    .setStorageBucket("smartvocallist1.appspot.com");
-            FirebaseApp.initializeApp(view.getContext(), builder.build());
-
-        }
-        catch (Exception ex)
-        {
-            Log.d(TAG, "Value is: " + ex.getMessage());
-        }
-
         FloatingActionButton AddCheckListButton = view.findViewById(R.id.fab);
         AddCheckListButton.setOnClickListener(v -> {
             Intent myIntent = new Intent(v.getContext(), AddListActivity.class);
