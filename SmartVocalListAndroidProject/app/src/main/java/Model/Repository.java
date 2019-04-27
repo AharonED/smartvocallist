@@ -6,6 +6,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
@@ -44,7 +45,18 @@ public class Repository {
 */
     }
 
-    public  ArrayList<Checklist> GetChecklists(Model.ItemsLsnr<Checklist> itemsLsnr) {
+        public  ArrayList<Checklist> GetChecklists(Model.ItemsLsnr<Checklist> itemsLsnr) {
+            DatabaseReference myRef = database.getReference("/Checklists");
+            Query query = myRef.orderByChild("checklistType").startAt("Template");
+            return  GetChecklistsByQuery(itemsLsnr,query);
+        }
+        public  ArrayList<Checklist> GetChecklistsReported(Model.ItemsLsnr<Checklist> itemsLsnr) {
+            DatabaseReference myRef = database.getReference("/Checklists");
+            Query query = myRef.orderByChild("checklistType").endAt("Reported");
+            return  GetChecklistsByQuery(itemsLsnr,query);
+        }
+
+        public  ArrayList<Checklist> GetChecklistsByQuery(Model.ItemsLsnr<Checklist> itemsLsnr, Query query ) {
 
         ArrayList<Checklist> items = new ArrayList<>();
         items.add(CreateTempCheckList("Ch1"));
@@ -52,9 +64,14 @@ public class Repository {
 
 
         try {
-            DatabaseReference myRef = database.getReference("/Checklists");
 
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            if(query==null) {
+                DatabaseReference myRef = database.getReference("/Checklists");
+                query = myRef.orderByChild("checklistType");
+            }
+
+            query.addValueEventListener(new ValueEventListener() {
+//            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     //Log.w(TAG, "onDataChange---" + snapshot.getChildrenCount() );
