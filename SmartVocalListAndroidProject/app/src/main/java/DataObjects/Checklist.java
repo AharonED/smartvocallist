@@ -16,6 +16,16 @@ public class Checklist extends BaseModelObject implements Serializable {
     private String name;
     private String description;
 
+    public int getIsCompleted() {
+        return IsCompleted;
+    }
+
+    public void setIsCompleted(int isCompleted) {
+        IsCompleted = isCompleted;
+    }
+
+    private int IsCompleted=0;
+
     public String getName() {
         return name;
     }
@@ -156,4 +166,14 @@ public class Checklist extends BaseModelObject implements Serializable {
     {
         return new Checklist("--");
     }
+
+    public  Checklist CopyChecklist()
+    {
+        Checklist tmpChk = new Checklist("-1");
+        tmpChk.Checklists( toJson());
+        tmpChk.id = java.util.UUID.randomUUID().toString();
+
+        return tmpChk;
+    }
+
 }

@@ -43,6 +43,16 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
     private int index;
     private ItemType itemType=ItemType.Boolean;
 
+    public int getIsReq() {
+        return IsReq;
+    }
+
+    public void setIsReq(int isReq) {
+        IsReq = isReq;
+    }
+
+    private int IsReq;
+
     //Parent Checklist ID
     public String getChecklistId() {
         return checklistId;
