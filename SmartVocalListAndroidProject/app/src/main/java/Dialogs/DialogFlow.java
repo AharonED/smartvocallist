@@ -52,31 +52,6 @@ public class DialogFlow<T extends ChecklistItem> {
     public FunctionalInterface readItem;
     public FunctionalInterface mustAnswerItem;
 
-/*
-    public void execute()
-    {
-
-    }
-
-    public void EOF()
-    {
-
-    }
-
-    public void SOF()
-    {
-
-    }
-
-    public void set(String value)
-    {
-    }
-
-    public void readOptions()
-    {
-    }
-*/
-
 //-------------------------------------------//
     //Navigation//
 
@@ -91,10 +66,7 @@ public class DialogFlow<T extends ChecklistItem> {
     {
         T item = items.get(step);
 
-        if(item.getResult() == null || item.getResult() == ""){
-            mustAnswerItem.execute(items.get(step));
-        }
-        else if(step<items.size()-1)
+        if(step<items.size()-1)
         {
             step++;
             execute.execute(items.get(step));
@@ -103,6 +75,20 @@ public class DialogFlow<T extends ChecklistItem> {
         {
             eof.execute(items.get(step));
         }
+
+        // use this for unskipable questions
+//        if(item.getResult() == null || item.getResult() == ""){
+//            mustAnswerItem.execute(items.get(step)) ;
+//        }
+//        else if(step<items.size()-1)
+//        {
+//            step++;
+//            execute.execute(items.get(step));
+//        }
+//        else if(step>=items.size()-1)
+//        {
+//            eof.execute(items.get(step));
+//        }
         return step;
     }
 

@@ -148,8 +148,7 @@ public class PocketSphinxActivity extends Activity implements
         setContentView(R.layout.activity_pocket_sphinx);
         ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
         ((TextView) findViewById(R.id.listening_text)).setText("");
-        ((TextView) findViewById(R.id.result_label)).setVisibility(View.INVISIBLE);
-        ((TextView) findViewById(R.id.answer_textView)).setVisibility(View.INVISIBLE);
+        ((TextView) findViewById(R.id.answer_textView)).setText("");
 
         ((Button)findViewById(R.id.back_button)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,13 +188,10 @@ public class PocketSphinxActivity extends Activity implements
     private void displayAnswerToTheQuestion(ChecklistItem item) {
         String answerToQuestion = item.getResult();
 
-        if(answerToQuestion == null || answerToQuestion == "") {
-            ((TextView) findViewById(R.id.result_label)).setVisibility(View.INVISIBLE);
-            ((TextView) findViewById(R.id.answer_textView)).setVisibility(View.INVISIBLE);
+        if(answerToQuestion == null || answerToQuestion.isEmpty()) {
+            ((TextView) findViewById(R.id.answer_textView)).setText("*No answer*");
         }
         else {
-            ((TextView) findViewById(R.id.result_label)).setVisibility(View.VISIBLE);
-            ((TextView) findViewById(R.id.answer_textView)).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.answer_textView)).setText(answerToQuestion);
         }
     }
@@ -348,10 +344,6 @@ public class PocketSphinxActivity extends Activity implements
                 .getRecognizer();
         recognizer.addListener(this);
 
-        /* In your application you might not need to add all those searches.
-          They are added here for demonstration. You can leave just one.
-         */
-
         // Create multiple keyword-activation search
         List<File> createdFiles = dlg.createKeyWordsFiles(assetsDir);
 
@@ -364,40 +356,14 @@ public class PocketSphinxActivity extends Activity implements
         //      recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
     }
 
-    //   @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
     private void setupTextToSpeech(){
         textToSpeech = new TextToSpeech(getApplicationContext(), status -> {
             if(status != TextToSpeech.ERROR) {
 
                 textToSpeech.setLanguage(Locale.US);
 
-                //******* That cause the listener to listen himself agan!!! :-(
                 String caption = chk.getName();
                 dlg.setCommand("read","");
-                //playTextToSpeechWhenDoneSpeaking(dlg.items.get(dlg.step).getName());
-
-//                textToSpeech.setOnUtteranceCompletedListener(utteranceId ->
-//                        recognizer.startListening(KEY_WORDS_SEARCH)
-//
-//                );
- /*
-                textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                    @Override
-                    public void onDone(String utteranceId) {
-                       // recognizer.startListening(KEY_WORDS_SEARCH);
-
-                    }
-
-                    @Override
-                    public void onError(String utteranceId) {
-                    }
-
-                    @Override
-                    public void onStart(String utteranceId) {
-                    }
-
-                });
-*/
             }
         });
     }
