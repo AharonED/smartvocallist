@@ -89,10 +89,11 @@ public class PocketSphinxActivity extends Activity implements
 
         dlg.execute = (item)-> {
             ChecklistItem itm =((ChecklistItem)item);
-            String text = itm.getName(); //this.dlg.items.get(this.dlg.step).getName();
-            String caption = "Step Number " + dlg.step + ". " + text;
+            String text = itm.getName();
+            String caption = "Step " + dlg.step + "/" + dlg.items.size() + ": " + text;
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
-            playTextToSpeechNow(caption);
+            String textToSpeech = "Step " + dlg.step + " out of " + dlg.items.size() + ": " + text;
+            playTextToSpeechNow(textToSpeech);
             displayAnswerToTheQuestion((ChecklistItem) item);
             listenToKeyWords();
         };
