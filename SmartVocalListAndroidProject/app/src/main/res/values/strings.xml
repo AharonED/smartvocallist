@@ -8,8 +8,5 @@
     <string name="boolean_caption">Do you wear pants? (True or False)</string>
     <string name="title_activity_add_list_activity">Add_list_activity</string>
     <string name="title_activity_add_list_item">addListItem</string>
-    <string name="title_activity_check_lists">CheckListsActivity</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_check_lists">SmartVocalList</string>
 </resources>

@@ -33,14 +33,20 @@ package com.example.ronen.smartvocallist;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.speech.tts.TextToSpeech;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -90,10 +96,12 @@ public class PocketSphinxActivity extends Activity implements
         dlg.execute = (item)-> {
             ChecklistItem itm =((ChecklistItem)item);
             String text = itm.getName();
-            String caption = "Step " + dlg.step + "/" + dlg.items.size() + ": " + text;
+            int stepNumber = dlg.step + 1;
+            String caption = "Step " + stepNumber + "/" + dlg.items.size() + ": " + text;
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
-            String textToSpeech = "Step " + dlg.step + " out of " + dlg.items.size() + ": " + text;
+            String textToSpeech = "Step " + stepNumber + " out of " + dlg.items.size() + ": " + text;
             playTextToSpeechNow(textToSpeech);
+            updateStateBarColors();
             displayAnswerToTheQuestion((ChecklistItem) item);
             listenToKeyWords();
         };
@@ -172,6 +180,8 @@ public class PocketSphinxActivity extends Activity implements
             }
         });
 
+        initStateBar();
+
         // Check if user has given permission to record audio
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -184,6 +194,62 @@ public class PocketSphinxActivity extends Activity implements
         SetupTask tsk= new SetupTask(this);
         tsk.dlg = this.dlg;
         tsk.execute();
+    }
+
+    private void initStateBar() {
+        ArrayList<ChecklistItem> items = dlg.items;
+        LinearLayout stateBar = findViewById(R.id.StateLinearLayout);
+        stateBar.setVisibility(View.INVISIBLE);
+
+        for (int itemIndex=0; itemIndex<items.size(); itemIndex++){
+            Button button = new Button(getApplicationContext());
+            button.setAllCaps(false);
+            String buttonText = String.valueOf(itemIndex + 1);
+            button.setText(buttonText);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Button button = (Button)v;
+                    int buttonTextNumber = Integer.parseInt(button.getText().toString());
+                    int itemIndex = buttonTextNumber - 1;
+                    dlg.jumpToStep(itemIndex);
+                }
+            });
+
+            stateBar.addView(button);
+        }
+    }
+
+    private void updateStateBarColors(){
+        LinearLayout stateBar = findViewById(R.id.StateLinearLayout);
+        int lightBlueColor = Color.rgb(0x35,0xd3,0xd2);
+        int BlueColor = Color.rgb(0x35,0x92,0xd2);
+
+        for(int itemIndex=0; itemIndex<stateBar.getChildCount(); itemIndex++) {
+            View button = stateBar.getChildAt(itemIndex);
+            int color;
+
+            if(itemIndex%2 == 0)
+                color = BlueColor;
+            else
+                color = lightBlueColor;
+
+            if(itemIndex == dlg.step){
+                ShapeDrawable shapedrawable = new ShapeDrawable();
+                shapedrawable.setShape(new RectShape());
+                shapedrawable.getPaint().setColor(color);
+                shapedrawable.getPaint().setStrokeWidth(24f);
+                shapedrawable.getPaint().setStyle(Paint.Style.STROKE);
+                button.setBackground(shapedrawable);
+            }
+            else{
+                button.setBackgroundColor(color);
+            }
+        }
+
+        if(stateBar.getVisibility() != View.VISIBLE)
+            stateBar.setVisibility(View.VISIBLE);
     }
 
     private void displayAnswerToTheQuestion(ChecklistItem item) {

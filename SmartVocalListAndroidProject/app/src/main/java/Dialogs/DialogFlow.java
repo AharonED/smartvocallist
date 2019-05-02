@@ -107,6 +107,20 @@ public class DialogFlow<T extends ChecklistItem> {
         return step;
     }
 
+    public void jumpToStep(int stepNumber){
+        if(step<0){
+            step = 0;
+        }
+        else if(step>items.size()){
+            step = items.size();
+        }
+        else{
+            step = stepNumber;
+        }
+
+        execute.execute(items.get(step));
+    }
+
     @SuppressLint("NewApi")
     public void setCommand(String command, String value)
     {
