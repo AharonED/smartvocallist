@@ -348,20 +348,24 @@ public class PocketSphinxActivity extends Activity implements
             return;
 
         String text = hypothesis.getHypstr();
-        text = text.split(" ")[0];
+        String[] textSplited = text.split(" ");
 
-        if(dlg.keywords.contains(text)) {
-            makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-            dlg.setCommand(text, "");
-        }
-        else if(!dlg.items.get(dlg.step).toKeywords().contains(text)) {
-            playTextToSpeechNow(text + " is not an answer");
-            listenToKeyWords();
-        }
-        else {
-            dlg.items.get(dlg.step).setResult(text);
-            makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-            dlg.next();
+        for (String word:textSplited) {
+            if(dlg.keywords.contains(word)) {
+                makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
+                dlg.setCommand(word, "");
+                break;
+            }
+            else if(dlg.items.get(dlg.step).options.contains(word)) {
+                dlg.items.get(dlg.step).setResult(word);
+                makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
+                dlg.next();
+                break;
+            }
+            else {
+                playTextToSpeechNow(word + " is not an answer");
+                listenToKeyWords();
+            }
         }
     }
 

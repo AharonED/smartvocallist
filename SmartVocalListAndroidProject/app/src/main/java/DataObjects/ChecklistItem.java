@@ -89,6 +89,7 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
     }
 
     public void setAttributes(String attributes) {
+        attributes = attributes.toLowerCase();
         this.attributes = attributes;
         String [] seperated = attributes.split(";|,|/");
         options.addAll(Arrays.asList(seperated));

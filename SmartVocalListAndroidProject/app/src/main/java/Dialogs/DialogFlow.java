@@ -22,7 +22,7 @@ public class DialogFlow<T extends ChecklistItem> {
 
     public  ArrayList<T> items = new ArrayList<>();
     public int step=0;
-    public String keywords;
+    public List<String> keywords;
 
     public DialogFlow()
     {
@@ -35,12 +35,13 @@ public class DialogFlow<T extends ChecklistItem> {
 //                "skip/1e-1/\n" +
 //                "options/1e-1/\n" +
 //                "read/1e-1/\n";
-
-        keywords= "next/1e-1/\n" +
-                  "back/1e-1/\n" +
-                  "start/1e-1/\n" +
-                  "options/1e-1/\n" +
-                  "read/1e-1/\n";
+        keywords = new ArrayList<String>() {{
+            add("next");
+            add("back");
+            add("start");
+            add("options");
+            add("read");
+        }};
     }
 
     public FunctionalInterface execute;
@@ -148,6 +149,16 @@ public class DialogFlow<T extends ChecklistItem> {
         }
     }
 
+    public String getKeyWordsForFile(){
+        StringBuilder text = new StringBuilder();
+
+        for (String key:keywords) {
+            text.append(key).append("/1e-1/\n");
+        }
+
+        return text.toString();
+    }
+
     public String getCurrentItemKeyWordsFileName(){
         return getItemFileName(items.get(step));
     }
@@ -168,7 +179,7 @@ public class DialogFlow<T extends ChecklistItem> {
 
             try {
                 FileOutputStream stream = new FileOutputStream(itemWordsListFile);
-                String textForFile = keywords + checklistItem.toKeywords();
+                String textForFile = getKeyWordsForFile() + checklistItem.toKeywords();
                 stream.write(textForFile.getBytes());
                 stream.close();
             } catch (IOException e) {
