@@ -199,6 +199,6 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
             textForFile.append(keyWord + "/1e-1/\n");
         }
 
-        return textForFile.toString();
+        return textForFile.toString().toLowerCase();
     }
 }

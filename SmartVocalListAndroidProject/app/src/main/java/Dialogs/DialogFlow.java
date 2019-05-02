@@ -64,14 +64,12 @@ public class DialogFlow<T extends ChecklistItem> {
 
     public int next()
     {
-        T item = items.get(step);
-
         if(step<items.size()-1)
         {
             step++;
             execute.execute(items.get(step));
         }
-        else if(step>=items.size()-1)
+        else
         {
             eof.execute(items.get(step));
         }
@@ -89,6 +87,7 @@ public class DialogFlow<T extends ChecklistItem> {
 //        {
 //            eof.execute(items.get(step));
 //        }
+
         return step;
     }
 
@@ -99,7 +98,7 @@ public class DialogFlow<T extends ChecklistItem> {
             step--;
             execute.execute(items.get(step));
         }
-        else if(step<=0)
+        else
         {
             step=0;
             sof.execute(items.get(step));
@@ -108,11 +107,11 @@ public class DialogFlow<T extends ChecklistItem> {
     }
 
     public void jumpToStep(int stepNumber){
-        if(step<0){
+        if(stepNumber<0){
             step = 0;
         }
-        else if(step>items.size()){
-            step = items.size();
+        else if(stepNumber>items.size()-1){
+            step = items.size() - 1;
         }
         else{
             step = stepNumber;

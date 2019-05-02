@@ -6,7 +6,7 @@
     <string name="options_caption">Say \"easy\", \"medium\" or \"hard\".</string>
     <string name="digits_caption">To try recognition of a number: (1 to 999,999)</string>
     <string name="boolean_caption">Do you wear pants? (True or False)</string>
-    <string name="title_activity_add_list_activity">Add_list_activity</string>
-    <string name="title_activity_add_list_item">addListItem</string>
-    <string name="title_activity_check_lists">SmartVocalList</string>
+    <string name="title_activity_add_list_activity">Add list activity</string>
+    <string name="title_activity_add_list_item">add List Item</string>
+    <string name="title_activity_check_lists">Smart Vocal List</string>
 </resources>
