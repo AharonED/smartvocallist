@@ -6,7 +6,7 @@ import java.io.Serializable;
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
 //
-public class ModelChecklistItems extends Model<ChecklistItem> implements Serializable {
+public class  ModelChecklistItems extends Model<ChecklistItem> implements Serializable {
 
     private static ModelChecklistItems instance ;
     public static ModelChecklistItems getInstance()

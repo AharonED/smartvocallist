@@ -32,6 +32,7 @@ public class AddListActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String FilePath = "C:\\Project\\end project\\smartvocallist\\SmartVocalListAndroidProject\\app\\src\\main\\java\\com\\example\\ronen\\smartvocallist\\checklistsCount.txt";
 
 
         super.onCreate(savedInstanceState);
@@ -48,19 +49,19 @@ public class AddListActivity extends Activity {
                 String ListName = twName.getText().toString();
                 int id = 0;
                 try {
-                    File read_write = new File("edu/cmu/pocketsphinx/demo/checklistsCount.txt");
+                    File read_write = new File(FilePath);
 
                     Scanner reader = new Scanner(read_write);
                     id = reader.nextInt();
                     reader.close();
-                    BufferedWriter writer = new BufferedWriter(new FileWriter("edu/cmu/pocketsphinx/demo/checklistsCount.txt"));
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(FilePath));
                     id ++;
                     writer.write(id);
                     writer.close();
                 }
                 catch (FileNotFoundException ex)
                 {
-
+                    id = 3344;
                 }
                 catch (IOException ex)
                 {
@@ -76,9 +77,15 @@ public class AddListActivity extends Activity {
                 Long time = currentTime.getTime();
                 Double tmp = time.doubleValue();
                 Checklist temp = new Checklist(str.toString(),ListName,twDescripton.getText().toString(),"", tmp);
+                for (ChecklistItem currItem:Items) {
+                    currItem.setChecklistId(str.toString());
+                }
                 temp.checklistItems.addAll(Items);
+
                 Model.ModelChecklists mod =  ModelChecklists.getInstance();
                 mod.addItem(temp);
+                finish();
+
             }
         });
 
@@ -88,27 +95,27 @@ public class AddListActivity extends Activity {
             public void onClick(View view) {
                 Intent myIntent = new Intent(AddListActivity.this, AddListItemActivity.class);
 
-                AddListActivity.this.startActivity(myIntent);
-                String result = myIntent.getStringArrayExtra("Item")[0];
+                AddListActivity.this.startActivityForResult(myIntent,1);
 
-                try {
-                    JSONObject tmp = new JSONObject(result);
-                    ChecklistItem itm = new ChecklistItem("",0,"","","",0.0);
-                    itm.ChecklistItems(tmp);
-                    TextView twitems = (TextView)findViewById(R.id.items);
-                    StringBuilder stb = new StringBuilder();
-                    stb.append(twitems.getText().toString());
-                    stb.append("\n");
-                    stb.append(itm.getName());
-                    twitems.setText(stb);
-                    Items.add(itm);
-                }
-                catch (JSONException ex)
-                {
-
-                }
             }
         });
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
+        ChecklistItem result = (ChecklistItem)data.getSerializableExtra("Item");
+
+        TextView twitems = (TextView)findViewById(R.id.items);
+        StringBuilder stb = new StringBuilder();
+        stb.append(twitems.getText().toString());
+        stb.append("\n");
+        stb.append(result.getName());
+        twitems.setText(stb);
+        Items.add(result);
     }
 
 }
