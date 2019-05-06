@@ -26,7 +26,7 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
     private ModelChecklists()
     {
         super();
-        setTableName("ChecklistItems");
+        setTableName("Checklists");
     }
 
 
@@ -80,7 +80,7 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         super.addItem(chk);
     }
 
-    
+
 
 
 }

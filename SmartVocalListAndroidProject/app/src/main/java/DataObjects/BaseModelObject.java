@@ -13,6 +13,10 @@ import java.io.Serializable;
 import java.lang.*;
 import java.lang.Double;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import org.json.*;
 
 public class BaseModelObject implements Serializable {
@@ -135,6 +139,25 @@ public class BaseModelObject implements Serializable {
             e.printStackTrace();
         }
         return json;
+    }
+    public Map<String, Object> toMap() {
+        JSONObject json = toJson();
+        Map<String, Object> childUpdates = new HashMap<>();
+
+
+
+        for (Iterator<String> it = json.keys(); it.hasNext(); ) {
+            String key = it.next();
+
+            try {
+                childUpdates.put( key, json.get(key));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return  childUpdates;
+
     }
 
 }

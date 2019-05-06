@@ -21,7 +21,7 @@ public class  ModelChecklistItems extends Model<ChecklistItem> implements Serial
     private ModelChecklistItems()
     {
         super();
-        setTableName("ChecklistItem");
+        setTableName("ChecklistItems");
     }
 
 

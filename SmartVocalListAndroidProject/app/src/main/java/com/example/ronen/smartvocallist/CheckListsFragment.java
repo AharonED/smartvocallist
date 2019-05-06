@@ -2,10 +2,13 @@ package com.example.ronen.smartvocallist;
 
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import DataObjects.Checklist;
 import Model.ModelChecklists;
+
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +23,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static android.content.ContentValues.TAG;
 
@@ -120,9 +125,14 @@ public class CheckListsFragment extends Fragment {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void startCheckListPlay(Checklist checkList){
+        Checklist newChk = checkList.CopyChecklist();
+        newChk.setChecklistType("Reported");
+        //newChk.setDescription("Reported at: " +LocalDateTime.now().toString() );
+        model.addItem(newChk);
         Intent myIntent = new Intent(getContext(), PocketSphinxActivity.class);
-        myIntent.putExtra("checkListId", checkList.getId());
+        myIntent.putExtra("checkListId", newChk.getId());
         //myIntent.putExtra("model", model);
         startActivity(myIntent);
     }

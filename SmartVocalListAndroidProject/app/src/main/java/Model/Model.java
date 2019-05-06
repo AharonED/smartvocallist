@@ -2,8 +2,10 @@ package Model;
 
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.firebase.FirebaseError;
 import com.google.firebase.database.DataSnapshot;
@@ -17,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import DataObjects.BaseModelObject;
 
@@ -68,9 +71,36 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
         HashMap<String, Object> timestampCreated = new HashMap<>();
         timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
 
-        chk.lastUpdate =  (double)timestampCreated.get("timestamp");
+//////        chk.lastUpdate =  (double)timestampCreated.get("timestamp");
 
-/*
+        DatabaseReference myRef = rep.database.getReference("/" + getTableName());
+
+        //myRef.child(chk.getId()).setValue(chk.toJson());
+
+try {
+        String key = myRef.push().push().getKey();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/" + key, chk.toMap());
+        //childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
+
+        myRef.updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+               if(databaseError!=null)
+                Log.println(1,"t","Data could not be saved: " + databaseError.getMessage());
+
+            }
+        });
+
+
+}
+    catch (Exception ex)
+    {
+        Log.println(1,"t","Data could not be saved: " + ex.getMessage());
+
+    }
+        /*
         DatabaseReference myRef = rep.database.getReference("/" + getTableName());
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
