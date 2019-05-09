@@ -38,10 +38,6 @@ public class CheckListsFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     CheckListsAdapter adapter;
     ArrayList<Checklist> mData = new ArrayList<>();
-    //private ListView checkListsView;
-    //private ArrayAdapter<String> adapter;
-    ArrayList<String> checkListsDisplay;
-    //private HashMap<String, Checklist> checkListsHashMap;
 
     ModelChecklists model=null;
 
@@ -67,21 +63,6 @@ public class CheckListsFragment extends Fragment {
         layoutManager = new LinearLayoutManager(view.getContext());
         checkListsRecyclerView.setLayoutManager(layoutManager);
 
-//        checkListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String checklistName = checkListsDisplay.get(position);
-//                Toast.makeText(getApplicationContext(), checklistName, Toast.LENGTH_SHORT).show();
-//                Checklist checkList = checkListsHashMap.get(checklistName);
-//                if(checkList.getChecklistItems().size()>0) {
-//                    startCheckListPlay(checkList);
-//                }
-//                else
-//                {
-//                    Toast.makeText(getApplicationContext(), "No Items to display for " + checklistName, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-
         return view;
     }
 
@@ -94,11 +75,6 @@ public class CheckListsFragment extends Fragment {
         //When data returned from Firebase, it will rise event onDataChange
         // - which execute the injected method-checkListsToDisplay
         model.getItemsAsync(this::checkListsToDisplay);
-
-//        if (checkListsDisplay != null) {
-//             adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
-//             checkListsView.setAdapter(adapter);
-//        }
     }
 
 
@@ -125,7 +101,6 @@ public class CheckListsFragment extends Fragment {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void startCheckListPlay(Checklist checkList){
         Checklist newChk = checkList.CopyChecklist();
         newChk.setChecklistType("Reported");

@@ -29,14 +29,8 @@ public class ReportsListFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     CheckListsAdapter adapter;
     ArrayList<Checklist> mData = new ArrayList<>();
-    //private ListView checkListsView;
-    //private ArrayAdapter<String> adapter;
-    ArrayList<String> checkListsDisplay;
-    //private HashMap<String, Checklist> checkListsHashMap;
 
     ModelChecklistsReported model=null;
-
-
 
     public ReportsListFragment() {
         // Required empty public constructor
@@ -46,16 +40,8 @@ public class ReportsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_reports_list, container, false);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reports_list, container, false);
-
-        FloatingActionButton AddCheckListButton = view.findViewById(R.id.fab);
-        AddCheckListButton.setOnClickListener(v -> {
-            Intent myIntent = new Intent(v.getContext(), AddListActivity.class);
-            startActivity(myIntent);
-        });
 
         checkListsRecyclerView = view.findViewById(R.id.checkListsRecyclerView);
         checkListsRecyclerView.setHasFixedSize(true);
@@ -63,10 +49,7 @@ public class ReportsListFragment extends Fragment {
         checkListsRecyclerView.setLayoutManager(layoutManager);
 
         return view;
-
     }
-
-
 
 
     @Override
@@ -78,11 +61,6 @@ public class ReportsListFragment extends Fragment {
         //When data returned from Firebase, it will rise event onDataChange
         // - which execute the injected method-checkListsToDisplay
         model.getItemsAsync(this::checkListsToDisplay);
-
-//        if (checkListsDisplay != null) {
-//             adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
-//             checkListsView.setAdapter(adapter);
-//        }
     }
 
 
