@@ -18,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 import DataObjects.Checklist;
+import DataObjects.ChecklistReported;
 import Model.ModelChecklistsReported;
 
 
@@ -27,8 +28,8 @@ import Model.ModelChecklistsReported;
 public class ReportsListFragment extends Fragment {
     RecyclerView checkListsRecyclerView;
     RecyclerView.LayoutManager layoutManager;
-    CheckListsAdapter adapter;
-    ArrayList<Checklist> mData = new ArrayList<>();
+    CheckListsReportedAdapter adapter;
+    ArrayList<ChecklistReported> mData = new ArrayList<>();
     //private ListView checkListsView;
     //private ArrayAdapter<String> adapter;
     ArrayList<String> checkListsDisplay;
@@ -86,12 +87,12 @@ public class ReportsListFragment extends Fragment {
     }
 
 
-    private void checkListsToDisplay(ArrayList<Checklist> checkLists) {
+    private void checkListsToDisplay(ArrayList<ChecklistReported> checkLists) {
         mData = checkLists;
-        adapter = new CheckListsAdapter(mData);
+        adapter = new CheckListsReportedAdapter(mData);
         checkListsRecyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickedListener(new CheckListsAdapter.OnItemClickedListener() {
+        adapter.setOnItemClickedListener(new CheckListsReportedAdapter.OnItemClickedListener() {
             @Override
             public void onClick(int index) {
                 Checklist clickedCheckList = mData.get(index);

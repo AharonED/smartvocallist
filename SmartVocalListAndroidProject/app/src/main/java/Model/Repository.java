@@ -14,8 +14,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import DataObjects.BaseModelObject;
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
+import DataObjects.ChecklistReported;
 
 import static android.content.ContentValues.TAG;
 
@@ -27,38 +29,24 @@ public class Repository {
 
 
     public Repository(){
-        /*
-        try {
-            FirebaseOptions.Builder builder = new FirebaseOptions.Builder()
-                    .setApplicationId("1:0123456789012:android:0123456789abcdef")
-                    .setApiKey("AIzaSyDMIVUTpX7i0L__KDhiQb4zfzvMxmjwNec ")
-                    .setDatabaseUrl("https://smartvocallist1.firebaseio.com/")
-                    .setStorageBucket("smartvocallist1.appspot.com");
-            FirebaseApp.initializeApp(this, builder.build());
 
-        }
-        catch (Exception ex)
-        {
-            Log.d(TAG, "Value is: " + ex.getMessage());
-
-        }
-*/
     }
 
-        public  ArrayList<Checklist> GetChecklists(Model.ItemsLsnr<Checklist> itemsLsnr) {
+        public  ArrayList<Checklist> GetChecklists(Model.ItemsLsnr itemsLsnr) {
             DatabaseReference myRef = database.getReference("/Checklists");
             Query query = myRef.orderByChild("checklistType").startAt("Template");
             return  GetChecklistsByQuery(itemsLsnr,query);
         }
-        public  ArrayList<Checklist> GetChecklistsReported(Model.ItemsLsnr<Checklist> itemsLsnr) {
+
+        public  ArrayList<ChecklistReported> GetChecklistsReported(Model.ItemsLsnr itemsLsnr) {
             DatabaseReference myRef = database.getReference("/Checklists");
             Query query = myRef.orderByChild("checklistType").endAt("Reported");
             return  GetChecklistsByQuery(itemsLsnr,query);
         }
 
-        public  ArrayList<Checklist> GetChecklistsByQuery(Model.ItemsLsnr<Checklist> itemsLsnr, Query query ) {
+        public  ArrayList GetChecklistsByQuery(Model.ItemsLsnr<BaseModelObject> itemsLsnr, Query query ) {
 
-        ArrayList<Checklist> items = new ArrayList<>();
+        ArrayList items = new ArrayList<>();
         items.add(CreateTempCheckList("Ch1"));
         items.add(CreateTempCheckList("Ch2"));
 

@@ -9,4 +9,7 @@
     <string name="title_activity_add_list_activity">Add list activity</string>
     <string name="title_activity_add_list_item">add List Item</string>
     <string name="title_activity_check_lists">Smart Vocal List</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

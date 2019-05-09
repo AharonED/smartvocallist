@@ -34,6 +34,7 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
     public Model.ItemsLsnr<T> getItemsLsnr() {
         return ItemsLsnr;
     }
+
     public interface ItemsLsnr<E extends BaseModelObject> {
         void OnDataChangeItemsLsnr(ArrayList<E> items);
     }
@@ -68,21 +69,22 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
             chk.id = java.util.UUID.randomUUID().toString();
         }
 
-        HashMap<String, Object> timestampCreated = new HashMap<>();
-        timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
+        //HashMap<String, Object> timestampCreated = new HashMap<>();
+        //timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
 
-//////        chk.lastUpdate =  (double)timestampCreated.get("timestamp");
+        //////chk.lastUpdate =  (double)timestampCreated.get("timestamp");
 
         DatabaseReference myRef = rep.database.getReference("/" + getTableName());
 
         //myRef.child(chk.getId()).setValue(chk.toJson());
 
 try {
-        String key = myRef.push().push().getKey();
+        //String key = myRef.push().push().getKey();
+        String key = chk.id;
 
+        //Convert checklist to Hashmap for sending to Firebase
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/" + key, chk.toMap());
-        //childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
 
         myRef.updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
             @Override

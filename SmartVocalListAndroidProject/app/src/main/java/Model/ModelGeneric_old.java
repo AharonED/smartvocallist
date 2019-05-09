@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 import DataObjects.BaseModelObject;
 
-public class ModelGeneric<T extends BaseModelObject> implements IModel, Serializable {
+public class ModelGeneric_old<T extends BaseModelObject> implements IModel, Serializable {
 
     private String tableName="";
 
@@ -42,7 +42,7 @@ public class ModelGeneric<T extends BaseModelObject> implements IModel, Serializ
     Class<T> getType(){return type;}
 
     private Class<T> type;
-    public ModelGeneric(Class<T> cls)
+    public ModelGeneric_old(Class<T> cls)
     {
         type= cls;
         if(items.size()==0) {

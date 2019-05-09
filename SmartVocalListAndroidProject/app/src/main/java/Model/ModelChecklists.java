@@ -73,8 +73,8 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         }
 
         for (ChecklistItem itm: chk.checklistItems) {
-            itm.id = java.util.UUID.randomUUID().toString();
-            itm.setChecklistId(chk.id);
+            //itm.id = java.util.UUID.randomUUID().toString();
+            //itm.setChecklistId(chk.id);
             ModelChecklistItems.getInstance().addItem(itm);
         }
         super.addItem(chk);
