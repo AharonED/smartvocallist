@@ -14,5 +14,22 @@
         android:id="@+id/reportsListFragment"
         android:name="com.example.ronen.smartvocallist.ReportsListFragment"
         android:label="fragment_reports_list"
-        tools:layout="@layout/fragment_reports_list" />
+        tools:layout="@layout/fragment_reports_list" >
+        <action
+            android:id="@+id/action_reportsListFragment_to_reportedCheckListFragment"
+            app:destination="@id/reportedCheckListFragment2" >
+            <argument
+                android:name="textToDisplay"
+                android:defaultValue="No text to display" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/reportedCheckListFragment2"
+        android:name="com.example.ronen.smartvocallist.ReportedCheckListFragment"
+        android:label="fragment_reported_check_list"
+        tools:layout="@layout/fragment_reported_check_list" >
+        <argument
+            android:name="textToDisplay"
+            app:argType="string" />
+    </fragment>
 </navigation>

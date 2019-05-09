@@ -1,10 +1,10 @@
 package com.example.ronen.smartvocallist;
 
-
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,11 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 
 import DataObjects.Checklist;
+import DataObjects.ChecklistItem;
 import Model.ModelChecklistsReported;
 
 
@@ -88,9 +87,24 @@ public class ReportsListFragment extends Fragment {
     }
 
     private void startCheckListPlay(Checklist checkList){
-        Intent myIntent = new Intent(getContext(), PocketSphinxActivity.class);
-        myIntent.putExtra("checkListId", checkList.getId());
-        //myIntent.putExtra("model", model);
-        startActivity(myIntent);
+        ReportsListFragmentDirections.ActionReportsListFragmentToReportedCheckListFragment action =
+                ReportsListFragmentDirections.actionReportsListFragmentToReportedCheckListFragment();
+        String textToDisplay = createReportCheckListDisplayText(checkList);
+        action.setTextToDisplay(textToDisplay);
+        Navigation.findNavController(getView()).navigate(action);
+    }
+
+    private String createReportCheckListDisplayText(Checklist checkList) {
+        StringBuilder textBuilder = new StringBuilder();
+        textBuilder.append("Report for checkList \""+ checkList.getName() + "\":\n");
+
+        for (ChecklistItem item : checkList.getChecklistItems()) {
+            textBuilder.append("\n");
+            textBuilder.append("Question:\n");
+            textBuilder.append(item.getName() + "\n");
+            textBuilder.append("Answer: " + item.getResult() + "\n");
+        }
+
+        return textBuilder.toString();
     }
 }
