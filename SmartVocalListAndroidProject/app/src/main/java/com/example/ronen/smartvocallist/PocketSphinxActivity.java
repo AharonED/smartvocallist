@@ -82,13 +82,16 @@ public class PocketSphinxActivity extends Activity implements
     private DialogFlow<ChecklistItem> dlg = null;
     private AsyncTask<Void,Void,Void> listenToKeyWordsWaiterTask = null;
 
+    private String checkListId;
+    private ModelChecklists mdl;
+
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
 
         dlg = new DialogFlow<>();
-        String checkListId = (String)getIntent().getExtras().get("checkListId");
-        ModelChecklists mdl =  ModelChecklists.getInstance();
+        checkListId = (String)getIntent().getExtras().get("checkListId");
+        mdl =  ModelChecklists.getInstance();
         //(Model)getIntent().getSerializableExtra("model");
         chk = mdl.getItemByID(checkListId);
         dlg.items=chk.checklistItems;
@@ -358,6 +361,11 @@ public class PocketSphinxActivity extends Activity implements
             }
             else if(dlg.items.get(dlg.step).options.contains(word)) {
                 dlg.items.get(dlg.step).setResult(word);
+
+                chk = mdl.getItemByID(checkListId);
+                mdl.addItem(chk);
+
+
                 makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
                 dlg.next();
                 break;
