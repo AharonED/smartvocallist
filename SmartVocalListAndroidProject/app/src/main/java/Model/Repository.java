@@ -38,7 +38,7 @@ public class Repository {
             return  GetChecklistsByQuery(itemsLsnr,query);
         }
 
-        public  ArrayList<ChecklistReported> GetChecklistsReported(Model.ItemsLsnr itemsLsnr) {
+        public  ArrayList<Checklist> GetChecklistsReported(Model.ItemsLsnr itemsLsnr) {
             DatabaseReference myRef = database.getReference("/Checklists");
             Query query = myRef.orderByChild("checklistType").endAt("Reported");
             return  GetChecklistsByQuery(itemsLsnr,query);

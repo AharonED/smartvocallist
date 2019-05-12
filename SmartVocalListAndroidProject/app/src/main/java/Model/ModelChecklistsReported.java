@@ -12,7 +12,7 @@ import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
 import DataObjects.ChecklistReported;
 
-public class ModelChecklistsReported extends Model<ChecklistReported> implements Serializable {
+public class ModelChecklistsReported extends Model<Checklist> implements Serializable {
 
     private static ModelChecklistsReported instance ;
     public static ModelChecklistsReported getInstance()
@@ -33,20 +33,20 @@ public class ModelChecklistsReported extends Model<ChecklistReported> implements
 
     @Override
     @TargetApi(Build.VERSION_CODES.N)
-    public void getItemsAsync(ItemsLsnr<ChecklistReported> lsnr) {
+    public void getItemsAsync(ItemsLsnr<Checklist> lsnr) {
         //Repository rep = new Repository();
         //items =  rep.GetChecklists(lsnr);
 
-        items =  rep.GetChecklistsReported(new ItemsLsnr<ChecklistReported>() {
+        items =  rep.GetChecklistsReported(new ItemsLsnr<Checklist>() {
                                        @Override
-                                       public void OnDataChangeItemsLsnr(ArrayList<ChecklistReported> items) {
+                                       public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
                                             //Get All Checklists
-                                           ArrayList <ChecklistReported> chks = items;
+                                           ArrayList <Checklist> chks = items;
                                            //For each ChecklistReported get its all ChecklistItems
                                            ModelChecklistItems.getInstance().getItemsAsync(new ItemsLsnr<ChecklistItem>() {
                                                @Override
                                                public void OnDataChangeItemsLsnr(ArrayList<ChecklistItem> items) {
-                                                   for (ChecklistReported chk: chks) {
+                                                   for (Checklist chk: chks) {
                                                        Iterator<ChecklistItem> iterator = items.iterator();
                                                        while (iterator.hasNext()) {
                                                            ChecklistItem item = iterator.next();
@@ -68,7 +68,7 @@ public class ModelChecklistsReported extends Model<ChecklistReported> implements
     }
 
     @Override
-    public void addItem(ChecklistReported chk){
+    public void addItem(Checklist chk){
         if(chk.id=="-1") {
             chk.id = java.util.UUID.randomUUID().toString();
         }

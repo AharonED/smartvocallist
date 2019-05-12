@@ -31,7 +31,7 @@ public class ReportsListFragment extends Fragment {
     RecyclerView checkListsRecyclerView;
     RecyclerView.LayoutManager layoutManager;
     CheckListsReportedAdapter adapter;
-    ArrayList<ChecklistReported> mData = new ArrayList<>();
+    ArrayList<Checklist> mData = new ArrayList<>();
     ModelChecklistsReported model=null;
 
     public ReportsListFragment() {
@@ -65,7 +65,7 @@ public class ReportsListFragment extends Fragment {
     }
 
 
-    private void checkListsToDisplay(ArrayList<ChecklistReported> checkLists) {
+    private void checkListsToDisplay(ArrayList<Checklist> checkLists) {
         mData = checkLists;
         adapter = new CheckListsReportedAdapter(mData);
         checkListsRecyclerView.setAdapter(adapter);

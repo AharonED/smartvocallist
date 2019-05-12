@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import DataObjects.Checklist;
 import DataObjects.ChecklistReported;
 
 public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsReportedAdapter.ChecklistViewHolder> {
-    ArrayList<ChecklistReported> mData;
+    ArrayList<Checklist> mData;
     CheckListsReportedAdapter.OnItemClickedListener mListener;
 
-    public CheckListsReportedAdapter(ArrayList<ChecklistReported> data) {
+    public CheckListsReportedAdapter(ArrayList<Checklist> data) {
         mData = data;
     }
 
@@ -39,7 +40,7 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
 
     @Override
     public void onBindViewHolder(@NonNull ChecklistViewHolder checklistViewHolder, int i) {
-        ChecklistReported checkList = mData.get(i);
+        Checklist checkList = mData.get(i);
         checklistViewHolder.bind(checkList);
     }
 
@@ -73,7 +74,7 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
         }
 
         // Binding data to the view
-        public void bind(ChecklistReported checkList){
+        public void bind(Checklist checkList){
             mName.setText(checkList.getName());
             mDescription.setText(checkList.getDescription());
             // For now it's always the default image
