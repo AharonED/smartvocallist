@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 import DataObjects.Checklist;
+import DataObjects.ChecklistItem;
 import DataObjects.ChecklistReported;
 import Model.ModelChecklistsReported;
 
@@ -30,33 +32,17 @@ public class ReportsListFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     CheckListsReportedAdapter adapter;
     ArrayList<ChecklistReported> mData = new ArrayList<>();
-    //private ListView checkListsView;
-    //private ArrayAdapter<String> adapter;
-    ArrayList<String> checkListsDisplay;
-    //private HashMap<String, Checklist> checkListsHashMap;
-
     ModelChecklistsReported model=null;
-
-
 
     public ReportsListFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 //        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_reports_list, container, false);
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reports_list, container, false);
-
-        FloatingActionButton AddCheckListButton = view.findViewById(R.id.fab);
-        AddCheckListButton.setOnClickListener(v -> {
-            Intent myIntent = new Intent(v.getContext(), AddListActivity.class);
-            startActivity(myIntent);
-        });
 
         checkListsRecyclerView = view.findViewById(R.id.checkListsRecyclerView);
         checkListsRecyclerView.setHasFixedSize(true);
@@ -64,10 +50,7 @@ public class ReportsListFragment extends Fragment {
         checkListsRecyclerView.setLayoutManager(layoutManager);
 
         return view;
-
     }
-
-
 
 
     @Override
@@ -79,11 +62,6 @@ public class ReportsListFragment extends Fragment {
         //When data returned from Firebase, it will rise event onDataChange
         // - which execute the injected method-checkListsToDisplay
         model.getItemsAsync(this::checkListsToDisplay);
-
-//        if (checkListsDisplay != null) {
-//             adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
-//             checkListsView.setAdapter(adapter);
-//        }
     }
 
 
@@ -111,9 +89,24 @@ public class ReportsListFragment extends Fragment {
     }
 
     private void startCheckListPlay(Checklist checkList){
-        Intent myIntent = new Intent(getContext(), PocketSphinxActivity.class);
-        myIntent.putExtra("checkListId", checkList.getId());
-        //myIntent.putExtra("model", model);
-        startActivity(myIntent);
+        ReportsListFragmentDirections.ActionReportsListFragmentToReportedCheckListFragment action =
+                ReportsListFragmentDirections.actionReportsListFragmentToReportedCheckListFragment();
+        String textToDisplay = createReportCheckListDisplayText(checkList);
+        action.setTextToDisplay(textToDisplay);
+        Navigation.findNavController(getView()).navigate(action);
+    }
+
+    private String createReportCheckListDisplayText(Checklist checkList) {
+        StringBuilder textBuilder = new StringBuilder();
+        textBuilder.append("Report for checkList \""+ checkList.getName() + "\":\n");
+
+        for (ChecklistItem item : checkList.getChecklistItems()) {
+            textBuilder.append("\n");
+            textBuilder.append("Question:\n");
+            textBuilder.append(item.getName() + "\n");
+            textBuilder.append("Answer: " + item.getResult() + "\n");
+        }
+
+        return textBuilder.toString();
     }
 }
