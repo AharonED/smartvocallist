@@ -1,5 +1,7 @@
 package DataObjects;
 
+import com.google.firebase.database.snapshot.Index;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,7 +11,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class ChecklistItem extends BaseModelObject implements Serializable {
 
@@ -182,18 +187,29 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
         json = super.toJson();
         try {
             json = new JSONObject();
+            json.put("id", id);
             json.put("itemIndex",index);
             json.put("name",name);
             json.put("description",description);
             json.put("url",url);
             json.put("lastUpdate",lastUpdate);
+            json.put("attributes",attributes);
+            json.put("checklistId",checklistId);
+            json.put("itemIndex", getIndex());
+            json.put("itemType",itemType);
+            json.put("owner",owner);
+            json.put("result",result);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return json;
     }
 
-    public String toKeywords(){
+
+
+
+        public String toKeywords(){
         StringBuilder textForFile = new StringBuilder();
 
         for (String keyWord : options) {

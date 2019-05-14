@@ -77,6 +77,9 @@ public class AddListActivity extends Activity {
                 Long time = currentTime.getTime();
                 Double tmp = time.doubleValue();
                 Checklist temp = new Checklist(str.toString(),ListName,twDescripton.getText().toString(),"", tmp);
+                temp.setChecklistType("Template");
+                temp.setOwner("10");
+
                 for (ChecklistItem currItem:Items) {
                     currItem.setChecklistId(str.toString());
                 }

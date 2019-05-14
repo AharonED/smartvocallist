@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
+import DataObjects.ChecklistReported;
 
 public class ModelChecklistsReported extends Model<Checklist> implements Serializable {
 
@@ -41,7 +42,7 @@ public class ModelChecklistsReported extends Model<Checklist> implements Seriali
                                        public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
                                             //Get All Checklists
                                            ArrayList <Checklist> chks = items;
-                                           //For each Checklist get its all ChecklistItems
+                                           //For each ChecklistReported get its all ChecklistItems
                                            ModelChecklistItems.getInstance().getItemsAsync(new ItemsLsnr<ChecklistItem>() {
                                                @Override
                                                public void OnDataChangeItemsLsnr(ArrayList<ChecklistItem> items) {
@@ -73,8 +74,8 @@ public class ModelChecklistsReported extends Model<Checklist> implements Seriali
         }
 
         for (ChecklistItem itm: chk.checklistItems) {
-            itm.id = java.util.UUID.randomUUID().toString();
-            itm.setChecklistId(chk.id);
+           // itm.id = java.util.UUID.randomUUID().toString();
+           // itm.setChecklistId(chk.id);
             ModelChecklistItems.getInstance().addItem(itm);
         }
         super.addItem(chk);
