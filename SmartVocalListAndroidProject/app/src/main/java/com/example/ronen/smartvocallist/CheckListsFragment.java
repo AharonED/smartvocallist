@@ -25,6 +25,8 @@ import com.google.firebase.FirebaseOptions;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import static android.content.ContentValues.TAG;
@@ -103,6 +105,13 @@ public class CheckListsFragment extends Fragment {
 
 
     private void checkListsToDisplay(ArrayList<Checklist> checkLists) {
+        Collections.sort(checkLists, new Comparator<Checklist>() {
+            @Override
+            public int compare(Checklist checkList1, Checklist checkList2) {
+                return checkList1.getName().compareTo(checkList2.getName());
+            }
+        });
+
         mData = checkLists;
         adapter = new CheckListsAdapter(mData);
         checkListsRecyclerView.setAdapter(adapter);

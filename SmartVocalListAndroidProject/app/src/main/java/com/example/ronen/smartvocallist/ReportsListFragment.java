@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
@@ -66,6 +68,13 @@ public class ReportsListFragment extends Fragment {
 
 
     private void checkListsToDisplay(ArrayList<Checklist> checkLists) {
+        Collections.sort(checkLists, new Comparator<Checklist>() {
+            @Override
+            public int compare(Checklist checkList1, Checklist checkList2) {
+                return checkList1.getName().compareTo(checkList2.getName());
+            }
+        });
+
         mData = checkLists;
         adapter = new CheckListsReportedAdapter(mData);
         checkListsRecyclerView.setAdapter(adapter);
