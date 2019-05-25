@@ -1,26 +1,25 @@
 package com.example.ronen.smartvocallist;
 
 
-import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
-import DataObjects.ChecklistReported;
 import Model.ModelChecklistsReported;
 
 
@@ -52,7 +51,6 @@ public class ReportsListFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -64,9 +62,16 @@ public class ReportsListFragment extends Fragment {
         model.getItemsAsync(this::checkListsToDisplay);
     }
 
-
     private void checkListsToDisplay(ArrayList<Checklist> checkLists) {
         mData = checkLists;
+
+        Collections.sort(mData, new Comparator<Checklist>() {
+            @Override
+            public int compare(Checklist checkList1, Checklist checkList2) {
+                return checkList1.getName().compareTo(checkList2.getName());
+            }
+        });
+
         adapter = new CheckListsReportedAdapter(mData);
         checkListsRecyclerView.setAdapter(adapter);
 

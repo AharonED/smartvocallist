@@ -2,32 +2,24 @@ package com.example.ronen.smartvocallist;
 
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-
-import DataObjects.Checklist;
-import Model.ModelChecklists;
-
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 
-import static android.content.ContentValues.TAG;
+import DataObjects.Checklist;
+import Model.ModelChecklists;
 
 
 /**
@@ -38,11 +30,6 @@ public class CheckListsFragment extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     CheckListsAdapter adapter;
     ArrayList<Checklist> mData = new ArrayList<>();
-    //private ListView checkListsView;
-    //private ArrayAdapter<String> adapter;
-    ArrayList<String> checkListsDisplay;
-    //private HashMap<String, Checklist> checkListsHashMap;
-
     ModelChecklists model=null;
 
     public CheckListsFragment() {
@@ -67,21 +54,6 @@ public class CheckListsFragment extends Fragment {
         layoutManager = new LinearLayoutManager(view.getContext());
         checkListsRecyclerView.setLayoutManager(layoutManager);
 
-//        checkListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String checklistName = checkListsDisplay.get(position);
-//                Toast.makeText(getApplicationContext(), checklistName, Toast.LENGTH_SHORT).show();
-//                Checklist checkList = checkListsHashMap.get(checklistName);
-//                if(checkList.getChecklistItems().size()>0) {
-//                    startCheckListPlay(checkList);
-//                }
-//                else
-//                {
-//                    Toast.makeText(getApplicationContext(), "No Items to display for " + checklistName, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-
         return view;
     }
 
@@ -94,21 +66,22 @@ public class CheckListsFragment extends Fragment {
         //When data returned from Firebase, it will rise event onDataChange
         // - which execute the injected method-checkListsToDisplay
         model.getItemsAsync(this::checkListsToDisplay);
-
-//        if (checkListsDisplay != null) {
-//             adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, checkListsDisplay);
-//             checkListsView.setAdapter(adapter);
-//        }
     }
 
 
     private void checkListsToDisplay(ArrayList<Checklist> checkLists) {
+        Collections.sort(checkLists, new Comparator<Checklist>() {
+            @Override
+            public int compare(Checklist checkList1, Checklist checkList2) {
+                return checkList1.getName().compareTo(checkList2.getName());
+            }
+        });
+
         mData = checkLists;
         adapter = new CheckListsAdapter(mData);
         checkListsRecyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickedListener(new CheckListsAdapter.OnItemClickedListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(int index) {
                 Checklist clickedCheckList = mData.get(index);
@@ -126,16 +99,12 @@ public class CheckListsFragment extends Fragment {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void startCheckListPlay(Checklist checkList){
         Checklist newChk = checkList.CopyChecklist();
-        //newChk.setId("-1");
         newChk.setChecklistType("Reported");
-        //newChk.setDescription("Reported at: " +LocalDateTime.now().toLocalDate().toString() );
         model.addItem(newChk);
         Intent myIntent = new Intent(getContext(), PocketSphinxActivity.class);
         myIntent.putExtra("checkListId", newChk.getId());
-        //myIntent.putExtra("model", model);
         startActivity(myIntent);
     }
 }

@@ -106,6 +106,7 @@ public class PocketSphinxActivity extends Activity implements
             playTextToSpeechNow(textToSpeech);
             updateStateBarColors();
             displayAnswerToTheQuestion((ChecklistItem) item);
+            displayOptionsToTheQuestion((ChecklistItem) item);
             listenToKeyWords();
         };
 
@@ -199,6 +200,8 @@ public class PocketSphinxActivity extends Activity implements
         tsk.execute();
     }
 
+
+
     private void initStateBar() {
         ArrayList<ChecklistItem> items = dlg.items;
         LinearLayout stateBar = findViewById(R.id.StateLinearLayout);
@@ -264,6 +267,18 @@ public class PocketSphinxActivity extends Activity implements
         else {
             ((TextView) findViewById(R.id.answer_textView)).setText(answerToQuestion);
         }
+    }
+
+    private void displayOptionsToTheQuestion(ChecklistItem item) {
+        StringBuilder optionsStringBuilder = new StringBuilder();
+        optionsStringBuilder.append("The options:");
+
+        for (String option:item.options) {
+            optionsStringBuilder.append(" " + option + ",");
+        }
+
+        String optionsString = optionsStringBuilder.substring(0, optionsStringBuilder.length() - 1);
+        ((TextView) findViewById(R.id.OptionsTextView)).setText(optionsString);
     }
 
     private static class SetupTask extends AsyncTask<Void, Void, Exception> {
