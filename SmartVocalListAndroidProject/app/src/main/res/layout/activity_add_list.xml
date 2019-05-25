@@ -104,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:foreground="@android:drawable/ic_menu_send"
+        android:foreground="@android:drawable/ic_menu_save"
         app:backgroundTint="#009688"
         app:backgroundTintMode="src_in"
         app:layout_constraintBottom_toBottomOf="parent"
