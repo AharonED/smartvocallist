@@ -36,6 +36,8 @@ import java.util.Set;
 //import edu.cmu.sphinx.pocketsphinx.R;
 
 public class AddListItemActivity extends Activity {
+    public static String Checklist_id;
+    public static int Index;
     private Set<String> availableWords;
     private void fill_dict()
     {
@@ -84,6 +86,10 @@ public class AddListItemActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         fill_dict();
+        Intent Data = getIntent();
+        Index = Data.getIntExtra("Index",0);
+        Checklist_id = Data.getStringExtra("Checklist_id");
+
         String FILE_PATH ="C:\\Project\\end project\\smartvocallist\\SmartVocalListAndroidProject\\app\\src\\main\\java\\com\\example\\ronen\\smartvocallist\\checklistsCount.txt";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_list_item);
@@ -93,10 +99,12 @@ public class AddListItemActivity extends Activity {
             @Override
             public void onClick(View view) {
                 boolean isViewValid = true;
+
                 TextView twname   = (TextView)findViewById(R.id.checkListName);
                 TextView twdesc   = (TextView)findViewById(R.id.description);
                 TextView twType  =  (TextView)findViewById(R.id.item_type);
                 TextView twtypes = (TextView)findViewById(R.id.atributes);
+
                 String atributes = twtypes.getText().toString();
                 String [] seperated = atributes.split(";");
 
@@ -105,75 +113,47 @@ public class AddListItemActivity extends Activity {
                 Date currentTime = Calendar.getInstance().getTime();
                 Long time = currentTime.getTime();
                 Double tmp = time.doubleValue();
-                int id = 0;
-                try {
-                    Scanner reader = new Scanner(new File(FILE_PATH));
-                    id = reader.nextInt();
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH));
-                    id ++;
-                    writer.write(id);
-                    writer.close();
-                }
-                catch (FileNotFoundException ex)
+
+                ChecklistItem item =new ChecklistItem(java.util.UUID.randomUUID().toString(),Index,name,description, "",tmp);
+
+                for (int a =0; a< seperated.length ; a++)
                 {
-                    int aaa;
-                    aaa =0;
-                    aaa =1;
-                    id = 1234;
-
-                }
-                catch (IOException ex)
-                {
-                    int aaa;
-                    aaa =0;
-                    aaa =1;
-                }
-                StringBuilder str
-                        = new StringBuilder();
-
-                    str.append(twType.getText().toString() + "_");
-                    str.append(id);
-
-                    ChecklistItem item =new ChecklistItem(str.toString(),id,name,description, "",tmp);
-
-                    for (int a =0; a< seperated.length ; a++)
+                    if (seperated[a].contains(" ")) {
+                        TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
+                        isViewValid = false;
+                        ErrorMessage.setVisibility(View.VISIBLE);
+                        StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
+                        ErrorMessageText.append(seperated[a]);
+                        ErrorMessageText.append(" Can only recieve single words");
+                        ErrorMessage.setText(ErrorMessageText.toString());
+                        break;
+                    }
+                    else if (!isAlpha(seperated[a])) {
+                        TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
+                        isViewValid = false;
+                        ErrorMessage.setVisibility(View.VISIBLE);
+                        StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
+                        ErrorMessageText.append(seperated[a]);
+                        ErrorMessageText.append(" Invalid Symbols");
+                        ErrorMessage.setText(ErrorMessageText.toString());
+                        break;
+                    }
+                    else if (!WordExistsInDict(seperated[a]))
                     {
-                        if (seperated[a].contains(" ")) {
-                            TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
-                            isViewValid = false;
-                            ErrorMessage.setVisibility(View.VISIBLE);
-                            StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
-                            ErrorMessageText.append(seperated[a]);
-                            ErrorMessageText.append(" Can only recieve single words");
-                            ErrorMessage.setText(ErrorMessageText.toString());
-                            break;
-                        }
-                        else if (!isAlpha(seperated[a])) {
-                            TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
-                            isViewValid = false;
-                            ErrorMessage.setVisibility(View.VISIBLE);
-                            StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
-                            ErrorMessageText.append(seperated[a]);
-                            ErrorMessageText.append(" Invalid Symbols");
-                            ErrorMessage.setText(ErrorMessageText.toString());
-                            break;
-                        }
-                        else if (!WordExistsInDict(seperated[a]))
-                        {
-                            TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
-                            isViewValid = false;
-                            ErrorMessage.setVisibility(View.VISIBLE);
-                            StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
-                            ErrorMessageText.append(seperated[a]);
-                            ErrorMessageText.append(" Word doesn't exists in our dictionary");
-                            ErrorMessage.setText(ErrorMessageText.toString());
-                            break;
-                        }
+                        TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
+                        isViewValid = false;
+                        ErrorMessage.setVisibility(View.VISIBLE);
+                        StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
+                        ErrorMessageText.append(seperated[a]);
+                        ErrorMessageText.append(" Word doesn't exists in our dictionary");
+                        ErrorMessage.setText(ErrorMessageText.toString());
+                        break;
+                    }
 
-                        item.options.add(seperated[a]);
-                }
+                    item.options.add(seperated[a]);
+            }
                 if(isViewValid) {
-                    item.setIndex(id);
+                    item.setIndex(Index);
 
 
                     //use item.setAttributes(atributes); instead of  above loop...
@@ -189,8 +169,9 @@ public class AddListItemActivity extends Activity {
                     }
 
                     Intent resultIntent = new Intent();
+                    item.setChecklistId(Checklist_id);
                     resultIntent.putExtra("Item", item);
-                    setResult(0, resultIntent);
+                    setResult(RESULT_OK, resultIntent);
                     finish();
                 }
                 else
