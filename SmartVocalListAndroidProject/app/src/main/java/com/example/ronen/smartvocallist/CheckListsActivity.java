@@ -2,16 +2,15 @@ package com.example.ronen.smartvocallist;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 
 import static android.content.ContentValues.TAG;
 
@@ -23,6 +22,7 @@ public class CheckListsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_lists);
+
 
         //This Firebase init code should be moved to global place....
         try {
