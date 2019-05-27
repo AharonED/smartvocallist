@@ -34,6 +34,16 @@ public class AddListActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AddListItemActivity.am = getApplicationContext().getAssets();
+        Thread tmp = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AddListItemActivity.fill_dict();
+            }
+        });
+        tmp.run();
+
+
         String FilePath = "C:\\Project\\end project\\smartvocallist\\SmartVocalListAndroidProject\\app\\src\\main\\java\\com\\example\\ronen\\smartvocallist\\checklistsCount.txt";
         Items_count = 0;
         Checklist_id = java.util.UUID.randomUUID().toString();

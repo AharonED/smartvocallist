@@ -38,20 +38,20 @@ import java.util.Set;
 public class AddListItemActivity extends Activity {
     public static String Checklist_id;
     public static int Index;
-    private Set<String> availableWords;
-    private void fill_dict()
+    public static Set<String> availableWords;
+    public static AssetManager am;
+    public static void fill_dict()
     {
-        this.availableWords = new HashSet<String>() ;
+        availableWords = new HashSet<String>() ;
         try {
-            AssetManager am = getApplicationContext().getAssets();
             InputStream assetDir = am.open("sync/cmudict-en-us.dict");
             //String theString = (inputStream, encoding);
             BufferedReader r = new BufferedReader(new InputStreamReader(assetDir));
             StringBuilder total = new StringBuilder();
             for (String line; (line = r.readLine()) != null; ) {
                 String tmp = line.split(" ")[0].toLowerCase();
-                if(!this.availableWords.contains(tmp)) {
-                    this.availableWords.add(tmp);
+                if(!availableWords.contains(tmp)) {
+                    availableWords.add(tmp);
                 }
             }
         }
@@ -65,11 +65,12 @@ public class AddListItemActivity extends Activity {
 
     private boolean WordExistsInDict(String word)
     {
-        if (this.availableWords == null)
+        if (availableWords == null)
         {
-            fill_dict();
+            int a =0;
+             a = 1/a;
         }
-        return this.availableWords.contains(word.toLowerCase());
+        return availableWords.contains(word.toLowerCase());
 
     }
     public boolean isAlpha(String name) {
