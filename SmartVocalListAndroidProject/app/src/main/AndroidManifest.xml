@@ -16,7 +16,8 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity"
+                  android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +28,8 @@
         <activity
             android:name=".SignupActivity"
             android:label="Sign up"
-            android:parentActivityName=".LoginActivity">
+            android:parentActivityName=".LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
