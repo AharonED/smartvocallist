@@ -92,12 +92,18 @@ public class PocketSphinxActivity extends Activity implements
     public void onCreate(Bundle state) {
         super.onCreate(state);
 
+        setContentView(R.layout.activity_pocket_sphinx);
+
         dlg = new DialogFlow<>();
         checkListId = (String)getIntent().getExtras().get("checkListId");
         mdl =  ModelChecklists.getInstance();
         //(Model)getIntent().getSerializableExtra("model");
         chk = mdl.getItemByID(checkListId);
         dlg.items=chk.checklistItems;
+
+        String checkListName = chk.getName();
+        TextView checkListNameTextView = findViewById(R.id.SelectedCheckListTextView);
+        checkListNameTextView.setText(checkListName);
 
         dlg.execute = (item)-> {
             ChecklistItem itm =((ChecklistItem)item);
@@ -160,7 +166,6 @@ public class PocketSphinxActivity extends Activity implements
         textToSpeechMap = new HashMap<String, String>();
         textToSpeechMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID");
 
-        setContentView(R.layout.activity_pocket_sphinx);
         ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
         notListeningDisplay();
 
