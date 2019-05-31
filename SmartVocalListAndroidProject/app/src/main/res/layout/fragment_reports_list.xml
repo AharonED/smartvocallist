@@ -19,7 +19,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:text="Reported Check Lists"
+            android:text="Reported Flights CheckLists"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/colorPrimary"
             android:textSize="24sp"

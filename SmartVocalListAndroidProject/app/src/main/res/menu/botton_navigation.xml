@@ -4,8 +4,16 @@
 
     <item
         android:id="@id/checkListsFragment"
-        android:title="CheckLists" />
+        android:checkable="false"
+        android:enabled="true"
+        android:title="CheckLists"
+        android:visible="true"
+        app:showAsAction="never" />
     <item
         android:id="@id/reportsListFragment"
-        android:title="Reports" />
+        android:checkable="false"
+        android:enabled="true"
+        android:title="Reports"
+        android:visible="true"
+        app:showAsAction="never" />
 </menu>
