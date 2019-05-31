@@ -39,9 +39,12 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.speech.tts.TextToSpeech;
@@ -104,8 +107,7 @@ public class PocketSphinxActivity extends Activity implements
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
             String textToSpeech = "Step " + stepNumber + " out of " + dlg.items.size() + ": " + text;
             playTextToSpeechNow(textToSpeech);
-            updateStateBarColors();
-            displayAnswerToTheQuestion((ChecklistItem) item);
+            updateStateBar();
             displayOptionsToTheQuestion((ChecklistItem) item);
             listenToKeyWords();
         };
@@ -127,7 +129,7 @@ public class PocketSphinxActivity extends Activity implements
             String caption = "This is the last item";
             playTextToSpeechNow(caption);
             makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
-            displayAnswerToTheQuestion((ChecklistItem) item);
+            updateStateBar();
             listenToKeyWords();
         };
 
@@ -160,8 +162,7 @@ public class PocketSphinxActivity extends Activity implements
 
         setContentView(R.layout.activity_pocket_sphinx);
         ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
-        ((TextView) findViewById(R.id.listening_text)).setText("");
-        ((TextView) findViewById(R.id.answer_textView)).setText("");
+        notListeningDisplay();
 
         ((Button)findViewById(R.id.back_button)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,20 +201,19 @@ public class PocketSphinxActivity extends Activity implements
         tsk.execute();
     }
 
-
-
     private void initStateBar() {
         ArrayList<ChecklistItem> items = dlg.items;
         LinearLayout stateBar = findViewById(R.id.StateLinearLayout);
         stateBar.setVisibility(View.INVISIBLE);
 
         for (int itemIndex=0; itemIndex<items.size(); itemIndex++){
-            Button button = new Button(getApplicationContext());
-            button.setAllCaps(false);
+            Button itemIndexButton = new Button(getApplicationContext());
+            itemIndexButton.setAllCaps(false);
             String buttonText = String.valueOf(itemIndex + 1);
-            button.setText(buttonText);
+            itemIndexButton.setText(buttonText);
+            itemIndexButton.setGravity(Gravity.CENTER);
 
-            button.setOnClickListener(new View.OnClickListener() {
+            itemIndexButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Button button = (Button)v;
@@ -223,17 +223,33 @@ public class PocketSphinxActivity extends Activity implements
                 }
             });
 
-            stateBar.addView(button);
+            TextView resultText = new TextView(getApplicationContext());
+            resultText.setPadding(8,0,0,0);
+            resultText.setGravity(Gravity.CENTER);
+
+            LinearLayout itemLinearLayout = new LinearLayout(getApplicationContext());
+            itemLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            itemLinearLayout.setGravity(Gravity.CENTER);
+
+            ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            itemIndexButton.setLayoutParams(params);
+            resultText.setLayoutParams(params);
+            itemLinearLayout.setLayoutParams(params);
+
+            itemLinearLayout.addView(itemIndexButton);
+            itemLinearLayout.addView(resultText);
+            stateBar.addView(itemLinearLayout);
         }
     }
 
-    private void updateStateBarColors(){
+    private void updateStateBar() {
         LinearLayout stateBar = findViewById(R.id.StateLinearLayout);
         int lightBlueColor = Color.rgb(0x35,0xd3,0xd2);
         int BlueColor = Color.rgb(0x35,0x92,0xd2);
 
         for(int itemIndex=0; itemIndex<stateBar.getChildCount(); itemIndex++) {
-            View button = stateBar.getChildAt(itemIndex);
+            LinearLayout linearLayout = (LinearLayout) stateBar.getChildAt(itemIndex);
             int color;
 
             if(itemIndex%2 == 0)
@@ -247,26 +263,24 @@ public class PocketSphinxActivity extends Activity implements
                 shapedrawable.getPaint().setColor(color);
                 shapedrawable.getPaint().setStrokeWidth(24f);
                 shapedrawable.getPaint().setStyle(Paint.Style.STROKE);
-                button.setBackground(shapedrawable);
+                linearLayout.getChildAt(0).setBackground(shapedrawable);
             }
             else{
-                button.setBackgroundColor(color);
+                linearLayout.getChildAt(0).setBackgroundColor(color);
+            }
+
+            TextView indexItemTextView = (TextView)linearLayout.getChildAt(1);
+            String indexItemResultString = dlg.items.get(itemIndex).getResult();
+
+            if(indexItemResultString != null && !indexItemResultString.equals("")){
+                indexItemTextView.setText("Result: " + indexItemResultString);
+            }else{
+                indexItemTextView.setText("");
             }
         }
 
         if(stateBar.getVisibility() != View.VISIBLE)
             stateBar.setVisibility(View.VISIBLE);
-    }
-
-    private void displayAnswerToTheQuestion(ChecklistItem item) {
-        String answerToQuestion = item.getResult();
-
-        if(answerToQuestion == null || answerToQuestion.isEmpty()) {
-            ((TextView) findViewById(R.id.answer_textView)).setText("*No answer*");
-        }
-        else {
-            ((TextView) findViewById(R.id.answer_textView)).setText(answerToQuestion);
-        }
     }
 
     private void displayOptionsToTheQuestion(ChecklistItem item) {
@@ -420,7 +434,7 @@ public class PocketSphinxActivity extends Activity implements
                 recognizer.stop();
                 //recognizer.startListening(dlg.step + ".lst");
                 recognizer.startListening(dlg.getCurrentItemKeyWordsFileName());
-                ((TextView) findViewById(R.id.listening_text)).setText("Listening :)");
+                listeningDisplay();
             }
         }else{
             listenToKeyWordsWaiterTask = new ListenToKeyWordsWaiter();
@@ -467,7 +481,7 @@ public class PocketSphinxActivity extends Activity implements
             return;
 
         recognizer.stop();
-        ((TextView) findViewById(R.id.listening_text)).setText("");
+        notListeningDisplay();
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, textToSpeechMap);
         while(!textToSpeech.isSpeaking());
     }
@@ -477,7 +491,7 @@ public class PocketSphinxActivity extends Activity implements
             return;
 
         recognizer.stop();
-        ((TextView) findViewById(R.id.listening_text)).setText("");
+        notListeningDisplay();
         textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, textToSpeechMap);
         while(!textToSpeech.isSpeaking());
     }
@@ -505,5 +519,17 @@ public class PocketSphinxActivity extends Activity implements
             super.onPostExecute(aVoid);
             listenToKeyWords();
         }
+    }
+
+    private void notListeningDisplay(){
+        TextView listeningTextView = findViewById(R.id.listening_text);
+        listeningTextView.setVisibility(View.INVISIBLE);
+    }
+
+    private void listeningDisplay(){
+        TextView listeningTextView = findViewById(R.id.listening_text);
+        listeningTextView.setVisibility(View.VISIBLE);
+        listeningTextView.setText("Listening :)");
+        listeningTextView.setBackgroundColor(Color.rgb(160,255,160));
     }
 }

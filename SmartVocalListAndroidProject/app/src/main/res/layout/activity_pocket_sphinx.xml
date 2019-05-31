@@ -28,16 +28,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="listening text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/OptionsTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/listOptions_text"
@@ -89,41 +87,12 @@
         app:layout_constraintEnd_toStartOf="@+id/next_Button"
         app:layout_constraintStart_toEndOf="@+id/back_button" />
 
-    <TextView
-        android:id="@+id/answer_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="The Answer Text"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@+id/listening_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/caption_text" />
-
-    <TextView
-        android:id="@+id/result_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Result:"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@+id/listening_text"
-        app:layout_constraintEnd_toStartOf="@+id/answer_textView"
-        app:layout_constraintTop_toBottomOf="@+id/caption_text" />
-
     <ScrollView
         android:id="@+id/StateScrollView"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/OptionsTextView"
+        app:layout_constraintBottom_toTopOf="@+id/listening_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/caption_text"
         app:layout_constraintVertical_bias="1.0">
