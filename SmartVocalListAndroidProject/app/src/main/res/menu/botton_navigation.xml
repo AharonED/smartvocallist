@@ -6,7 +6,7 @@
         android:id="@id/checkListsFragment"
         android:checkable="false"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_slideshow"
+        android:icon="@android:drawable/ic_btn_speak_now"
         android:title="CheckLists"
         android:visible="true"
         app:showAsAction="never" />
