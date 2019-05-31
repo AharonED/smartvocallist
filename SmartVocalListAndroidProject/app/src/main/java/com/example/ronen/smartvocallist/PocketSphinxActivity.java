@@ -44,7 +44,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.speech.tts.TextToSpeech;
@@ -84,7 +83,8 @@ public class PocketSphinxActivity extends Activity implements
     private Checklist chk = null;
     private DialogFlow<ChecklistItem> dlg = null;
     private AsyncTask<Void,Void,Void> listenToKeyWordsWaiterTask = null;
-
+    private volatile boolean isWaitingTaskRunning = false;
+    private boolean isReadingQuestion = false;
     private String checkListId;
     private ModelChecklists mdl;
 
@@ -112,7 +112,7 @@ public class PocketSphinxActivity extends Activity implements
             String caption = "Step " + stepNumber + "/" + dlg.items.size() + ": " + text;
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
             String textToSpeech = "Step " + stepNumber + " out of " + dlg.items.size() + ": " + text;
-            playTextToSpeechNow(textToSpeech);
+            playTextToSpeechQeuestionRead(textToSpeech);
             updateStateBar();
             displayOptionsToTheQuestion((ChecklistItem) item);
             listenToKeyWords();
@@ -126,14 +126,14 @@ public class PocketSphinxActivity extends Activity implements
 
         dlg.sof  = (item)->{
             String caption ="This is the first item";
-            playTextToSpeechNow(caption);
+            playTextToSpeechIfNotSpeaking(caption);
             makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
             listenToKeyWords();
         };
 
         dlg.eof  = (item)->{
             String caption = "This is the last item";
-            playTextToSpeechNow(caption);
+            playTextToSpeechIfNotSpeaking(caption);
             makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
             updateStateBar();
             listenToKeyWords();
@@ -167,7 +167,7 @@ public class PocketSphinxActivity extends Activity implements
         textToSpeechMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID");
 
         ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
-        notListeningDisplay();
+        notListeningTextViewDisplay();
 
         ((Button)findViewById(R.id.back_button)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -356,7 +356,8 @@ public class PocketSphinxActivity extends Activity implements
         }
 
         if(listenToKeyWordsWaiterTask != null &&
-                listenToKeyWordsWaiterTask.getStatus() == AsyncTask.Status.RUNNING){
+                (listenToKeyWordsWaiterTask.getStatus() == AsyncTask.Status.RUNNING ||
+                 listenToKeyWordsWaiterTask.getStatus() == AsyncTask.Status.PENDING)){
             listenToKeyWordsWaiterTask.cancel(true);
         }
 
@@ -388,25 +389,24 @@ public class PocketSphinxActivity extends Activity implements
         String[] textSplited = text.split(" ");
 
         for (String word:textSplited) {
+            // A key work
             if(dlg.keywords.contains(word)) {
                 makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
                 dlg.setCommand(word, "");
                 break;
             }
+            // Answer word
             else if(dlg.items.get(dlg.step).options.contains(word)) {
                 dlg.items.get(dlg.step).setResult(word);
 
+                // Update model
                 chk = mdl.getItemByID(checkListId);
                 mdl.addItem(chk);
 
-
                 makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
+                playTextToSpeechNow(word);
                 dlg.next();
                 break;
-            }
-            else {
-                playTextToSpeechNow(word + " is not an answer");
-                listenToKeyWords();
             }
         }
     }
@@ -439,9 +439,11 @@ public class PocketSphinxActivity extends Activity implements
                 recognizer.stop();
                 //recognizer.startListening(dlg.step + ".lst");
                 recognizer.startListening(dlg.getCurrentItemKeyWordsFileName());
-                listeningDisplay();
+                listeningTextViewDisplay();
+                isReadingQuestion = false;
             }
-        }else{
+        }else if(isWaitingTaskRunning == false){
+            isWaitingTaskRunning = true;
             listenToKeyWordsWaiterTask = new ListenToKeyWordsWaiter();
             listenToKeyWordsWaiterTask.execute();
         }
@@ -486,17 +488,34 @@ public class PocketSphinxActivity extends Activity implements
             return;
 
         recognizer.stop();
-        notListeningDisplay();
+        notListeningTextViewDisplay();
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, textToSpeechMap);
         while(!textToSpeech.isSpeaking());
     }
 
-    private void playTextToSpeechWhenDoneSpeaking(String text){
+    private void playTextToSpeechQeuestionRead(String text){
         if(textToSpeech == null || text == "")
             return;
 
         recognizer.stop();
-        notListeningDisplay();
+        notListeningTextViewDisplay();
+
+        if(isReadingQuestion){
+            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, textToSpeechMap);
+        }else{
+            isReadingQuestion = true;
+            textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, textToSpeechMap);
+        }
+
+        while(!textToSpeech.isSpeaking());
+    }
+
+    private void playTextToSpeechIfNotSpeaking(String text){
+        if(textToSpeech == null || text == "" || textToSpeech.isSpeaking())
+            return;
+
+        recognizer.stop();
+        notListeningTextViewDisplay();
         textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, textToSpeechMap);
         while(!textToSpeech.isSpeaking());
     }
@@ -522,16 +541,17 @@ public class PocketSphinxActivity extends Activity implements
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            isWaitingTaskRunning = false;
             listenToKeyWords();
         }
     }
 
-    private void notListeningDisplay(){
+    private void notListeningTextViewDisplay(){
         TextView listeningTextView = findViewById(R.id.listening_text);
         listeningTextView.setVisibility(View.INVISIBLE);
     }
 
-    private void listeningDisplay(){
+    private void listeningTextViewDisplay(){
         TextView listeningTextView = findViewById(R.id.listening_text);
         listeningTextView.setVisibility(View.VISIBLE);
         listeningTextView.setText("Listening :)");
