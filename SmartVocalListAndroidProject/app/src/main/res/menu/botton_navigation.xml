@@ -6,6 +6,7 @@
         android:id="@id/checkListsFragment"
         android:checkable="false"
         android:enabled="true"
+        android:icon="@android:drawable/ic_menu_slideshow"
         android:title="CheckLists"
         android:visible="true"
         app:showAsAction="never" />
@@ -13,6 +14,7 @@
         android:id="@id/reportsListFragment"
         android:checkable="false"
         android:enabled="true"
+        android:icon="@android:drawable/stat_notify_chat"
         android:title="Reports"
         android:visible="true"
         app:showAsAction="never" />
