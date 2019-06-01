@@ -74,6 +74,13 @@ public class AddListItemActivity extends Activity {
                     availableWords.add(tmp);
                 }
             }
+            availableWords.remove("next");
+            availableWords.remove("back");
+            availableWords.remove("start");
+            availableWords.remove("options");
+            availableWords.remove("read");
+
+
         }
         catch (FileNotFoundException ex)
         {
@@ -81,6 +88,8 @@ public class AddListItemActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     private boolean WordExistsInDict(String word)
@@ -161,27 +170,28 @@ public class AddListItemActivity extends Activity {
                     ErrorMessageText.append(" Word doesn't exists in our dictionary");
                     ErrorMessage.setText(ErrorMessageText.toString());
                 }
+                else {
+                    all_Props.append(seperated);
+                    all_Props.append(";");
 
-                all_Props.append(seperated);
-                all_Props.append(";");
-
-                Button newItem = new Button(getApplicationContext());
-                newItem.setTextSize(20);
-                newItem.setText(seperated);
-                newItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ll.removeView(v);
-                        String tmp = all_Props.toString().replace(((Button)v).getText() + ";","");
-                        all_Props = new StringBuilder();
-                        all_Props.append(tmp);
-                        ammount--;
-                    }
+                    Button newItem = new Button(getApplicationContext());
+                    newItem.setTextSize(20);
+                    newItem.setText(seperated);
+                    newItem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ll.removeView(v);
+                            String tmp = all_Props.toString().replace(((Button) v).getText() + ";", "");
+                            all_Props = new StringBuilder();
+                            all_Props.append(tmp);
+                            ammount--;
+                        }
                     });
-                ll.addView(newItem,ammount);
-                twtypes.setText("");
-                ammount++;
-                ll.invalidate();
+                    ll.addView(newItem, ammount);
+                    twtypes.setText("");
+                    ammount++;
+                    ll.invalidate();
+                }
 
             }
         });
