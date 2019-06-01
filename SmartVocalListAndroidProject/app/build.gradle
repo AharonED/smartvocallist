@@ -5,7 +5,7 @@ apply plugin: "androidx.navigation.safeargs"
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.ronen.smartvocallist"
+        applicationId "com.SmartVocalList"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
@@ -50,3 +50,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui:$nav_version"
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }
+
+apply plugin: "com.google.gms.google-services"
+
+
