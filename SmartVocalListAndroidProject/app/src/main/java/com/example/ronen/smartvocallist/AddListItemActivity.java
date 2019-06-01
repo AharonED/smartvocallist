@@ -3,14 +3,27 @@ package com.example.ronen.smartvocallist;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.View;
 
 import DataObjects.ChecklistItem;
 import DataObjects.ItemType;
 import edu.cmu.pocketsphinx.Assets;
 
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.gms.common.util.IOUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,6 +36,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -39,7 +53,13 @@ public class AddListItemActivity extends Activity {
     public static String Checklist_id;
     public static int Index;
     public static Set<String> availableWords;
+    private static StringBuilder all_Props;
     public static AssetManager am;
+    private boolean is_checked =false;
+    private static int ammount = 0;
+    LinearLayout ll;
+    CoordinatorLayout CL;
+
     public static void fill_dict()
     {
         availableWords = new HashSet<String>() ;
@@ -67,8 +87,7 @@ public class AddListItemActivity extends Activity {
     {
         if (availableWords == null)
         {
-            int a =0;
-             a = 1/a;
+            availableWords = new HashSet<String>();
         }
         return availableWords.contains(word.toLowerCase());
 
@@ -83,17 +102,89 @@ public class AddListItemActivity extends Activity {
         }
         return true;
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+
+        //Detects request codes
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        fill_dict();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_list_item);
+        ammount = 0;
+
+        all_Props = new StringBuilder();
+        //ll = (LinearLayout) findViewById(R.id.item);
+        ll = (LinearLayout) findViewById(R.id.llItem);
+        ll.setGravity(Gravity.CENTER_VERTICAL);
+        ll.setOrientation(LinearLayout.VERTICAL);
+
         Intent Data = getIntent();
         Index = Data.getIntExtra("Index",0);
         Checklist_id = Data.getStringExtra("Checklist_id");
 
         String FILE_PATH ="C:\\Project\\end project\\smartvocallist\\SmartVocalListAndroidProject\\app\\src\\main\\java\\com\\example\\ronen\\smartvocallist\\checklistsCount.txt";
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_list_item);
+
+        FloatingActionButton AddProperty = (FloatingActionButton) findViewById(R.id.fab2);
+        AddProperty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView twtypes = (TextView)findViewById(R.id.atributes);
+
+                String seperated = twtypes.getText().toString();
+
+                if (seperated.contains(" ")) {
+                    TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
+                    ErrorMessage.setVisibility(View.VISIBLE);
+                    StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
+                    ErrorMessageText.append(seperated);
+                    ErrorMessageText.append(" Can only recieve single words");
+                    ErrorMessage.setText(ErrorMessageText.toString());
+                }
+                else if (!isAlpha(seperated)) {
+                    TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
+                    ErrorMessage.setVisibility(View.VISIBLE);
+                    StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
+                    ErrorMessageText.append(seperated);
+                    ErrorMessageText.append(" Invalid Symbols");
+                    ErrorMessage.setText(ErrorMessageText.toString());
+                }
+                else if (!WordExistsInDict(seperated))
+                {
+                    TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
+                    ErrorMessage.setVisibility(View.VISIBLE);
+                    StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
+                    ErrorMessageText.append(seperated);
+                    ErrorMessageText.append(" Word doesn't exists in our dictionary");
+                    ErrorMessage.setText(ErrorMessageText.toString());
+                }
+
+                all_Props.append(seperated);
+                all_Props.append(";");
+
+                Button newItem = new Button(getApplicationContext());
+                newItem.setTextSize(20);
+                newItem.setText(seperated);
+                newItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ll.removeView(v);
+                        String tmp = all_Props.toString().replace(((Button)v).getText() + ";","");
+                        all_Props = new StringBuilder();
+                        all_Props.append(tmp);
+                        ammount--;
+                    }
+                    });
+                ll.addView(newItem,ammount);
+                twtypes.setText("");
+                ammount++;
+                ll.invalidate();
+
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -102,75 +193,28 @@ public class AddListItemActivity extends Activity {
                 boolean isViewValid = true;
 
                 TextView twname   = (TextView)findViewById(R.id.checkListName);
-                TextView twdesc   = (TextView)findViewById(R.id.description);
-                TextView twType  =  (TextView)findViewById(R.id.item_type);
-                TextView twtypes = (TextView)findViewById(R.id.atributes);
+                CheckBox isRequired = (CheckBox)findViewById(R.id.Required);
 
-                String atributes = twtypes.getText().toString();
-                String [] seperated = atributes.split(";");
 
                 String name = twname.getText().toString();
-                String description = twdesc.getText().toString();
                 Date currentTime = Calendar.getInstance().getTime();
                 Long time = currentTime.getTime();
                 Double tmp = time.doubleValue();
 
-                ChecklistItem item =new ChecklistItem(java.util.UUID.randomUUID().toString(),Index,name,description, "",tmp);
+                ChecklistItem item =new ChecklistItem(java.util.UUID.randomUUID().toString(),Index,name,"", "",tmp);
 
-                for (int a =0; a< seperated.length ; a++)
-                {
-                    if (seperated[a].contains(" ")) {
-                        TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
-                        isViewValid = false;
-                        ErrorMessage.setVisibility(View.VISIBLE);
-                        StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
-                        ErrorMessageText.append(seperated[a]);
-                        ErrorMessageText.append(" Can only recieve single words");
-                        ErrorMessage.setText(ErrorMessageText.toString());
-                        break;
-                    }
-                    else if (!isAlpha(seperated[a])) {
-                        TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
-                        isViewValid = false;
-                        ErrorMessage.setVisibility(View.VISIBLE);
-                        StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
-                        ErrorMessageText.append(seperated[a]);
-                        ErrorMessageText.append(" Invalid Symbols");
-                        ErrorMessage.setText(ErrorMessageText.toString());
-                        break;
-                    }
-                    else if (!WordExistsInDict(seperated[a]))
-                    {
-                        TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
-                        isViewValid = false;
-                        ErrorMessage.setVisibility(View.VISIBLE);
-                        StringBuilder ErrorMessageText = new StringBuilder("Error Accured in : ");
-                        ErrorMessageText.append(seperated[a]);
-                        ErrorMessageText.append(" Word doesn't exists in our dictionary");
-                        ErrorMessage.setText(ErrorMessageText.toString());
-                        break;
-                    }
 
-                    item.options.add(seperated[a]);
-            }
                 if(isViewValid) {
                     item.setIndex(Index);
 
 
                     //use item.setAttributes(atributes); instead of  above loop...
-                    item.setAttributes(atributes);
+                    item.setAttributes(all_Props.toString());
 
-                    String type = twType.getText().toString();
-                    if (type.toLowerCase().equals("boolean")) {
-                        item.setItemType(ItemType.Boolean);
-                    } else if (type.toLowerCase().equals("text")) {
-                        item.setItemType(ItemType.Text);
-                    } else {
-                        item.setItemType(ItemType.Numeric);
-                    }
-
+                    item.setItemType(ItemType.Text);
                     Intent resultIntent = new Intent();
                     item.setChecklistId(Checklist_id);
+                    item.setIsReq(isRequired.isChecked() ? 1 : 0);
                     resultIntent.putExtra("Item", item);
                     setResult(RESULT_OK, resultIntent);
                     finish();
@@ -182,6 +226,8 @@ public class AddListItemActivity extends Activity {
 
             }
         });
+
+
     }
 
 }

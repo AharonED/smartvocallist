@@ -2,10 +2,15 @@ package com.example.ronen.smartvocallist;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -31,6 +36,10 @@ public class AddListActivity extends Activity {
     private static String Checklist_id;
     private static int Items_count;
     private ArrayList<ChecklistItem> Items;
+    int GET_FROM_GALLERY = 17;
+    Bitmap bitmap = null;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +50,7 @@ public class AddListActivity extends Activity {
                 AddListItemActivity.fill_dict();
             }
         });
-        tmp.run();
+
 
 
         String FilePath = "C:\\Project\\end project\\smartvocallist\\SmartVocalListAndroidProject\\app\\src\\main\\java\\com\\example\\ronen\\smartvocallist\\checklistsCount.txt";
@@ -57,6 +66,11 @@ public class AddListActivity extends Activity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TextView listId = (TextView)findViewById(R.id.lidtId);
+                if (listId.getText().toString().equals(""))
+                {
+
+                }
                 TextView twName = (TextView)findViewById(R.id.List_Name);
                 TextView twDescripton = (TextView)findViewById(R.id.description);
 
@@ -95,13 +109,23 @@ public class AddListActivity extends Activity {
             }
         });
 
+        FloatingActionButton fab2 = findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+            }
+
+        });
+      //  tmp.run();
+
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(resultCode == RESULT_OK) {
+        if(requestCode!=GET_FROM_GALLERY && resultCode == RESULT_OK) {
             Items_count ++;
             ChecklistItem result = (ChecklistItem) data.getSerializableExtra("Item");
             TextView twitems = (TextView) findViewById(R.id.items);
@@ -111,6 +135,22 @@ public class AddListActivity extends Activity {
             stb.append(result.getName());
             twitems.setText(stb);
             Items.add(result);
+        }
+        else  if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            ImageView iv = (ImageView) findViewById(R.id.listImage);
+            iv.setImageBitmap(bitmap);
+
         }
     }
 
