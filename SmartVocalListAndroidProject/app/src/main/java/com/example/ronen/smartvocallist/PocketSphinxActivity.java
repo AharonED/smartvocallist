@@ -39,7 +39,9 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -81,13 +83,16 @@ public class PocketSphinxActivity extends Activity implements
     private Checklist chk = null;
     private DialogFlow<ChecklistItem> dlg = null;
     private AsyncTask<Void,Void,Void> listenToKeyWordsWaiterTask = null;
-
+    private volatile boolean isWaitingTaskRunning = false;
+    private boolean isReadingQuestion = false;
     private String checkListId;
     private ModelChecklists mdl;
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
+
+        setContentView(R.layout.activity_pocket_sphinx);
 
         dlg = new DialogFlow<>();
         checkListId = (String)getIntent().getExtras().get("checkListId");
@@ -96,6 +101,10 @@ public class PocketSphinxActivity extends Activity implements
         chk = mdl.getItemByID(checkListId);
         dlg.items=chk.checklistItems;
 
+        String checkListName = chk.getName();
+        TextView checkListNameTextView = findViewById(R.id.SelectedCheckListTextView);
+        checkListNameTextView.setText(checkListName);
+
         dlg.execute = (item)-> {
             ChecklistItem itm =((ChecklistItem)item);
             String text = itm.getName();
@@ -103,9 +112,8 @@ public class PocketSphinxActivity extends Activity implements
             String caption = "Step " + stepNumber + "/" + dlg.items.size() + ": " + text;
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
             String textToSpeech = "Step " + stepNumber + " out of " + dlg.items.size() + ": " + text;
-            playTextToSpeechNow(textToSpeech);
-            updateStateBarColors();
-            displayAnswerToTheQuestion((ChecklistItem) item);
+            playTextToSpeechQeuestionRead(textToSpeech);
+            updateStateBar();
             displayOptionsToTheQuestion((ChecklistItem) item);
             listenToKeyWords();
         };
@@ -118,16 +126,16 @@ public class PocketSphinxActivity extends Activity implements
 
         dlg.sof  = (item)->{
             String caption ="This is the first item";
-            playTextToSpeechNow(caption);
+            playTextToSpeechIfNotSpeaking(caption);
             makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
             listenToKeyWords();
         };
 
         dlg.eof  = (item)->{
             String caption = "This is the last item";
-            playTextToSpeechNow(caption);
+            playTextToSpeechIfNotSpeaking(caption);
             makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
-            displayAnswerToTheQuestion((ChecklistItem) item);
+            updateStateBar();
             listenToKeyWords();
         };
 
@@ -158,10 +166,8 @@ public class PocketSphinxActivity extends Activity implements
         textToSpeechMap = new HashMap<String, String>();
         textToSpeechMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID");
 
-        setContentView(R.layout.activity_pocket_sphinx);
         ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
-        ((TextView) findViewById(R.id.listening_text)).setText("");
-        ((TextView) findViewById(R.id.answer_textView)).setText("");
+        notListeningTextViewDisplay();
 
         ((Button)findViewById(R.id.back_button)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,20 +206,19 @@ public class PocketSphinxActivity extends Activity implements
         tsk.execute();
     }
 
-
-
     private void initStateBar() {
         ArrayList<ChecklistItem> items = dlg.items;
         LinearLayout stateBar = findViewById(R.id.StateLinearLayout);
         stateBar.setVisibility(View.INVISIBLE);
 
         for (int itemIndex=0; itemIndex<items.size(); itemIndex++){
-            Button button = new Button(getApplicationContext());
-            button.setAllCaps(false);
+            Button itemIndexButton = new Button(getApplicationContext());
+            itemIndexButton.setAllCaps(false);
             String buttonText = String.valueOf(itemIndex + 1);
-            button.setText(buttonText);
+            itemIndexButton.setText(buttonText);
+            itemIndexButton.setGravity(Gravity.CENTER);
 
-            button.setOnClickListener(new View.OnClickListener() {
+            itemIndexButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Button button = (Button)v;
@@ -223,17 +228,33 @@ public class PocketSphinxActivity extends Activity implements
                 }
             });
 
-            stateBar.addView(button);
+            TextView resultText = new TextView(getApplicationContext());
+            resultText.setPadding(8,0,0,0);
+            resultText.setGravity(Gravity.CENTER);
+
+            LinearLayout itemLinearLayout = new LinearLayout(getApplicationContext());
+            itemLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            itemLinearLayout.setGravity(Gravity.CENTER);
+
+            ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            itemIndexButton.setLayoutParams(params);
+            resultText.setLayoutParams(params);
+            itemLinearLayout.setLayoutParams(params);
+
+            itemLinearLayout.addView(itemIndexButton);
+            itemLinearLayout.addView(resultText);
+            stateBar.addView(itemLinearLayout);
         }
     }
 
-    private void updateStateBarColors(){
+    private void updateStateBar() {
         LinearLayout stateBar = findViewById(R.id.StateLinearLayout);
         int lightBlueColor = Color.rgb(0x35,0xd3,0xd2);
         int BlueColor = Color.rgb(0x35,0x92,0xd2);
 
         for(int itemIndex=0; itemIndex<stateBar.getChildCount(); itemIndex++) {
-            View button = stateBar.getChildAt(itemIndex);
+            LinearLayout linearLayout = (LinearLayout) stateBar.getChildAt(itemIndex);
             int color;
 
             if(itemIndex%2 == 0)
@@ -247,26 +268,24 @@ public class PocketSphinxActivity extends Activity implements
                 shapedrawable.getPaint().setColor(color);
                 shapedrawable.getPaint().setStrokeWidth(24f);
                 shapedrawable.getPaint().setStyle(Paint.Style.STROKE);
-                button.setBackground(shapedrawable);
+                linearLayout.getChildAt(0).setBackground(shapedrawable);
             }
             else{
-                button.setBackgroundColor(color);
+                linearLayout.getChildAt(0).setBackgroundColor(color);
+            }
+
+            TextView indexItemTextView = (TextView)linearLayout.getChildAt(1);
+            String indexItemResultString = dlg.items.get(itemIndex).getResult();
+
+            if(indexItemResultString != null && !indexItemResultString.equals("")){
+                indexItemTextView.setText("Result: " + indexItemResultString);
+            }else{
+                indexItemTextView.setText("");
             }
         }
 
         if(stateBar.getVisibility() != View.VISIBLE)
             stateBar.setVisibility(View.VISIBLE);
-    }
-
-    private void displayAnswerToTheQuestion(ChecklistItem item) {
-        String answerToQuestion = item.getResult();
-
-        if(answerToQuestion == null || answerToQuestion.isEmpty()) {
-            ((TextView) findViewById(R.id.answer_textView)).setText("*No answer*");
-        }
-        else {
-            ((TextView) findViewById(R.id.answer_textView)).setText(answerToQuestion);
-        }
     }
 
     private void displayOptionsToTheQuestion(ChecklistItem item) {
@@ -337,7 +356,8 @@ public class PocketSphinxActivity extends Activity implements
         }
 
         if(listenToKeyWordsWaiterTask != null &&
-                listenToKeyWordsWaiterTask.getStatus() == AsyncTask.Status.RUNNING){
+                (listenToKeyWordsWaiterTask.getStatus() == AsyncTask.Status.RUNNING ||
+                 listenToKeyWordsWaiterTask.getStatus() == AsyncTask.Status.PENDING)){
             listenToKeyWordsWaiterTask.cancel(true);
         }
 
@@ -369,25 +389,24 @@ public class PocketSphinxActivity extends Activity implements
         String[] textSplited = text.split(" ");
 
         for (String word:textSplited) {
+            // A key work
             if(dlg.keywords.contains(word)) {
                 makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
                 dlg.setCommand(word, "");
                 break;
             }
+            // Answer word
             else if(dlg.items.get(dlg.step).options.contains(word)) {
                 dlg.items.get(dlg.step).setResult(word);
 
+                // Update model
                 chk = mdl.getItemByID(checkListId);
                 mdl.addItem(chk);
 
-
                 makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
+                playTextToSpeechNow(word);
                 dlg.next();
                 break;
-            }
-            else {
-                playTextToSpeechNow(word + " is not an answer");
-                listenToKeyWords();
             }
         }
     }
@@ -420,9 +439,11 @@ public class PocketSphinxActivity extends Activity implements
                 recognizer.stop();
                 //recognizer.startListening(dlg.step + ".lst");
                 recognizer.startListening(dlg.getCurrentItemKeyWordsFileName());
-                ((TextView) findViewById(R.id.listening_text)).setText("Listening :)");
+                listeningTextViewDisplay();
+                isReadingQuestion = false;
             }
-        }else{
+        }else if(isWaitingTaskRunning == false){
+            isWaitingTaskRunning = true;
             listenToKeyWordsWaiterTask = new ListenToKeyWordsWaiter();
             listenToKeyWordsWaiterTask.execute();
         }
@@ -467,17 +488,34 @@ public class PocketSphinxActivity extends Activity implements
             return;
 
         recognizer.stop();
-        ((TextView) findViewById(R.id.listening_text)).setText("");
+        notListeningTextViewDisplay();
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, textToSpeechMap);
         while(!textToSpeech.isSpeaking());
     }
 
-    private void playTextToSpeechWhenDoneSpeaking(String text){
+    private void playTextToSpeechQeuestionRead(String text){
         if(textToSpeech == null || text == "")
             return;
 
         recognizer.stop();
-        ((TextView) findViewById(R.id.listening_text)).setText("");
+        notListeningTextViewDisplay();
+
+        if(isReadingQuestion){
+            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, textToSpeechMap);
+        }else{
+            isReadingQuestion = true;
+            textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, textToSpeechMap);
+        }
+
+        while(!textToSpeech.isSpeaking());
+    }
+
+    private void playTextToSpeechIfNotSpeaking(String text){
+        if(textToSpeech == null || text == "" || textToSpeech.isSpeaking())
+            return;
+
+        recognizer.stop();
+        notListeningTextViewDisplay();
         textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, textToSpeechMap);
         while(!textToSpeech.isSpeaking());
     }
@@ -503,7 +541,20 @@ public class PocketSphinxActivity extends Activity implements
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            isWaitingTaskRunning = false;
             listenToKeyWords();
         }
+    }
+
+    private void notListeningTextViewDisplay(){
+        TextView listeningTextView = findViewById(R.id.listening_text);
+        listeningTextView.setVisibility(View.INVISIBLE);
+    }
+
+    private void listeningTextViewDisplay(){
+        TextView listeningTextView = findViewById(R.id.listening_text);
+        listeningTextView.setVisibility(View.VISIBLE);
+        listeningTextView.setText("Listening :)");
+        listeningTextView.setBackgroundColor(Color.rgb(160,255,160));
     }
 }
