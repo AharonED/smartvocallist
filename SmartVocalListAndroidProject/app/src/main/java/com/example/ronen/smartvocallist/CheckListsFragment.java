@@ -17,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import DataObjects.Checklist;
 import Model.ModelChecklists;
@@ -102,6 +103,9 @@ public class CheckListsFragment extends Fragment {
     private void startCheckListPlay(Checklist checkList){
         Checklist newChk = checkList.CopyChecklist();
         newChk.setChecklistType("Reported");
+        Date d = new Date();
+        newChk.setLastUpdate((double)d.getTime());
+        newChk.setDescription("Reported at: " + d.toString());
         model.addItem(newChk);
         Intent myIntent = new Intent(getContext(), PocketSphinxActivity.class);
         myIntent.putExtra("checkListId", newChk.getId());

@@ -1,14 +1,12 @@
 package com.example.ronen.smartvocallist;
 
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -68,7 +66,7 @@ public class ReportsListFragment extends Fragment {
         Collections.sort(mData, new Comparator<Checklist>() {
             @Override
             public int compare(Checklist checkList1, Checklist checkList2) {
-                return checkList1.getName().compareTo(checkList2.getName());
+                return checkList1.getLastUpdate().compareTo(checkList2.getLastUpdate());
             }
         });
 

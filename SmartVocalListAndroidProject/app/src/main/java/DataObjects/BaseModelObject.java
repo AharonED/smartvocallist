@@ -9,15 +9,13 @@
 
 package DataObjects;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
-import java.lang.*;
-import java.lang.Double;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.json.*;
 
 public class BaseModelObject implements Serializable {
 
@@ -39,6 +37,9 @@ public class BaseModelObject implements Serializable {
     }
 
     public Double getLastUpdate() {
+        if(lastUpdate==null) {
+            lastUpdate = 0.0;
+        }
         return lastUpdate;
     }
 
