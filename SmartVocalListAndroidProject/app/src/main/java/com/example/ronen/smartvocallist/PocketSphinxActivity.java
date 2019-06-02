@@ -39,6 +39,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,24 +47,23 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.speech.tts.TextToSpeech;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-
-import DataObjects.ChecklistItem;
 import DataObjects.Checklist;
+import DataObjects.ChecklistItem;
 import Dialogs.DialogFlow;
 import Model.ModelChecklists;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
@@ -87,12 +87,16 @@ public class PocketSphinxActivity extends Activity implements
     private boolean isReadingQuestion = false;
     private String checkListId;
     private ModelChecklists mdl;
+    private boolean Completed=false;
+    private boolean Starting=true;
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
 
         setContentView(R.layout.activity_pocket_sphinx);
+
+        Completed=false;
 
         dlg = new DialogFlow<>();
         checkListId = (String)getIntent().getExtras().get("checkListId");
@@ -112,6 +116,11 @@ public class PocketSphinxActivity extends Activity implements
             String caption = "Step " + stepNumber + "/" + dlg.items.size() + ": " + text;
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
             String textToSpeech = "Step " + stepNumber + " out of " + dlg.items.size() + ": " + text;
+
+            if(Starting){
+                textToSpeech = checkListName + ". " + textToSpeech;
+                Starting=false;
+            }
             playTextToSpeechQeuestionRead(textToSpeech);
             updateStateBar();
             displayOptionsToTheQuestion((ChecklistItem) item);
@@ -133,6 +142,9 @@ public class PocketSphinxActivity extends Activity implements
 
         dlg.eof  = (item)->{
             String caption = "This is the last item";
+            if(Completed) {
+                caption = "Checklist reporting completed";
+            }
             playTextToSpeechIfNotSpeaking(caption);
             makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
             updateStateBar();
@@ -406,7 +418,29 @@ public class PocketSphinxActivity extends Activity implements
 
                 makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
                 playTextToSpeechNow(word);
+
+                boolean tmpCompleted = true;
+                Completed=false;
+
+                //if(dlg.step == dlg.items.size()-1)
+                {
+                    for (ChecklistItem item: dlg.items) {
+                        if(item.getResult() == null || item.getResult() == "")
+                        {
+                            tmpCompleted = false;
+                            break;
+                        }
+                    }
+                    if(tmpCompleted)
+                    {
+                        Completed=true;
+                        chk.setIsCompleted(1);
+                    }
+                }
+
                 dlg.next();
+
+
                 break;
             }
         }
