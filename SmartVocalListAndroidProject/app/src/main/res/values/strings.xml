@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_name">SmartVocalList</string>
+    <string name="app_name">Smart Vocal List</string>
 
     <string name="title_activity_add_list_activity">Add list activity</string>
     <string name="title_activity_add_list_item">add List Item</string>

@@ -229,6 +229,7 @@ public class PocketSphinxActivity extends Activity implements
             });
 
             TextView resultText = new TextView(getApplicationContext());
+            resultText.setTextColor(Color.BLACK);
             resultText.setPadding(8,0,0,0);
             resultText.setGravity(Gravity.CENTER);
 
