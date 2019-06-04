@@ -80,6 +80,19 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         super.addItem(chk);
     }
 
+    @Override
+    public void deleteItem(Checklist chk){
+
+        for (ChecklistItem itm: chk.checklistItems) {
+            //itm.id = java.util.UUID.randomUUID().toString();
+            //itm.setChecklistId(chk.id);
+            ModelChecklistItems.getInstance().deleteItem(itm);
+        }
+        super.deleteItem(chk);
+    }
+
+
+
 
 
 

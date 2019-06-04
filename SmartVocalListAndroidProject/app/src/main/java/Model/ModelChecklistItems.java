@@ -3,7 +3,6 @@ package Model;
 
 import java.io.Serializable;
 
-import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
 //
 public class  ModelChecklistItems extends Model<ChecklistItem> implements Serializable {
@@ -33,6 +32,11 @@ public class  ModelChecklistItems extends Model<ChecklistItem> implements Serial
     @Override
     public void addItem(ChecklistItem chk){
         super.addItem(chk);
+    }
+
+    @Override
+    public void deleteItem(ChecklistItem chk){
+        super.deleteItem(chk);
     }
 
 }

@@ -117,6 +117,7 @@ public class CheckListsFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int itemPosition = item.getGroupId();
+
         Checklist checkList = mData.get(itemPosition);
 
         switch (item.getItemId()){
@@ -133,6 +134,8 @@ public class CheckListsFragment extends Fragment {
 
     private void deleteOptionSelected(Checklist checkList) {
         // TODO: delete code for firebase
+        model.deleteItem(checkList);
+
     }
 
     private void editOptionSelected(Checklist checkList) {

@@ -7,13 +7,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.firebase.FirebaseError;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,9 +18,6 @@ import java.util.Map;
 
 import DataObjects.BaseModelObject;
 
-import static com.google.firebase.database.ServerValue.*;
-import static java.lang.System.in;
-
 public  abstract class Model <T extends BaseModelObject> implements IModel, Serializable {
 
     private String tableName="";
@@ -33,6 +25,18 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
 
     public Model.ItemsLsnr<T> getItemsLsnr() {
         return ItemsLsnr;
+    }
+
+    public void deleteItem(T chk){
+        DatabaseReference myRef = rep.database.getReference("/" + getTableName());
+        try {
+            String key = chk.id;
+            myRef.child(key).removeValue();
+        }
+        catch (Exception ex)
+        {
+            Log.println(1,"t","Data could not be deleted: " + ex.getMessage());
+        }
     }
 
     public interface ItemsLsnr<E extends BaseModelObject> {
@@ -167,6 +171,7 @@ try {
         }
         return null;
     }
+
 
 }
 
