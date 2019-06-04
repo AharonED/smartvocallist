@@ -1,5 +1,6 @@
 package com.example.ronen.smartvocallist;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
         return mData.size();
     }
 
-    static class ChecklistViewHolder extends RecyclerView.ViewHolder {
+    static class ChecklistViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
         ImageView mImage;
         TextView mName;
         TextView mDescription;
@@ -71,6 +72,8 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
                     }
                 }
             });
+
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         // Binding data to the view
@@ -79,6 +82,11 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
             mDescription.setText(checkList.getDescription());
             // For now it's always the default image
             mImage.setImageResource(R.drawable.default_icon);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add(this.getAdapterPosition(), R.id.reportedDeleteOption, 0, "Delete Checklist");
         }
     }
 }
