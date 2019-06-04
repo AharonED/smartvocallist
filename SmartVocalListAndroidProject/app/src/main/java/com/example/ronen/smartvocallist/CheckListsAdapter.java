@@ -1,6 +1,10 @@
 package com.example.ronen.smartvocallist;
 
+import android.content.Context;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,6 +15,8 @@ import java.util.ArrayList;
 import DataObjects.Checklist;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.StudentViewHolder> {
     ArrayList<Checklist> mData;
@@ -47,7 +53,7 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.St
         return mData.size();
     }
 
-    static class StudentViewHolder extends RecyclerView.ViewHolder {
+    static class StudentViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         ImageView mImage;
         TextView mName;
         TextView mDescription;
@@ -62,21 +68,29 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.St
                 @Override
                 public void onClick(View v) {
                     int index = getAdapterPosition();
-                    if(listener != null){
-                        if(index != RecyclerView.NO_POSITION){
+                    if (listener != null) {
+                        if (index != RecyclerView.NO_POSITION) {
                             listener.onClick(index);
                         }
                     }
                 }
             });
+
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         // Binding data to the view
-        public void bind(Checklist checkList){
+        public void bind(Checklist checkList) {
             mName.setText(checkList.getName());
             mDescription.setText(checkList.getDescription());
             // For now it's always the default image
             mImage.setImageResource(R.drawable.default_icon);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add(this.getAdapterPosition(), R.id.deleteOption, 0, "Delete Checklist");
+            menu.add(this.getAdapterPosition(), R.id.editOption, 1, "Edit Checklist");
         }
     }
 }

@@ -4,10 +4,12 @@ package com.example.ronen.smartvocallist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -110,5 +112,30 @@ public class CheckListsFragment extends Fragment {
         Intent myIntent = new Intent(getContext(), PocketSphinxActivity.class);
         myIntent.putExtra("checkListId", newChk.getId());
         startActivity(myIntent);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int itemPosition = item.getGroupId();
+        Checklist checkList = mData.get(itemPosition);
+
+        switch (item.getItemId()){
+            case R.id.deleteOption:
+                deleteOptionSelected(checkList);
+                return true;
+            case R.id.editOption:
+                editOptionSelected(checkList);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private void deleteOptionSelected(Checklist checkList) {
+        // TODO: delete code for firebase
+    }
+
+    private void editOptionSelected(Checklist checkList) {
+        // TODO
     }
 }
