@@ -1,10 +1,7 @@
 package com.example.ronen.smartvocallist;
 
-import android.content.Context;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,9 +13,7 @@ import DataObjects.Checklist;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-
-public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.StudentViewHolder> {
+public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.ChecklistViewHolder> {
     ArrayList<Checklist> mData;
     OnItemClickedListener mListener;
 
@@ -36,14 +31,14 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.St
 
     @NonNull
     @Override
-    public StudentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ChecklistViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.checklist_row, viewGroup, false);
-        StudentViewHolder studentViewHolder = new StudentViewHolder(view, mListener);
-        return studentViewHolder;
+        ChecklistViewHolder checklistViewHolder = new ChecklistViewHolder(view, mListener);
+        return checklistViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StudentViewHolder studentViewHolder, int i) {
+    public void onBindViewHolder(@NonNull ChecklistViewHolder studentViewHolder, int i) {
         Checklist checkList = mData.get(i);
         studentViewHolder.bind(checkList);
     }
@@ -53,16 +48,16 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.St
         return mData.size();
     }
 
-    static class StudentViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    static class ChecklistViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         ImageView mImage;
-        TextView mName;
-        TextView mDescription;
+        TextView mTitle;
+        TextView mSubTitle;
 
-        public StudentViewHolder(@NonNull View itemView, final OnItemClickedListener listener) {
+        public ChecklistViewHolder(@NonNull View itemView, final OnItemClickedListener listener) {
             super(itemView);
             mImage = itemView.findViewById(R.id.checkListImage);
-            mName = itemView.findViewById(R.id.checkListName);
-            mDescription = itemView.findViewById(R.id.checkListDescription);
+            mTitle = itemView.findViewById(R.id.checkListName);
+            mSubTitle = itemView.findViewById(R.id.checkListDescription);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -81,8 +76,12 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.St
 
         // Binding data to the view
         public void bind(Checklist checkList) {
-            mName.setText(checkList.getName());
-            mDescription.setText(checkList.getDescription());
+            mTitle.setText(checkList.getName());
+            mSubTitle.setText(checkList.getDescription());
+            setCheckListImage(checkList);
+        }
+
+        private void setCheckListImage(Checklist checkList) {
             // For now it's always the default image
             mImage.setImageResource(R.drawable.default_icon);
         }
