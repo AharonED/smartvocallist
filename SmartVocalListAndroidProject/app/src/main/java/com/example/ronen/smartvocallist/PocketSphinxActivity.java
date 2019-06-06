@@ -32,6 +32,7 @@ package com.example.ronen.smartvocallist;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -49,6 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -87,7 +89,6 @@ public class PocketSphinxActivity extends Activity implements
     private boolean isReadingQuestion = false;
     private String checkListId;
     private ModelChecklists mdl;
-    private boolean Completed=false;
     private boolean Starting=true;
 
     @Override
@@ -95,8 +96,6 @@ public class PocketSphinxActivity extends Activity implements
         super.onCreate(state);
 
         setContentView(R.layout.activity_pocket_sphinx);
-
-        Completed=false;
 
         dlg = new DialogFlow<>();
         checkListId = (String)getIntent().getExtras().get("checkListId");
@@ -141,12 +140,16 @@ public class PocketSphinxActivity extends Activity implements
         };
 
         dlg.eof  = (item)->{
-            String caption = "This is the last item";
-            if(Completed) {
-                caption = "Checklist reporting completed";
+            if(chk.getIsCompleted() == 1) {
+                String caption = "Checklist reporting completed";
+                playTextToSpeechIfNotSpeaking(caption);
+                displayYouFinishedAlert();
+            }else{
+                String caption = "This is the last item";
+                playTextToSpeechIfNotSpeaking(caption);
+                makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
             }
-            playTextToSpeechIfNotSpeaking(caption);
-            makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
+
             updateStateBar();
             listenToKeyWords();
         };
@@ -216,6 +219,20 @@ public class PocketSphinxActivity extends Activity implements
         SetupTask tsk= new SetupTask(this);
         tsk.dlg = this.dlg;
         tsk.execute();
+    }
+
+    private void displayYouFinishedAlert() {
+        new AlertDialog.Builder(this)
+                .setTitle("Finished")
+                .setMessage("Do you want to exit the checklist?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
     }
 
     private void initStateBar() {
@@ -411,6 +428,7 @@ public class PocketSphinxActivity extends Activity implements
             // Answer word
             else if(dlg.items.get(dlg.step).options.contains(word)) {
                 dlg.items.get(dlg.step).setResult(word);
+                checkIfCheckListComplete();
 
                 // Update model
                 chk = mdl.getItemByID(checkListId);
@@ -418,31 +436,28 @@ public class PocketSphinxActivity extends Activity implements
 
                 makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
                 playTextToSpeechNow(word);
-
-                boolean tmpCompleted = true;
-                Completed=false;
-
-                //if(dlg.step == dlg.items.size()-1)
-                {
-                    for (ChecklistItem item: dlg.items) {
-                        if(item.getResult() == null || item.getResult() == "")
-                        {
-                            tmpCompleted = false;
-                            break;
-                        }
-                    }
-                    if(tmpCompleted)
-                    {
-                        Completed=true;
-                        chk.setIsCompleted(1);
-                    }
-                }
-
                 dlg.next();
-
-
                 break;
             }
+        }
+    }
+
+    private void checkIfCheckListComplete() {
+        boolean isCompleted = true;
+
+        for (ChecklistItem item: dlg.items) {
+            if(item.getIsReq() == 1 &&
+                    (item.getResult() == null || item.getResult() == ""))
+            {
+                isCompleted = false;
+                break;
+            }
+        }
+
+        if(isCompleted)
+            chk.setIsCompleted(1);
+        else{
+            chk.setIsCompleted(0);
         }
     }
 
