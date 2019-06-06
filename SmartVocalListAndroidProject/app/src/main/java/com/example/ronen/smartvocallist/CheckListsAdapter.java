@@ -55,9 +55,9 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.Ch
 
         public ChecklistViewHolder(@NonNull View itemView, final OnItemClickedListener listener) {
             super(itemView);
-            mImage = itemView.findViewById(R.id.checkListImage);
-            mTitle = itemView.findViewById(R.id.checkListName);
-            mSubTitle = itemView.findViewById(R.id.checkListDescription);
+            mImage = itemView.findViewById(R.id.image_iv);
+            mTitle = itemView.findViewById(R.id.title_tv);
+            mSubTitle = itemView.findViewById(R.id.subTitle_tv);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
