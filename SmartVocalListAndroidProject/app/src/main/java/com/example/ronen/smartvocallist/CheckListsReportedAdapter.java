@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import DataObjects.Checklist;
-import DataObjects.ChecklistReported;
 
 public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsReportedAdapter.ChecklistViewHolder> {
     ArrayList<Checklist> mData;
@@ -52,14 +51,14 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
 
     static class ChecklistViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
         ImageView mImage;
-        TextView mName;
-        TextView mDescription;
+        TextView mTitle;
+        TextView mSubTitle;
 
         public ChecklistViewHolder(@NonNull View itemView, final CheckListsReportedAdapter.OnItemClickedListener listener) {
             super(itemView);
-            mImage = itemView.findViewById(R.id.checkListImage);
-            mName = itemView.findViewById(R.id.checkListName);
-            mDescription = itemView.findViewById(R.id.checkListDescription);
+            mImage = itemView.findViewById(R.id.image_iv);
+            mTitle = itemView.findViewById(R.id.title_tv);
+            mSubTitle = itemView.findViewById(R.id.subTitle_tv);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -77,9 +76,13 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
         }
 
         // Binding data to the view
-        public void bind(Checklist checkList){
-            mName.setText(checkList.getName());
-            mDescription.setText(checkList.getDescription());
+        public void bind(Checklist checkList) {
+            mTitle.setText(checkList.getName());
+            mSubTitle.setText(checkList.getDescription());
+            setCheckListImage(checkList);
+        }
+
+        private void setCheckListImage(Checklist checkList) {
             // For now it's always the default image
             mImage.setImageResource(R.drawable.default_icon);
         }

@@ -7,7 +7,7 @@
     android:background="?attr/selectableItemBackground">
 
     <ImageView
-        android:id="@+id/checkListImage"
+        android:id="@+id/image_iv"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
@@ -21,7 +21,7 @@
         tools:src="@drawable/default_icon" />
 
     <TextView
-        android:id="@+id/checkListName"
+        android:id="@+id/title_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -29,15 +29,15 @@
         android:layout_marginEnd="8dp"
         android:textColor="@android:color/black"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/checkListDescription"
+        app:layout_constraintBottom_toTopOf="@+id/subTitle_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/checkListImage"
+        app:layout_constraintStart_toEndOf="@+id/image_iv"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Ronen - Check List Name" />
 
     <TextView
-        android:id="@+id/checkListDescription"
+        android:id="@+id/subTitle_tv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -50,6 +50,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/checkListImage"
-        app:layout_constraintTop_toBottomOf="@+id/checkListName" />
+        app:layout_constraintStart_toEndOf="@+id/image_iv"
+        app:layout_constraintTop_toBottomOf="@+id/title_tv" />
 </androidx.constraintlayout.widget.ConstraintLayout>

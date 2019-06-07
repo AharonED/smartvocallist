@@ -1,6 +1,7 @@
 package com.example.ronen.smartvocallist;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -76,7 +78,9 @@ public class CheckListsFragment extends Fragment {
         Collections.sort(checkLists, new Comparator<Checklist>() {
             @Override
             public int compare(Checklist checkList1, Checklist checkList2) {
-                return checkList1.getName().compareTo(checkList2.getName());
+                String ckl1Name = checkList1.getName().toLowerCase();
+                String ckl2Name = checkList2.getName().toLowerCase();
+                return ckl1Name.compareTo(ckl2Name);
             }
         });
 
@@ -133,12 +137,24 @@ public class CheckListsFragment extends Fragment {
     }
 
     private void deleteOptionSelected(Checklist checkList) {
-        // TODO: delete code for firebase
-        model.deleteItem(checkList);
-
+        new AlertDialog.Builder(getContext())
+                .setTitle("Warning!")
+                .setMessage("You are about to delete checklist:\n" +
+                            "\"" + checkList.getName() + "\"\n" +
+                            "Are you sure?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        model.deleteItem(checkList);
+                        mData.remove(checkList);
+                        checkListsToDisplay(mData);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void editOptionSelected(Checklist checkList) {
-        // TODO
+        // TODO: Alex start edit activity
     }
 }
