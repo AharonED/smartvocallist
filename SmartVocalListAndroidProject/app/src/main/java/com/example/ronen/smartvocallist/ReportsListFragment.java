@@ -70,7 +70,9 @@ public class ReportsListFragment extends Fragment {
         Collections.sort(mData, new Comparator<Checklist>() {
             @Override
             public int compare(Checklist checkList1, Checklist checkList2) {
-                return checkList2.getLastUpdate().compareTo(checkList1.getLastUpdate());
+                Double chk1LastUpdate = checkList1.getLastUpdate();
+                Double chk2LastUpdate = checkList2.getLastUpdate();
+                return chk2LastUpdate.compareTo(chk1LastUpdate);
             }
         });
 

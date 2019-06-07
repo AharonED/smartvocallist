@@ -78,7 +78,9 @@ public class CheckListsFragment extends Fragment {
         Collections.sort(checkLists, new Comparator<Checklist>() {
             @Override
             public int compare(Checklist checkList1, Checklist checkList2) {
-                return checkList1.getName().compareTo(checkList2.getName());
+                String ckl1Name = checkList1.getName().toLowerCase();
+                String ckl2Name = checkList2.getName().toLowerCase();
+                return ckl1Name.compareTo(ckl2Name);
             }
         });
 
