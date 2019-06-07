@@ -151,6 +151,6 @@ public class CheckListsFragment extends Fragment {
     }
 
     private void editOptionSelected(Checklist checkList) {
-        // TODO
+        // TODO: Alex start edit activity
     }
 }
