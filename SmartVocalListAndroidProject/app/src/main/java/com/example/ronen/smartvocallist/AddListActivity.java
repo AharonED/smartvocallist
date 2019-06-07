@@ -47,6 +47,7 @@ public class AddListActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_add_list);
         ll = (LinearLayout) findViewById(R.id.llItem);
         ll.setGravity(Gravity.CENTER_VERTICAL);
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -66,7 +67,6 @@ public class AddListActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         this.Items = new ArrayList<ChecklistItem>();
-                setContentView(R.layout.activity_add_list);
 
         FloatingActionButton fab = findViewById(R.id.fab);
 
