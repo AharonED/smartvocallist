@@ -225,12 +225,12 @@ public class PocketSphinxActivity extends Activity implements
         new AlertDialog.Builder(this)
                 .setTitle("Finished")
                 .setMessage("Do you want to exit the checklist?")
-                .setPositiveButton("Finish", new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(android.R.string.no, null)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .show();
     }

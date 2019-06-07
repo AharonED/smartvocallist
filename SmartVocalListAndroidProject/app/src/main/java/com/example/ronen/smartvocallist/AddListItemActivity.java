@@ -3,29 +3,44 @@ package com.example.ronen.smartvocallist;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
 
 import DataObjects.ChecklistItem;
 import DataObjects.ItemType;
+import edu.cmu.pocketsphinx.Assets;
 
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.google.android.gms.common.util.IOUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Scanner;
+import java.io.File;
 
 
 import java.util.Date;
@@ -187,7 +202,7 @@ public class AddListItemActivity extends Activity {
             public void onClick(View view) {
                 boolean isViewValid = true;
 
-                TextView twname   = (TextView)findViewById(R.id.title_tv);
+                TextView twname   = (TextView)findViewById(R.id.checkListName);
                 CheckBox isRequired = (CheckBox)findViewById(R.id.Required);
 
 
