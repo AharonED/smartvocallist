@@ -8,9 +8,12 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -37,12 +40,16 @@ public class AddListActivity extends Activity {
     private static int Items_count;
     private ArrayList<ChecklistItem> Items;
     int GET_FROM_GALLERY = 17;
+    LinearLayout ll;
     Bitmap bitmap = null;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ll = (LinearLayout) findViewById(R.id.llItem);
+        ll.setGravity(Gravity.CENTER_VERTICAL);
+        ll.setOrientation(LinearLayout.VERTICAL);
         AddListItemActivity.am = getApplicationContext().getAssets();
         Thread tmp = new Thread(new Runnable() {
             @Override
@@ -66,11 +73,7 @@ public class AddListActivity extends Activity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView listId = (TextView)findViewById(R.id.lidtId);
-                if (listId.getText().toString().equals(""))
-                {
 
-                }
                 TextView twName = (TextView)findViewById(R.id.List_Name);
                 TextView twDescripton = (TextView)findViewById(R.id.description);
 
@@ -128,12 +131,35 @@ public class AddListActivity extends Activity {
         if(requestCode!=GET_FROM_GALLERY && resultCode == RESULT_OK) {
             Items_count ++;
             ChecklistItem result = (ChecklistItem) data.getSerializableExtra("Item");
-            TextView twitems = (TextView) findViewById(R.id.items);
-            StringBuilder stb = new StringBuilder();
-            stb.append(twitems.getText().toString());
-            stb.append("\n");
-            stb.append(result.getName());
-            twitems.setText(stb);
+
+
+
+
+            Button newItem = new Button(getApplicationContext());
+            newItem.setTextSize(20);
+            newItem.setText(result.getName());
+            newItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ll.removeView(v);
+                    Items_count--;
+                    Items.remove(result.getIndex());
+                }
+            });
+
+
+            ll.addView(newItem, Items_count);
+            Items_count++;
+            ll.invalidate();
+
+
+
+
+            //TextView twitems = (TextView) findViewById(R.id.items);
+            //StringBuilder stb = new StringBuilder();
+            //stb.append(twitems.getText().toString());
+            //stb.append("\n");
+            //twitems.setText(stb);
             Items.add(result);
         }
         else  if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
