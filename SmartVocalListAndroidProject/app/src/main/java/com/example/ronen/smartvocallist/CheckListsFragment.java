@@ -143,6 +143,8 @@ public class CheckListsFragment extends Fragment {
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         model.deleteItem(checkList);
+                        mData.remove(checkList);
+                        checkListsToDisplay(mData);
                     }
                 })
                 .setNegativeButton("Cancel", null)
