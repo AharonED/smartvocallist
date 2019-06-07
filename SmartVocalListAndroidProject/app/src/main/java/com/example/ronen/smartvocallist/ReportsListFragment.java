@@ -1,6 +1,7 @@
 package com.example.ronen.smartvocallist;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -68,7 +70,9 @@ public class ReportsListFragment extends Fragment {
         Collections.sort(mData, new Comparator<Checklist>() {
             @Override
             public int compare(Checklist checkList1, Checklist checkList2) {
-                return checkList2.getLastUpdate().compareTo(checkList1.getLastUpdate());
+                Double chk1LastUpdate = checkList1.getLastUpdate();
+                Double chk2LastUpdate = checkList2.getLastUpdate();
+                return chk2LastUpdate.compareTo(chk1LastUpdate);
             }
         });
 
@@ -130,6 +134,19 @@ public class ReportsListFragment extends Fragment {
     }
 
     private void deleteOptionSelected(Checklist reportedCheckList) {
-        // TODO: delete code for firebase
+        new AlertDialog.Builder(getContext())
+                .setTitle("Warning!")
+                .setMessage("You are about to delete report:\n" +
+                        "\"" + reportedCheckList.getName() + "\"\n" +
+                        "Are you sure?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO: Delete not working....
+                        //model.deleteItem(reportedCheckList);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
