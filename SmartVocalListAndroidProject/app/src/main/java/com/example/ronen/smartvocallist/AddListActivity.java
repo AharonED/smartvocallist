@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.provider.MediaStore;
 import android.view.Gravity;
@@ -16,18 +15,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Scanner;
 
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
@@ -42,12 +34,17 @@ public class AddListActivity extends Activity {
     int GET_FROM_GALLERY = 17;
     LinearLayout ll;
     Bitmap bitmap = null;
+    private boolean isUpdate = false;
+    private Checklist Old;
+
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_add_list);
+        super.onCreate(savedInstanceState);
+
         ll = (LinearLayout) findViewById(R.id.llItem);
         ll.setGravity(Gravity.CENTER_VERTICAL);
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -65,10 +62,9 @@ public class AddListActivity extends Activity {
         Items_count = 0;
         Checklist_id = java.util.UUID.randomUUID().toString();
 
-        super.onCreate(savedInstanceState);
         this.Items = new ArrayList<ChecklistItem>();
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        Button fab = (Button)findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,14 +88,22 @@ public class AddListActivity extends Activity {
                 }
                 temp.checklistItems.addAll(Items);
 
+
                 Model.ModelChecklists mod =  ModelChecklists.getInstance();
+
+                if (isUpdate)
+                {
+                    mod.deleteItem(Old);
+                }
+
                 mod.addItem(temp);
+
                 finish();
 
             }
         });
 
-        ImageButton btn = (ImageButton)findViewById(R.id.additem);
+        ImageButton btn = (ImageButton)findViewById(R.id.addnewitem);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +116,7 @@ public class AddListActivity extends Activity {
             }
         });
 
-        FloatingActionButton fab2 = findViewById(R.id.fab2);
+        Button fab2 = findViewById(R.id.fab2);
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,6 +124,42 @@ public class AddListActivity extends Activity {
             }
 
         });
+
+        Intent Data = getIntent();
+        Checklist to_update = (Checklist)Data.getSerializableExtra("Checklist");
+        if (to_update != null)
+        {
+            isUpdate = true;
+            Old = to_update;
+            TextView twName = (TextView)findViewById(R.id.List_Name);
+            TextView twDescripton = (TextView)findViewById(R.id.description);
+            twName.setText(to_update.getName());
+            twDescripton.setText(to_update.getDescription());
+
+            for (ChecklistItem item:to_update.checklistItems) {
+                Button newItem = new Button(getApplicationContext());
+                newItem.setTextSize(20);
+                newItem.setText(item.getName());
+                newItem.setOnClickListener(new View.OnClickListener() {
+                    private ChecklistItem itm = item;
+                    @Override
+                    public void onClick(View v) {
+                        ll.removeView(v);
+                        Items_count--;
+                        Items.remove(itm.getIndex());
+                    }
+                });
+
+
+                ll.addView(newItem, Items_count);
+                Items_count++;
+                ll.invalidate();
+
+                Items.add(item);
+
+            }
+        }
+
         tmp.run();
 
 
@@ -129,7 +169,6 @@ public class AddListActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if(requestCode!=GET_FROM_GALLERY && resultCode == RESULT_OK) {
-            Items_count ++;
             ChecklistItem result = (ChecklistItem) data.getSerializableExtra("Item");
 
 
@@ -139,11 +178,13 @@ public class AddListActivity extends Activity {
             newItem.setTextSize(20);
             newItem.setText(result.getName());
             newItem.setOnClickListener(new View.OnClickListener() {
+                private ChecklistItem itm = result;
+
                 @Override
                 public void onClick(View v) {
                     ll.removeView(v);
                     Items_count--;
-                    Items.remove(result.getIndex());
+                    Items.remove(itm.getIndex());
                 }
             });
 

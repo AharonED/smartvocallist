@@ -48,41 +48,13 @@
         app:layout_constraintVertical_bias="0.132"
         app:layout_constraintVertical_chainStyle="spread" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="20dp"
-        android:background="#009688"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ErrorMessage"
-        app:srcCompat="@android:drawable/ic_menu_save" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="#009688"
-        android:foreground="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toTopOf="@+id/llItem"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/atributes"
-        app:layout_constraintTop_toTopOf="@+id/atributes"
-        app:srcCompat="@drawable/common_google_signin_btn_text_light" />
 
     <EditText
         android:id="@+id/ErrorMessage"
         android:layout_width="287dp"
         android:layout_height="89dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="560dp"
+        android:layout_marginTop="564dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -90,7 +62,7 @@
         android:textColor="#F44336"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.37"
+        app:layout_constraintHorizontal_bias="0.101"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -114,7 +86,8 @@
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.992" />
+        app:layout_constraintVertical_bias="0.992"
+        android:orientation="horizontal" />
 
     <CheckBox
         android:id="@+id/Required"
@@ -131,5 +104,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_tv"
         app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/fab2"
+        android:layout_width="89dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="288dp"
+        android:background="#009688"
+        android:foreground="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toBottomOf="@+id/llItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.777"
+        app:layout_constraintStart_toEndOf="@+id/atributes" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="93dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="300dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="#009688"
+        android:foreground="@android:drawable/ic_menu_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

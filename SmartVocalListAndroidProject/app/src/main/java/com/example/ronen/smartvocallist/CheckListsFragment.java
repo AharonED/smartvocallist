@@ -155,6 +155,9 @@ public class CheckListsFragment extends Fragment {
     }
 
     private void editOptionSelected(Checklist checkList) {
-        // TODO: Alex start edit activity
+        Intent myIntent = new Intent(getActivity(),AddListActivity.class);
+        myIntent.putExtra("Checklist",checkList);
+
+        CheckListsFragment.this.startActivity(myIntent);
     }
 }

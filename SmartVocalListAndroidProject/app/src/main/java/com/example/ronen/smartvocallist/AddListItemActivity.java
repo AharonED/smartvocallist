@@ -122,7 +122,7 @@ public class AddListItemActivity extends Activity {
 
         String FILE_PATH ="C:\\Project\\end project\\smartvocallist\\SmartVocalListAndroidProject\\app\\src\\main\\java\\com\\example\\ronen\\smartvocallist\\checklistsCount.txt";
 
-        FloatingActionButton AddProperty = (FloatingActionButton) findViewById(R.id.fab2);
+        Button AddProperty = (Button) findViewById(R.id.fab2);
         AddProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,7 +181,7 @@ public class AddListItemActivity extends Activity {
             }
         });
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        Button fab = findViewById(R.id.save);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
