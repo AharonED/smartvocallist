@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
 
 public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.ChecklistViewHolder> {
@@ -92,7 +93,6 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.Ch
 
         private void setCheckListImage(Checklist checkList) {
             //default image
-            mImage.setTag(checkList.getId());
             mImage.setImageResource(R.drawable.default_icon);
 
             if(checkList.getUrl() == null || checkList.getUrl().equals("")) {
@@ -102,7 +102,7 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.Ch
                 Target target = new Target(){
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        if (mImage.getTag() == checkList.getId()) {
+                        if (mImage.getTag() == this) {
                             mImage.setImageBitmap(bitmap);
                             mImageProgressBar.setVisibility(View.INVISIBLE);
                         }
@@ -119,9 +119,10 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.Ch
                     }
                 };
 
-                Picasso.get().load(checkList.getUrl())
-                        .placeholder(R.drawable.default_icon)
-                        .into(target);
+                // Used to set a strong reference, also validity check
+                mImage.setTag(target);
+                RequestCreator request = Picasso.get().load(checkList.getUrl()).placeholder(R.drawable.default_icon);
+                request.into(target);
             }
         }
 
