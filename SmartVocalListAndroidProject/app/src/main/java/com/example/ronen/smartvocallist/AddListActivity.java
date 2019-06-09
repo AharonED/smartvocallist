@@ -89,7 +89,7 @@ public class AddListActivity extends Activity {
                 }
                 temp.checklistItems.addAll(Items);
 
-                Model.ModelChecklists mod =  ModelChecklists.getInstance();
+                ModelChecklists mod =  ModelChecklists.getInstance();
 
                 if (isUpdate)
                 {
