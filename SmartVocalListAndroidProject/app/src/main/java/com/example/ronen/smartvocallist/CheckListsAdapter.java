@@ -66,6 +66,7 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.Ch
             mTitle = itemView.findViewById(R.id.title_tv);
             mSubTitle = itemView.findViewById(R.id.subTitle_tv);
             mImageProgressBar = itemView.findViewById(R.id.image_progressBar);
+            mImageProgressBar.setVisibility(View.INVISIBLE);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

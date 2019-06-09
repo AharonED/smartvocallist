@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -53,12 +54,15 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
         ImageView mImage;
         TextView mTitle;
         TextView mSubTitle;
+        ProgressBar mImageProgressBar;
 
         public ChecklistViewHolder(@NonNull View itemView, final CheckListsReportedAdapter.OnItemClickedListener listener) {
             super(itemView);
             mImage = itemView.findViewById(R.id.image_iv);
             mTitle = itemView.findViewById(R.id.title_tv);
             mSubTitle = itemView.findViewById(R.id.subTitle_tv);
+            mImageProgressBar = itemView.findViewById(R.id.image_progressBar);
+            mImageProgressBar.setVisibility(View.INVISIBLE);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
