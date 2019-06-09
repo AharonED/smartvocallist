@@ -1,6 +1,7 @@
 package Model;
 
 import android.annotation.TargetApi;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.util.Log;
 
@@ -172,6 +173,12 @@ try {
         return null;
     }
 
+    public interface SaveImageListener{
+        void onComplete(String url);
+    }
+    public void saveImage(Bitmap imageBitmap, SaveImageListener listener) {
+        rep.saveImage(imageBitmap, listener);
+    }
 
 }
 

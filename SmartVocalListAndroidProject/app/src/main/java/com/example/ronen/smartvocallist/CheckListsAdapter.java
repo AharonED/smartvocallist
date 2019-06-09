@@ -1,10 +1,13 @@
 package com.example.ronen.smartvocallist;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -12,6 +15,10 @@ import java.util.ArrayList;
 import DataObjects.Checklist;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
+import com.squareup.picasso.Target;
 
 public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.ChecklistViewHolder> {
     ArrayList<Checklist> mData;
@@ -52,12 +59,15 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.Ch
         ImageView mImage;
         TextView mTitle;
         TextView mSubTitle;
+        ProgressBar mImageProgressBar;
 
         public ChecklistViewHolder(@NonNull View itemView, final OnItemClickedListener listener) {
             super(itemView);
             mImage = itemView.findViewById(R.id.image_iv);
             mTitle = itemView.findViewById(R.id.title_tv);
             mSubTitle = itemView.findViewById(R.id.subTitle_tv);
+            mImageProgressBar = itemView.findViewById(R.id.image_progressBar);
+            mImageProgressBar.setVisibility(View.INVISIBLE);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,8 +92,38 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.Ch
         }
 
         private void setCheckListImage(Checklist checkList) {
-            // For now it's always the default image
+            //default image
             mImage.setImageResource(R.drawable.default_icon);
+
+            if(checkList.getUrl() == null || checkList.getUrl().equals("")) {
+                mImageProgressBar.setVisibility(View.INVISIBLE);
+            }else {
+                Picasso.get().setIndicatorsEnabled(true);
+                Target target = new Target(){
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        if (mImage.getTag() == this) {
+                            mImage.setImageBitmap(bitmap);
+                            mImageProgressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                        mImageProgressBar.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        mImageProgressBar.setVisibility(View.VISIBLE);
+                    }
+                };
+
+                // Used to set a strong reference, also validity check
+                mImage.setTag(target);
+                RequestCreator request = Picasso.get().load(checkList.getUrl()).placeholder(R.drawable.default_icon);
+                request.into(target);
+            }
         }
 
         @Override
