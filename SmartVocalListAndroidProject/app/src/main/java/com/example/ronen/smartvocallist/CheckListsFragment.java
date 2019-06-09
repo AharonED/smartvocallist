@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -110,8 +112,15 @@ public class CheckListsFragment extends Fragment {
         Checklist newChk = checkList.CopyChecklist();
         newChk.setChecklistType("Reported");
         Date d = new Date();
+        String formatedDate = "";
+        // Make a new Date object. It will be initialized to the current time.
+        DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd");
+        //Date d = dfm.parse("2011-09-07 00:00:00");
+        formatedDate = dfm.format(d).toString();
+
         newChk.setLastUpdate((double)d.getTime());
-        newChk.setDescription("Reported at: " + d.toString());
+        newChk.setDescription("Reported at: " + formatedDate + " By:" + model.getOwnerName());
+        newChk.setOwner(model.getOwnerID());
         model.addItem(newChk);
         Intent myIntent = new Intent(getContext(), PocketSphinxActivity.class);
         myIntent.putExtra("checkListId", newChk.getId());

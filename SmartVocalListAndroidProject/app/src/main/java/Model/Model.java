@@ -24,6 +24,26 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
     private String tableName="";
     protected Repository rep = new Repository();
 
+    private static String ownerID;
+    private static String ownerName;
+
+    public static String getOwnerID() {
+        return ownerID;
+    }
+
+    public static void setOwnerID(String ownerID) {
+        Model.ownerID = ownerID;
+    }
+
+    public static String getOwnerName() {
+        return ownerName;
+    }
+
+    public static void setOwnerName(String ownerName) {
+        Model.ownerName = ownerName;
+    }
+
+
     public Model.ItemsLsnr<T> getItemsLsnr() {
         return ItemsLsnr;
     }

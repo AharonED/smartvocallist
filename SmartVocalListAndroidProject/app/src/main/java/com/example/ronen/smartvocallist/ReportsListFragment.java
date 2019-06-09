@@ -143,6 +143,12 @@ public class ReportsListFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: Delete not working....
                         //model.deleteItem(reportedCheckList);
+
+
+                        model.deleteItem(reportedCheckList);
+                        mData.remove(reportedCheckList);
+                        checkListsToDisplay(mData);
+
                     }
                 })
                 .setNegativeButton("Cancel", null)

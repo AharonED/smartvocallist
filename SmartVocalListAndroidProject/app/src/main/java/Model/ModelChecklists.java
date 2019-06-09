@@ -14,6 +14,7 @@ import DataObjects.ChecklistItem;
 public class ModelChecklists  extends Model<Checklist> implements Serializable {
 
     private static ModelChecklists instance ;
+
     public static ModelChecklists getInstance()
     {
         if (instance == null)

@@ -22,6 +22,8 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import Model.ModelChecklists;
+
 import static android.content.ContentValues.TAG;
 
 /**
@@ -118,6 +120,13 @@ public class LoginActivity extends AppCompatActivity {
                                 // If sign in fails, display a message to the user. If sign in succeeds
                                 // the auth state listener will be notified and logic to handle the
                                 // signed in user can be handled in the listener.
+
+
+                                /*----------------------------*/
+                                ModelChecklists model = ModelChecklists.getInstance();
+                                model.setOwnerID("-1");
+                                model.setOwnerName( email);
+
 
                                 intent = new Intent(LoginActivity.this, CheckListsActivity.class);
                                 startActivity(intent);
