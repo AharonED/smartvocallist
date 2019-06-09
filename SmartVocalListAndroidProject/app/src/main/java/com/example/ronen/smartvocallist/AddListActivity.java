@@ -137,6 +137,7 @@ public class AddListActivity extends Activity {
             twDescripton.setText(to_update.getDescription());
 
             for (ChecklistItem item:to_update.checklistItems) {
+                Items.add(item);
                 Button newItem = new Button(getApplicationContext());
                 newItem.setTextSize(20);
                 newItem.setText(item.getName());
@@ -146,7 +147,7 @@ public class AddListActivity extends Activity {
                     public void onClick(View v) {
                         ll.removeView(v);
                         Items_count--;
-                        Items.remove(itm.getIndex());
+                        Items.remove(Items.indexOf(itm));
                     }
                 });
 
@@ -154,9 +155,6 @@ public class AddListActivity extends Activity {
                 ll.addView(newItem, Items_count);
                 Items_count++;
                 ll.invalidate();
-
-                Items.add(item);
-
             }
         }
 
