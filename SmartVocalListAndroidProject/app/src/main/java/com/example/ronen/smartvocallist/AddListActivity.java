@@ -31,6 +31,7 @@ import java.util.Scanner;
 
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
+import Model.Model;
 import Model.ModelChecklists;
 
 
@@ -92,10 +93,22 @@ public class AddListActivity extends Activity {
                 }
                 temp.checklistItems.addAll(Items);
 
-                Model.ModelChecklists mod =  ModelChecklists.getInstance();
-                mod.addItem(temp);
-                finish();
+                ModelChecklists mod =  ModelChecklists.getInstance();
 
+                if(bitmap != null){
+                    mod.saveImage(bitmap, new Model.SaveImageListener() {
+                        @Override
+                        public void onComplete(String url) {
+                            temp.setUrl(url);
+                            mod.addItem(temp);
+                            finish();
+                        }
+                    });
+                }
+                else{
+                    mod.addItem(temp);
+                    finish();
+                }
             }
         });
 

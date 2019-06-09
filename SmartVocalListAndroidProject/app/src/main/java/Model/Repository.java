@@ -142,7 +142,6 @@ public class Repository {
         StorageReference storageRef = storage.getReference();
 
         Date d = new Date();
-        // Create a reference to "mountains.jpg"
         final StorageReference imageStorageRef = storageRef.child("image_" + d.getTime() + ".jpg");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
