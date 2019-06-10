@@ -183,12 +183,12 @@
     "27E7B38B-27DB-4FE4-8CDB-19A829435EE6" : {
       "attributes" : "CHECKED",
       "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
-      "description" : "Check CIRCUITBREAKERS",
+      "description" : "Check CIRCUIT BREAKERS",
       "id" : "27E7B38B-27DB-4FE4-8CDB-19A829435EE6",
       "itemIndex" : 1,
       "itemType" : "Text",
       "lastUpdate" : 1552561294981,
-      "name" : "CIRCUITBREAKERS",
+      "name" : "CIRCUIT BREAKERS",
       "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
       "result" : ""
     },
