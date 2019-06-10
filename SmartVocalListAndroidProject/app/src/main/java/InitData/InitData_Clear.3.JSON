@@ -25,7 +25,7 @@
       "result" : ""
     },
     "7193C5B6-136D-4C87-9A8E-122D4F337B25" : {
-      "attributes" : "AUTO, AUX",
+      "attributes" : "AUTOMATIC; MANUAL",
       "checklistId" : "2D388EFD-AEB0-433D-9514-AE88D8B3DEFC",
       "description" : "HYDRAULIC DEMAND PUMPS…",
       "id" : "7193C5B6-136D-4C87-9A8E-122D4F337B25",
@@ -37,7 +37,7 @@
       "result" : ""
     },
       "B7BF550F-F654-48F6-92EE-38BD2742305B" : {
-      "attributes" : "NOTIFIED",
+      "attributes" : "verified",
       "checklistId" : "28FA3EF8-1B8A-4EA8-BB17-4256B7779277",
       "description" : "FLIGHT ATTENDANTS",
       "id" : "B7BF550F-F654-48F6-92EE-38BD2742305B",
@@ -97,7 +97,7 @@
       "result" : ""
     },
     "E28A5BAF-D136-4CD7-87D3-C0684EC97B53" : {
-      "attributes" : "AUTO",
+      "attributes" : "automatic",
       "checklistId" : "406E48CF-CD4C-4612-856B-A57713D4BC90",
       "description" : "STAB TRIM CUTOUT SWITCHES…",
       "id" : "E28A5BAF-D136-4CD7-87D3-C0684EC97B53",
@@ -109,7 +109,7 @@
       "result" : ""
     },
     "62149316-0197-4B05-968E-5D69720DE693" : {
-      "attributes" : "DOWN AND GREEN LIGHT",
+      "attributes" : "DOWN,up",
       "checklistId" : "4533DB99-7262-4201-BA52-5EC8F0B14863",
       "description" : "GEAR LEVER",
       "id" : "62149316-0197-4B05-968E-5D69720DE693",
@@ -121,7 +121,7 @@
       "result" : ""
     },
     "66B17DF9-77B9-4B57-BFE2-1DAC44F4B9D9" : {
-      "attributes" : "NOTIFIED",
+      "attributes" : "verified",
       "checklistId" : "4533DB99-7262-4201-BA52-5EC8F0B14863",
       "description" : "FLIGHT ATTENDANTS…",
       "id" : "66B17DF9-77B9-4B57-BFE2-1DAC44F4B9D9",
@@ -133,7 +133,7 @@
       "result" : ""
     },
     "92861D3E-35E7-489F-8F8E-3E0CF09A4EA0" : {
-      "attributes" : "CHECKED;NOT CHECKED",
+      "attributes" : "CHECKED",
       "checklistId" : "6A4FB837-41A3-4BB3-BF46-58B42FC0F1D4",
       "description" : "EMERGENCY EQUIPMENT",
       "id" : "92861D3E-35E7-489F-8F8E-3E0CF09A4EA0",
@@ -145,7 +145,7 @@
       "result" : ""
     },
     "9D9FC6E9-EC44-42E3-9951-E7279CF4169B" : {
-      "attributes" : "CHECKED;NOT CHECKED",
+      "attributes" : "CHECKED",
       "checklistId" : "6A4FB837-41A3-4BB3-BF46-58B42FC0F1D4",
       "description" : "FIRE PROTECTION…",
       "id" : "9D9FC6E9-EC44-42E3-9951-E7279CF4169B",
@@ -181,7 +181,7 @@
       "result" : ""
     },
     "27E7B38B-27DB-4FE4-8CDB-19A829435EE6" : {
-      "attributes" : "CHECKED/NOT CHECKED",
+      "attributes" : "CHECKED",
       "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
       "description" : "Check CIRCUITBREAKERS",
       "id" : "27E7B38B-27DB-4FE4-8CDB-19A829435EE6",
@@ -193,7 +193,7 @@
       "result" : ""
     },
     "296FA97F-2288-4322-8864-A31F256349F5" : {
-      "attributes" : "AUTO,MANUAL",
+      "attributes" : "automatic,MANUAL",
       "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
       "description" : "STANDBY POWER",
       "id" : "296FA97F-2288-4322-8864-A31F256349F5",
