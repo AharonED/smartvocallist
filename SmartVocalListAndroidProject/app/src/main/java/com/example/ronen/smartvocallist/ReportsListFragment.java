@@ -111,7 +111,6 @@ public class ReportsListFragment extends Fragment {
     private String createReportCheckListDisplayText(Checklist checkList) {
         StringBuilder textBuilder = new StringBuilder();
         textBuilder.append("Report for checkList \""+ checkList.getName() + "\".\n");
-        textBuilder.append("Description: " + checkList.getDescription() + "\n");
 
         for (ChecklistItem item : checkList.getChecklistItems()) {
             textBuilder.append("\n");
