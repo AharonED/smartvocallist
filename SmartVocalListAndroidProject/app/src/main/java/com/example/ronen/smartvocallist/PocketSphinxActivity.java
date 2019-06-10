@@ -142,18 +142,16 @@ public class PocketSphinxActivity extends Activity implements
         dlg.eof  = (item)->{
             if(chk.getIsCompleted() == 1) {
                 String caption = "Checklist reporting completed";
-                //playTextToSpeechIfNotSpeaking(caption);
                 playTextToSpeechNow(caption);
-                try{Thread.sleep(1000);}catch (Exception e){}
                 displayYouFinishedAlert();
             }else{
                 String caption = "This is the last item";
                 playTextToSpeechIfNotSpeaking(caption);
                 makeText(getApplicationContext(), caption, Toast.LENGTH_SHORT).show();
+                listenToKeyWords();
             }
 
             updateStateBar();
-            listenToKeyWords();
         };
 
         dlg.readItem = (item)->{
@@ -224,7 +222,8 @@ public class PocketSphinxActivity extends Activity implements
     }
 
     private void displayYouFinishedAlert() {
-        try{Thread.sleep(1000);}catch (Exception e){}
+        // Stop recognizer while alert is on
+        recognizer.stop();
 
         new AlertDialog.Builder(this)
                 .setTitle("Finished")
@@ -235,6 +234,13 @@ public class PocketSphinxActivity extends Activity implements
                     }
                 })
                 .setNegativeButton("Cancel", null)
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        // Turn back recogniser if dialog is dismissed
+                        listenToKeyWords();
+                    }
+                })
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .show();
     }
