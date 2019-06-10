@@ -142,9 +142,7 @@ public class PocketSphinxActivity extends Activity implements
         dlg.eof  = (item)->{
             if(chk.getIsCompleted() == 1) {
                 String caption = "Checklist reporting completed";
-                //playTextToSpeechIfNotSpeaking(caption);
                 playTextToSpeechNow(caption);
-                try{Thread.sleep(1000);}catch (Exception e){}
                 displayYouFinishedAlert();
             }else{
                 String caption = "This is the last item";
@@ -224,8 +222,6 @@ public class PocketSphinxActivity extends Activity implements
     }
 
     private void displayYouFinishedAlert() {
-        try{Thread.sleep(1000);}catch (Exception e){}
-
         new AlertDialog.Builder(this)
                 .setTitle("Finished")
                 .setMessage("Do you want to exit the checklist?")
