@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if (password.length() < 6) {
                                         inputPassword.setError(getString(R.string.minimum_password));
                                     } else {
-                                        Toast.makeText(LoginActivity.this, getString(R.string.auth_failed) + " - " + task.getException(), Toast.LENGTH_LONG).show();
+                                       // Toast.makeText(LoginActivity.this, getString(R.string.auth_failed) + " - " + task.getException(), Toast.LENGTH_LONG).show();
                                     }
                                 } else {
                                     intent = new Intent(LoginActivity.this, CheckListsActivity.class);
