@@ -3,6 +3,7 @@ package com.example.ronen.smartvocallist;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
@@ -20,6 +22,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
+import com.squareup.picasso.Target;
 
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
@@ -35,10 +41,49 @@ public class AddListActivity extends Activity {
     int GET_FROM_GALLERY = 17;
     LinearLayout ll;
     Bitmap bitmap = null;
+    String URL ="";
     private boolean isUpdate = false;
     private Checklist Old;
 
+    private void setCheckListImage(Checklist checkList) {
+        ImageView mImage  = findViewById(R.id.listImage);
+        ProgressBar mImageProgressBar = findViewById(R.id.image_progressBar);;
 
+
+        //default image
+        mImage.setImageResource(R.drawable.default_icon);
+
+        if(checkList.getUrl() == null || checkList.getUrl().equals("")) {
+            mImageProgressBar.setVisibility(View.INVISIBLE);
+        }else {
+            Picasso.get().setIndicatorsEnabled(true);
+            Target target = new Target(){
+                @Override
+                public void onBitmapLoaded(Bitmap Bbitmap, Picasso.LoadedFrom from) {
+                    if (mImage.getTag() == this) {
+                        mImage.setImageBitmap(Bbitmap);
+                        //mImageProgressBar.setVisibility(View.INVISIBLE);
+                    }
+                }
+
+                @Override
+                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                   // mImageProgressBar.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    //mImageProgressBar.setVisibility(View.VISIBLE);
+                }
+            };
+
+            // Used to set a strong reference, also validity check
+            mImage.setTag(target);
+            RequestCreator request = Picasso.get().load(checkList.getUrl()).placeholder(R.drawable.default_icon);
+            URL = checkList.getUrl();
+            request.into(target);
+        }
+    }
 
 
     @Override
@@ -107,6 +152,7 @@ public class AddListActivity extends Activity {
                     });
                 }
                 else{
+                    temp.setUrl(URL);
                     mod.addItem(temp);
                     finish();
                 }
@@ -142,12 +188,15 @@ public class AddListActivity extends Activity {
         Checklist to_update = (Checklist)Data.getSerializableExtra("Checklist");
         if (to_update != null)
         {
+            TextView twtitle = (TextView)findViewById(R.id.textView3);
+            twtitle.setText("Update Checklist");
             isUpdate = true;
             Old = to_update;
             TextView twName = (TextView)findViewById(R.id.List_Name);
             TextView twDescripton = (TextView)findViewById(R.id.description);
             twName.setText(to_update.getName());
             twDescripton.setText(to_update.getDescription());
+            setCheckListImage(to_update);
 
             for (ChecklistItem item:to_update.checklistItems) {
                 Items.add(item);
@@ -168,10 +217,11 @@ public class AddListActivity extends Activity {
                 ll.addView(newItem, Items_count);
                 Items_count++;
                 ll.invalidate();
+
             }
         }
 
-        tmp.run();
+        //tmp.run();
 
 
     }
