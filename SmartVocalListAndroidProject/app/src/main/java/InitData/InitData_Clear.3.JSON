@@ -1,0 +1,410 @@
+{
+  "ChecklistItems" : {
+    "B3E45A85-66D2-4596-998A-C2B006D7FDD1" : {
+      "attributes" : "NORMAL",
+      "checklistId" : "2D388EFD-AEB0-433D-9514-AE88D8B3DEFC",
+      "description" : "BRAKE PRESSURE",
+      "id" : "B3E45A85-66D2-4596-998A-C2B006D7FDD1",
+      "itemIndex" : 2,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562209464,
+      "name" : "BRAKE PRESSURE",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "432AE188-C57B-42B2-8C53-F309A44063CE" : {
+      "attributes" : "Full;Empty",
+      "checklistId" : "2D388EFD-AEB0-433D-9514-AE88D8B3DEFC",
+      "description" : "FUEL QUANTITY…",
+      "id" : "432AE188-C57B-42B2-8C53-F309A44063CE",
+      "itemIndex" : 3,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562236500,
+      "name" : "FUEL QUANTITY",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "7193C5B6-136D-4C87-9A8E-122D4F337B25" : {
+      "attributes" : "AUTO, AUX",
+      "checklistId" : "2D388EFD-AEB0-433D-9514-AE88D8B3DEFC",
+      "description" : "HYDRAULIC DEMAND PUMPS…",
+      "id" : "7193C5B6-136D-4C87-9A8E-122D4F337B25",
+      "itemIndex" : 1,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562194074,
+      "name" : "HYDRAULIC DEMAND PUMPS",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+      "B7BF550F-F654-48F6-92EE-38BD2742305B" : {
+      "attributes" : "NOTIFIED",
+      "checklistId" : "28FA3EF8-1B8A-4EA8-BB17-4256B7779277",
+      "description" : "FLIGHT ATTENDANTS",
+      "id" : "B7BF550F-F654-48F6-92EE-38BD2742305B",
+      "itemIndex" : 1,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562671176,
+      "name" : "FLIGHT ATTENDANTS",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "E9ADA8BA-9E2E-46A1-A78B-ADC965167EF6" : {
+      "attributes" : "ANNOUNCED",
+      "checklistId" : "28FA3EF8-1B8A-4EA8-BB17-4256B7779277",
+      "description" : "PREPARE FOR TAKEOFF.",
+      "id" : "E9ADA8BA-9E2E-46A1-A78B-ADC965167EF6",
+      "itemIndex" : 2,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562693508,
+      "name" : "PREPARE FOR TAKEOFF.",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "F825DEB3-C77E-4B63-837A-F529C36994ED" : {
+      "attributes" : "ON;OFF",
+      "checklistId" : "28FA3EF8-1B8A-4EA8-BB17-4256B7779277",
+      "description" : "TAXI OFF, STROBE ON, LANDING",
+      "id" : "F825DEB3-C77E-4B63-837A-F529C36994ED",
+      "itemIndex" : 3,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562731208,
+      "name" : "EXTERIOR LIGHTS",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "C98826B1-A20B-419F-96A7-11884681EB86" : {
+      "attributes" : "CHECKED",
+      "checklistId" : "406E48CF-CD4C-4612-856B-A57713D4BC90",
+      "description" : "NAV EQUIPMENT",
+      "id" : "C98826B1-A20B-419F-96A7-11884681EB86",
+      "itemIndex" : 3,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562116902,
+      "name" : "NAV EQUIPMENT",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "DEF28CC4-1D68-4CD4-AC1F-8EB2FF51C8F6" : {
+      "attributes" : "NORMAL;EMPTY",
+      "checklistId" : "406E48CF-CD4C-4612-856B-A57713D4BC90",
+      "description" : "PASSENGER OXYGEN…",
+      "id" : "DEF28CC4-1D68-4CD4-AC1F-8EB2FF51C8F6",
+      "itemIndex" : 1,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562077885,
+      "name" : "PASSENGER OXYGEN",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "E28A5BAF-D136-4CD7-87D3-C0684EC97B53" : {
+      "attributes" : "AUTO",
+      "checklistId" : "406E48CF-CD4C-4612-856B-A57713D4BC90",
+      "description" : "STAB TRIM CUTOUT SWITCHES…",
+      "id" : "E28A5BAF-D136-4CD7-87D3-C0684EC97B53",
+      "itemIndex" : 2,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562095877,
+      "name" : "STAB TRIM CUTOUT SWITCHES",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "62149316-0197-4B05-968E-5D69720DE693" : {
+      "attributes" : "DOWN AND GREEN LIGHT",
+      "checklistId" : "4533DB99-7262-4201-BA52-5EC8F0B14863",
+      "description" : "GEAR LEVER",
+      "id" : "62149316-0197-4B05-968E-5D69720DE693",
+      "itemIndex" : 2,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562857893,
+      "name" : "GEAR LEVER",
+      "owner" : "ya1zQotYtAeCciWOsgYyMvHvKUx2",
+      "result" : ""
+    },
+    "66B17DF9-77B9-4B57-BFE2-1DAC44F4B9D9" : {
+      "attributes" : "NOTIFIED",
+      "checklistId" : "4533DB99-7262-4201-BA52-5EC8F0B14863",
+      "description" : "FLIGHT ATTENDANTS…",
+      "id" : "66B17DF9-77B9-4B57-BFE2-1DAC44F4B9D9",
+      "itemIndex" : 1,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562839936,
+      "name" : "FLIGHT ATTENDANTS",
+      "owner" : "ya1zQotYtAeCciWOsgYyMvHvKUx2",
+      "result" : ""
+    },
+    "92861D3E-35E7-489F-8F8E-3E0CF09A4EA0" : {
+      "attributes" : "CHECKED;NOT CHECKED",
+      "checklistId" : "6A4FB837-41A3-4BB3-BF46-58B42FC0F1D4",
+      "description" : "EMERGENCY EQUIPMENT",
+      "id" : "92861D3E-35E7-489F-8F8E-3E0CF09A4EA0",
+      "itemIndex" : 1,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561937270,
+      "name" : "EMERGENCY EQUIPMENT",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "9D9FC6E9-EC44-42E3-9951-E7279CF4169B" : {
+      "attributes" : "CHECKED;NOT CHECKED",
+      "checklistId" : "6A4FB837-41A3-4BB3-BF46-58B42FC0F1D4",
+      "description" : "FIRE PROTECTION…",
+      "id" : "9D9FC6E9-EC44-42E3-9951-E7279CF4169B",
+      "itemIndex" : 2,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561965550,
+      "name" : "FIRE PROTECTION",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "EB7F9A2E-DD38-4018-8691-7138DB6C8A4B" : {
+      "attributes" : "ON;OFF",
+      "checklistId" : "6A4FB837-41A3-4BB3-BF46-58B42FC0F1D4",
+      "description" : "INTERRUPT SWITCHES…",
+      "id" : "EB7F9A2E-DD38-4018-8691-7138DB6C8A4B",
+      "itemIndex" : 3,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561985767,
+      "name" : "INTERRUPT SWITCHES",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "173A5C07-41FC-4088-AF97-AAAC1DDCAD7A" : {
+      "attributes" : "ON;OFF",
+      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
+      "description" : "HYDRAULIC DEMAND PUMPS",
+      "id" : "173A5C07-41FC-4088-AF97-AAAC1DDCAD7A",
+      "itemIndex" : 4,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561278649,
+      "name" : "HYDRAULIC DEMAND PUMPS",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "27E7B38B-27DB-4FE4-8CDB-19A829435EE6" : {
+      "attributes" : "CHECKED/NOT CHECKED",
+      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
+      "description" : "Check CIRCUITBREAKERS",
+      "id" : "27E7B38B-27DB-4FE4-8CDB-19A829435EE6",
+      "itemIndex" : 1,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561294981,
+      "name" : "CIRCUITBREAKERS",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "296FA97F-2288-4322-8864-A31F256349F5" : {
+      "attributes" : "AUTO,MANUAL",
+      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
+      "description" : "STANDBY POWER",
+      "id" : "296FA97F-2288-4322-8864-A31F256349F5",
+      "itemIndex" : 3,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561312561,
+      "name" : "STANDBY POWER",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "A186509D-F3C3-4D76-B1BE-F8689894A5B9" : {
+      "attributes" : "ON;OFF",
+      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
+      "description" : "BATTERY",
+      "id" : "A186509D-F3C3-4D76-B1BE-F8689894A5B9",
+      "itemIndex" : 2,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561302950,
+      "name" : "BATTERY",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "C2D9EB46-0B4D-4026-A699-91453F4F35DF" : {
+      "attributes" : "ON;OFF",
+      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
+      "description" : "WINDSHIELD WIPERS",
+      "id" : "C2D9EB46-0B4D-4026-A699-91453F4F35DF",
+      "itemIndex" : 5,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561333933,
+      "name" : "WINDSHIELD WIPERS",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "result" : ""
+    },
+    "B86B8B69-EDB8-4AD2-AC7D-FBE246C6A9C7" : {
+      "attributes" : "ON;OFF",
+      "checklistId" : "C9353637-B89B-4557-BB0C-58E713B86453",
+      "description" : "INTEGRAL LIGHTS",
+      "id" : "B86B8B69-EDB8-4AD2-AC7D-FBE246C6A9C7",
+      "itemIndex" : 1,
+      "itemType" : "Text",
+      "lastUpdate" : 1552566881271,
+      "name" : "INTEGRAL LIGHTS",
+      "owner" : "ya1zQotYtAeCciWOsgYyMvHvKUx2",
+      "result" : ""
+    },
+    "bdb7f588-0089-4e75-be41-32027ea550da" : {
+      "attributes" : "low;high",
+      "checklistId" : "f8d3a3f3-7dd1-4f72-995f-80766fce8b73",
+      "description" : "",
+      "id" : "bdb7f588-0089-4e75-be41-32027ea550da",
+      "itemIndex" : 1,
+      "itemType" : "Numeric",
+      "lastUpdate" : 1559125854477,
+      "name" : "Tire air pressure ",
+      "url" : ""
+    },
+    "cb27c8cb-6910-495f-be91-0e26bc1e6067" : {
+      "attributes" : "down;up",
+      "checklistId" : "f8d3a3f3-7dd1-4f72-995f-80766fce8b73",
+      "description" : "",
+      "id" : "cb27c8cb-6910-495f-be91-0e26bc1e6067",
+      "itemIndex" : 0,
+      "itemType" : "Numeric",
+      "lastUpdate" : 1559125720195,
+      "name" : "Gear down",
+      "url" : ""
+    }
+},
+  "Checklists" : {
+          "28FA3EF8-1B8A-4EA8-BB17-4256B7779277" : {
+      "checklistType" : "Template",
+      "description" : "BEFORE TAKEOFF CHECK [TO]",
+      "groupId" : "B843C09D-CB52-4C1E-9AD5-5E5DBE5EEA37",
+      "id" : "28FA3EF8-1B8A-4EA8-BB17-4256B7779277",
+      "lastUpdate" : 1552562648648,
+      "name" : "BEFORE TAKEOFF CHECK ",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "url" : "https://firebasestorage.googleapis.com/v0/b/smartvocallist1.appspot.com/o/before%20takeoff.jpeg?alt=media&token=f5714e66-9b26-4a81-b36a-47e6e000fa2f"
+    },
+    "2D388EFD-AEB0-433D-9514-AE88D8B3DEFC" : {
+      "checklistType" : "Template",
+      "description" : "Captain",
+      "groupId" : "6EAE77FC-FB33-4D8F-B7EF-C2358D84BFAD",
+      "id" : "2D388EFD-AEB0-433D-9514-AE88D8B3DEFC",
+      "lastUpdate" : 1552562152619,
+      "name" : "BEFORE STARTING",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "url" : "https://firebasestorage.googleapis.com/v0/b/smartvocallist1.appspot.com/o/before%20starting.jpg?alt=media&token=106eceb5-1b45-42a4-a2f0-847cce4aff08"
+    },
+    "406E48CF-CD4C-4612-856B-A57713D4BC90" : {
+      "checklistType" : "Template",
+      "description" : "PREFLIGHT Proc.-",
+      "groupId" : "BEB68819-98C1-4ECB-B79A-20A76AF4465F",
+      "id" : "406E48CF-CD4C-4612-856B-A57713D4BC90",
+      "lastUpdate" : 1552562024139,
+      "name" : "PREFLIGHT",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "url" : ""
+    },
+    "4533DB99-7262-4201-BA52-5EC8F0B14863" : {
+      "checklistType" : "Template",
+      "description" : "Pilot Not Flying ",
+      "groupId" : "5E34ACC1-A8C8-416D-BF91-90DB65CDAC55",
+      "id" : "4533DB99-7262-4201-BA52-5EC8F0B14863",
+      "lastUpdate" : 1552562816846,
+      "name" : "LANDING CHECK",
+      "owner" : "ya1zQotYtAeCciWOsgYyMvHvKUx2",
+      "url" : ""
+    },
+    "6A4FB837-41A3-4BB3-BF46-58B42FC0F1D4" : {
+      "checklistType" : "Template",
+      "description" : "First Officer",
+      "groupId" : "5E34ACC1-A8C8-416D-BF91-90DB65CDAC55",
+      "id" : "6A4FB837-41A3-4BB3-BF46-58B42FC0F1D4",
+      "lastUpdate" : 1552561851973,
+      "name" : "PREFLIGHT",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "url" : ""
+    },
+    "A8411F4A-8121-4FBD-B17A-A7038C113A28" : {
+      "checklistType" : "Template",
+      "description" : "First Officer/Captain",
+      "groupId" : "5E34ACC1-A8C8-416D-BF91-90DB65CDAC55",
+      "id" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
+      "lastUpdate" : 1552566313842,
+      "name" : "POWER UP / SAFETY CHECK",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "url" : ""
+    },
+    "C9353637-B89B-4557-BB0C-58E713B86453" : {
+      "checklistType" : "Template",
+      "description" : "2-Captains",
+      "groupId" : "1C0C52DB-D9F4-4565-858C-7F3BCD11D9EA",
+      "id" : "C9353637-B89B-4557-BB0C-58E713B86453",
+      "lastUpdate" : 1552567421813,
+      "name" : "SECURING CHECK",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "url" : ""
+    },
+    "f8d3a3f3-7dd1-4f72-995f-80766fce8b73" : {
+      "checklistType" : "Template",
+      "description" : "Check landing gear pre flight",
+      "id" : "f8d3a3f3-7dd1-4f72-995f-80766fce8b73",
+      "lastUpdate" : 1559125889851,
+      "name" : "Landing gear",
+      "owner" : "10",
+      "url" : ""
+    }
+  },
+  "Groups" : {
+    "1C0C52DB-D9F4-4565-858C-7F3BCD11D9EA" : {
+      "description" : "F-21 fighter jet Safety Proc.",
+      "id" : "1C0C52DB-D9F4-4565-858C-7F3BCD11D9EA",
+      "lastUpdate" : 1552566736328,
+      "name" : "Lockheed Martin F-21",
+      "owner" : "ya1zQotYtAeCciWOsgYyMvHvKUx2",
+      "privacyType" : "",
+      "url" : "https://firebasestorage.googleapis.com/v0/b/smartlistios-7a38f.appspot.com/o/B1754C77-0968-4263-9322-C2F1AD1CBC21?alt=media&token=88524533-bc24-4b01-a9cf-690091395bb9"
+    },
+    "5E34ACC1-A8C8-416D-BF91-90DB65CDAC55" : {
+      "description" : "Procedures Checklist",
+      "id" : "5E34ACC1-A8C8-416D-BF91-90DB65CDAC55",
+      "lastUpdate" : 1552568388686,
+      "name" : "Boeing 747",
+      "owner" : "ya1zQotYtAeCciWOsgYyMvHvKUx2",
+      "privacyType" : "",
+      "url" : "https://firebasestorage.googleapis.com/v0/b/smartlistios-7a38f.appspot.com/o/EBF37C05-53F9-419C-9DE7-FBE0776E9FA4?alt=media&token=997ffebb-0276-4f2b-bb50-c2c3acc27fa8"
+    },
+    "6EAE77FC-FB33-4D8F-B7EF-C2358D84BFAD" : {
+      "description" : "Mmedium- to long-range twin-engined wide-body jet airliner ",
+      "id" : "6EAE77FC-FB33-4D8F-B7EF-C2358D84BFAD",
+      "lastUpdate" : 1552561646988,
+      "name" : "Airbus A310",
+      "owner" : "ya1zQotYtAeCciWOsgYyMvHvKUx2",
+      "privacyType" : "MostPop",
+      "url" : "https://firebasestorage.googleapis.com/v0/b/smartlistios-7a38f.appspot.com/o/64A2F8BB-F6AC-48D8-B228-99A2031DB7BB?alt=media&token=4df1d86c-c8ac-4c0c-bb33-b4baba2f6f8d"
+    },
+    "B843C09D-CB52-4C1E-9AD5-5E5DBE5EEA37" : {
+      "description" : "Performance Check",
+      "id" : "B843C09D-CB52-4C1E-9AD5-5E5DBE5EEA37",
+      "lastUpdate" : 1552573441408,
+      "name" : "Embraer E190-E2",
+      "owner" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "privacyType" : "",
+      "url" : "https://firebasestorage.googleapis.com/v0/b/smartlistios-7a38f.appspot.com/o/9D299965-1BB0-4BAA-8B6D-DCDA8FD7CF14?alt=media&token=5277d6b6-59a2-4eec-8bcb-f189e5f32fdd"
+    },
+    "BEB68819-98C1-4ECB-B79A-20A76AF4465F" : {
+      "description" : "Maintenance Procedures",
+      "id" : "BEB68819-98C1-4ECB-B79A-20A76AF4465F",
+      "lastUpdate" : 1552568311352,
+      "name" : "Boeing 737 8 Max",
+      "owner" : "ya1zQotYtAeCciWOsgYyMvHvKUx2",
+      "privacyType" : "",
+      "url" : "https://firebasestorage.googleapis.com/v0/b/smartlistios-7a38f.appspot.com/o/76EE0A79-FE2B-4942-9D5C-70BBD7B3D4BD?alt=media&token=dae71881-44dc-4e7b-9241-895ba6606a51"
+    }
+  },
+  "Users" : {
+    "2mzdQdRBnwgoKkSgl3hod6ZbxfD3" : {
+      "email" : "angular1@gmail.com",
+      "firstName" : "Angular1",
+      "id" : "2mzdQdRBnwgoKkSgl3hod6ZbxfD3",
+      "lastName" : "Ang1",
+      "password" : 123456
+    },
+    "ya1zQotYtAeCciWOsgYyMvHvKUx2" : {
+      "email" : "Angular5@gmail.com",
+      "firstName" : "Angular5",
+      "id" : "ya1zQotYtAeCciWOsgYyMvHvKUx2",
+      "lastName" : "Ang5",
+      "password" : "123456"
+    }
+  }
+}

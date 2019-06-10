@@ -16,9 +16,12 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import DataObjects.Checklist;
 import DataObjects.ChecklistItem;
@@ -107,7 +110,7 @@ public class ReportsListFragment extends Fragment {
 
     private String createReportCheckListDisplayText(Checklist checkList) {
         StringBuilder textBuilder = new StringBuilder();
-        textBuilder.append("Report for checkList \""+ checkList.getName() + "\":\n");
+        textBuilder.append("Report for checkList \""+ checkList.getName() + "\".\n");
 
         for (ChecklistItem item : checkList.getChecklistItems()) {
             textBuilder.append("\n");
@@ -116,7 +119,16 @@ public class ReportsListFragment extends Fragment {
             textBuilder.append("Answer: " + item.getResult() + "\n");
         }
 
+        textBuilder.append("\n");
+        textBuilder.append("Created at " + convertTime(checkList.getLastUpdate()));
         return textBuilder.toString();
+    }
+
+    private String convertTime(Double t){
+        long time = Math.round(t);
+        Date date = new Date(time);
+        Format format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return format.format(date);
     }
 
     @Override
