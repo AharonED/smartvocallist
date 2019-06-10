@@ -1,20 +1,11 @@
 package DataObjects;
 
-import com.google.firebase.database.snapshot.Index;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 public class ChecklistItem extends BaseModelObject implements Serializable {
 
@@ -141,6 +132,8 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
             json.put("description",description);
             json.put("url",url);
             json.put("lastUpdate",lastUpdate);
+            json.put("IsReq",getIsReq());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -161,6 +154,7 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
                 this.setAttributes( (String) json.get("attributes"));
             if (json.has("checklistId") && json.get("checklistId") != null)
                 this.setChecklistId( (String) json.get("checklistId"));
+
             if (json.has("itemType") && json.get("itemType") != null)
                 this.setItemType(ItemType.Text );//(String) json.get("itemType")
             if (json.has("owner") && json.get("owner") != null)
@@ -170,6 +164,10 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
 
             if (json.has("itemIndex") && json.get("itemIndex") != null)
                 this.setIndex( Integer.parseInt(  json.get("itemIndex").toString()));
+
+
+            if (json.has("IsReq") && json.get("IsReq") != null)
+                this.setIsReq(Integer.parseInt(  json.get("IsReq").toString()));
 
             if (json.has("lastUpdate") && json.get("lastUpdate") != null)
                 lastUpdate =  Double.parseDouble(json.get("lastUpdate").toString());
@@ -195,6 +193,10 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
             json.put("lastUpdate",lastUpdate);
             json.put("attributes",attributes);
             json.put("checklistId",checklistId);
+
+            json.put("IsReq",IsReq);
+
+
             json.put("itemIndex", getIndex());
             json.put("itemType",itemType);
             json.put("owner",owner);
