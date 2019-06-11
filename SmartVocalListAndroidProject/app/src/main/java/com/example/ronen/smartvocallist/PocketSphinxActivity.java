@@ -113,6 +113,11 @@ public class PocketSphinxActivity extends Activity implements
             String text = itm.getName();
             int stepNumber = dlg.step + 1;
             String caption = "Step " + stepNumber + "/" + dlg.items.size() + ": " + text;
+
+            if(itm.getIsReq() == 1){
+                caption = "*" + caption;
+            }
+
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
             String textToSpeech = "Step " + stepNumber + " out of " + dlg.items.size() + ": " + text;
 

@@ -116,7 +116,11 @@ public class ReportsListFragment extends Fragment {
             textBuilder.append("\n");
             textBuilder.append("Question:\n");
             textBuilder.append(item.getName() + "\n");
-            textBuilder.append("Answer: " + item.getResult() + "\n");
+
+            if(item.getResult() == "")
+                textBuilder.append("Answer: *No Answer*\n");
+            else
+                textBuilder.append("Answer: " + item.getResult() + "\n");
         }
 
         textBuilder.append("\n");

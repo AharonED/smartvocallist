@@ -218,9 +218,7 @@ public class AddListActivity extends Activity {
             }
         }
 
-        //tmp.run();
-
-
+        tmp.run();
     }
 
     @Override
