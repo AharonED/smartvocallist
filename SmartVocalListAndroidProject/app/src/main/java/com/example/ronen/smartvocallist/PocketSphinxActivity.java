@@ -141,7 +141,12 @@ public class PocketSphinxActivity extends Activity implements
 
         dlg.eof  = (item)->{
             if(chk.getIsCompleted() == 1) {
+                String res = ((ChecklistItem)item).getResult();
+
                 String caption = "Checklist reporting completed";
+                if(res !=null && !res.equals("")){
+                    caption = res +". " + caption;
+                }
                 playTextToSpeechNow(caption);
                 displayYouFinishedAlert();
             }else{
