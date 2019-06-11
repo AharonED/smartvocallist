@@ -156,6 +156,8 @@ public class AddListItemActivity extends Activity {
                     ErrorMessage.setText(ErrorMessageText.toString());
                 }
                 else {
+                    TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
+                    ErrorMessage.setVisibility(View.INVISIBLE);
                     all_Props.append(seperated);
                     all_Props.append(";");
 
