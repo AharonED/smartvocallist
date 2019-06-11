@@ -47,33 +47,32 @@ public class AddListActivity extends Activity {
 
     private void setCheckListImage(Checklist checkList) {
         ImageView mImage  = findViewById(R.id.listImage);
-        ProgressBar mImageProgressBar = findViewById(R.id.image_progressBar);;
+        ProgressBar mImageProgressBar = findViewById(R.id.image_progressBar);
+        mImageProgressBar.setVisibility(View.INVISIBLE);
 
 
         //default image
         mImage.setImageResource(R.drawable.default_icon);
 
-        if(checkList.getUrl() == null || checkList.getUrl().equals("")) {
-            mImageProgressBar.setVisibility(View.INVISIBLE);
-        }else {
+        if(checkList.getUrl() != null && !checkList.getUrl().equals("")) {
             Picasso.get().setIndicatorsEnabled(true);
             Target target = new Target(){
                 @Override
                 public void onBitmapLoaded(Bitmap Bbitmap, Picasso.LoadedFrom from) {
                     if (mImage.getTag() == this) {
                         mImage.setImageBitmap(Bbitmap);
-                        //mImageProgressBar.setVisibility(View.INVISIBLE);
+                        mImageProgressBar.setVisibility(View.INVISIBLE);
                     }
                 }
 
                 @Override
                 public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                   // mImageProgressBar.setVisibility(View.INVISIBLE);
+                    mImageProgressBar.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
                 public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    //mImageProgressBar.setVisibility(View.VISIBLE);
+                    mImageProgressBar.setVisibility(View.VISIBLE);
                 }
             };
 
