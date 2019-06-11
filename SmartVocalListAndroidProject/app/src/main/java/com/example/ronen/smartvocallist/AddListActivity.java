@@ -48,8 +48,6 @@ public class AddListActivity extends Activity {
     private void setCheckListImage(Checklist checkList) {
         ImageView mImage  = findViewById(R.id.listImage);
         ProgressBar mImageProgressBar = findViewById(R.id.image_progressBar);
-        mImageProgressBar.setVisibility(View.INVISIBLE);
-
 
         //default image
         mImage.setImageResource(R.drawable.default_icon);
