@@ -110,7 +110,7 @@ public class ReportsListFragment extends Fragment {
 
     private String createReportCheckListDisplayText(Checklist checkList) {
         StringBuilder textBuilder = new StringBuilder();
-        textBuilder.append("Report for checkList \""+ checkList.getName() + "\".\n");
+        textBuilder.append(checkList.getName() + "\n");
 
         for (ChecklistItem item : checkList.getChecklistItems()) {
             textBuilder.append("\n");
@@ -120,7 +120,7 @@ public class ReportsListFragment extends Fragment {
         }
 
         textBuilder.append("\n");
-        textBuilder.append("Created at " + convertTime(checkList.getLastUpdate()));
+        textBuilder.append(checkList.getDescription().replace(" By", "\nBy"));
         return textBuilder.toString();
     }
 
