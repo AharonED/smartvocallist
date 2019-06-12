@@ -118,6 +118,8 @@ public class AddListActivity extends Activity {
 
                 String ListName = twName.getText().toString();
 
+                ProgressBar savingProgressBar = findViewById(R.id.save_progressBar);
+                savingProgressBar.setVisibility(View.VISIBLE);
 
                 Date currentTime = Calendar.getInstance().getTime();
                 Long time = currentTime.getTime();
@@ -138,12 +140,13 @@ public class AddListActivity extends Activity {
                     mod.deleteItem(Old);
                 }
 
- 		if(bitmap != null){
+ 		        if(bitmap != null){
                     mod.saveImage(bitmap, new Model.SaveImageListener() {
                         @Override
                         public void onComplete(String url) {
                             temp.setUrl(url);
                             mod.addItem(temp);
+                            savingProgressBar.setVisibility(View.INVISIBLE);
                             finish();
                         }
                     });
@@ -151,11 +154,9 @@ public class AddListActivity extends Activity {
                 else{
                     temp.setUrl(URL);
                     mod.addItem(temp);
+                    savingProgressBar.setVisibility(View.INVISIBLE);
                     finish();
                 }
-               
-
-
             }
         });
 
