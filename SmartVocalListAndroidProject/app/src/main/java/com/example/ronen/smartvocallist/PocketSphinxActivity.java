@@ -467,7 +467,7 @@ public class PocketSphinxActivity extends Activity implements
 
         for (ChecklistItem item: dlg.items) {
             if(item.getIsReq() == 1 &&
-                    (item.getResult() == null || item.getResult() == ""))
+                    (item.getResult() == null || item.getResult().equals("")))
             {
                 isCompleted = false;
                 break;
@@ -554,7 +554,7 @@ public class PocketSphinxActivity extends Activity implements
     }
 
     private void playTextToSpeechNow(String text){
-        if(textToSpeech == null || text == "")
+        if(textToSpeech == null || text.equals(""))
             return;
 
         recognizer.stop();
@@ -564,7 +564,7 @@ public class PocketSphinxActivity extends Activity implements
     }
 
     private void playTextToSpeechQeuestionRead(String text){
-        if(textToSpeech == null || text == "")
+        if(textToSpeech == null || text.equals(""))
             return;
 
         recognizer.stop();
@@ -581,7 +581,7 @@ public class PocketSphinxActivity extends Activity implements
     }
 
     private void playTextToSpeechIfNotSpeaking(String text){
-        if(textToSpeech == null || text == "" || textToSpeech.isSpeaking())
+        if(textToSpeech == null || text.equals("") || textToSpeech.isSpeaking())
             return;
 
         recognizer.stop();

@@ -67,7 +67,7 @@ public class DialogFlow<T extends ChecklistItem> {
         T currentItem = items.get(step);
 
         if(items.get(step).getIsReq() == 1 &&
-                (currentItem.getResult() == null || currentItem.getResult() == "")){
+                (currentItem.getResult() == null || currentItem.getResult().equals(""))){
             mustAnswerItem.execute(currentItem) ;
         }
         else if(step<items.size()-1)
