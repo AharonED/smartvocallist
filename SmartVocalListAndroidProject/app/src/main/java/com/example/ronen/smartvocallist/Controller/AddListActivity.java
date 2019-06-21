@@ -1,4 +1,4 @@
-package com.example.ronen.smartvocallist;
+package com.example.ronen.smartvocallist.Controller;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,14 +23,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.example.ronen.smartvocallist.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
 
-import DataObjects.Checklist;
-import DataObjects.ChecklistItem;
-import Model.Model;
-import Model.ModelChecklists;
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
+import com.example.ronen.smartvocallist.Model.Model;
+import com.example.ronen.smartvocallist.Model.ModelChecklists;
 
 
 public class AddListActivity extends Activity {

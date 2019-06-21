@@ -1,4 +1,4 @@
-package com.example.ronen.smartvocallist;
+package com.example.ronen.smartvocallist.Controller;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.ronen.smartvocallist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;

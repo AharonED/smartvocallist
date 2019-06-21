@@ -1,4 +1,4 @@
-package Model;
+package com.example.ronen.smartvocallist.Model;
 
 
 import android.annotation.TargetApi;
@@ -8,26 +8,25 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import DataObjects.Checklist;
-import DataObjects.ChecklistItem;
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 
-public class ModelChecklists  extends Model<Checklist> implements Serializable {
+public class ModelChecklistsReported extends Model<Checklist> implements Serializable {
 
-    private static ModelChecklists instance ;
-
-    public static ModelChecklists getInstance()
+    private static ModelChecklistsReported instance ;
+    public static ModelChecklistsReported getInstance()
     {
         if (instance == null)
         {
-            instance=new ModelChecklists();
+            instance=new ModelChecklistsReported();
         }
         return instance;
     }
 
-    private ModelChecklists()
+    private ModelChecklistsReported()
     {
         super();
-        setTableName("Checklists");
+        setTableName("ChecklistItems");
     }
 
 
@@ -37,12 +36,12 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         //Repository rep = new Repository();
         //items =  rep.GetChecklists(lsnr);
 
-        items =  rep.GetChecklists(new ItemsLsnr<Checklist>() {
+        items =  rep.GetChecklistsReported(new ItemsLsnr<Checklist>() {
                                        @Override
                                        public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
                                             //Get All Checklists
                                            ArrayList <Checklist> chks = items;
-                                           //For each Checklist get its all ChecklistItems
+                                           //For each ChecklistReported get its all ChecklistItems
                                            ModelChecklistItems.getInstance().getItemsAsync(new ItemsLsnr<ChecklistItem>() {
                                                @Override
                                                public void OnDataChangeItemsLsnr(ArrayList<ChecklistItem> items) {
@@ -74,8 +73,8 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         }
 
         for (ChecklistItem itm: chk.checklistItems) {
-            //itm.id = java.util.UUID.randomUUID().toString();
-            //itm.setChecklistId(chk.id);
+           // itm.id = java.util.UUID.randomUUID().toString();
+           // itm.setChecklistId(chk.id);
             ModelChecklistItems.getInstance().addItem(itm);
         }
         super.addItem(chk);
@@ -91,11 +90,6 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         }
         super.deleteItem(chk);
     }
-
-
-
-
-
 
 }
 

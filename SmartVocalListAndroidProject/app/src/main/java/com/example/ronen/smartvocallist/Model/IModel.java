@@ -1,6 +1,6 @@
-package Model;
+package com.example.ronen.smartvocallist.Model;
 
-import DataObjects.BaseModelObject;
+import com.example.ronen.smartvocallist.DataObjects.BaseModelObject;
 
 public interface IModel {
     static  void addNew(BaseModelObject instance) throws Exception {

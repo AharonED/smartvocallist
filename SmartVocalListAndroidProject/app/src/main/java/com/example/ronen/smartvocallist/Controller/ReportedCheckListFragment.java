@@ -1,4 +1,4 @@
-package com.example.ronen.smartvocallist;
+package com.example.ronen.smartvocallist.Controller;
 
 
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.ronen.smartvocallist.R;
+import com.example.ronen.smartvocallist.Controller.ReportedCheckListFragmentArgs;
 
 
 /**

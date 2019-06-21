@@ -1,9 +1,9 @@
-package Model;
+package com.example.ronen.smartvocallist.Model;
 
 
 import java.io.Serializable;
 
-import DataObjects.ChecklistItem;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 //
 public class  ModelChecklistItems extends Model<ChecklistItem> implements Serializable {
 

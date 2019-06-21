@@ -1,4 +1,4 @@
-package Model;
+package com.example.ronen.smartvocallist.Model;
 
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import DataObjects.BaseModelObject;
+import com.example.ronen.smartvocallist.DataObjects.BaseModelObject;
 
 public class ModelGeneric_old<T extends BaseModelObject> implements IModel, Serializable {
 
@@ -47,7 +47,7 @@ public class ModelGeneric_old<T extends BaseModelObject> implements IModel, Seri
         type= cls;
         if(items.size()==0) {
             switch (getType().getName()) {
-                case "DataObjects.Checklist":
+                case "Checklist":
                     setTableName("Checklist");
                     break;
             }

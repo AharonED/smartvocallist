@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/checkListsFragment"
-        android:name="com.example.ronen.smartvocallist.CheckListsFragment"
+        android:name="com.example.ronen.smartvocallist.Controller.CheckListsFragment"
         android:label="fragment_check_lists"
         tools:layout="@layout/fragment_check_lists" />
     <fragment
         android:id="@+id/reportsListFragment"
-        android:name="com.example.ronen.smartvocallist.ReportsListFragment"
+        android:name="com.example.ronen.smartvocallist.Controller.ReportsListFragment"
         android:label="fragment_reports_list"
         tools:layout="@layout/fragment_reports_list" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/reportedCheckListFragment2"
-        android:name="com.example.ronen.smartvocallist.ReportedCheckListFragment"
+        android:name="com.example.ronen.smartvocallist.Controller.ReportedCheckListFragment"
         android:label="fragment_reported_check_list"
         tools:layout="@layout/fragment_reported_check_list" >
         <argument

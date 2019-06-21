@@ -1,4 +1,4 @@
-package com.example.ronen.smartvocallist;
+package com.example.ronen.smartvocallist.Controller;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -10,22 +10,22 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ronen.smartvocallist.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
 
-import java.util.ArrayList;
-
-import DataObjects.Checklist;
-
-public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsReportedAdapter.ChecklistViewHolder> {
+public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.ChecklistViewHolder> {
     ArrayList<Checklist> mData;
-    CheckListsReportedAdapter.OnItemClickedListener mListener;
+    OnItemClickedListener mListener;
 
-    public CheckListsReportedAdapter(ArrayList<Checklist> data) {
+    public CheckListsAdapter(ArrayList<Checklist> data){
         mData = data;
     }
 
@@ -33,7 +33,7 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
         void onClick(int index);
     }
 
-    public void setOnItemClickedListener(CheckListsReportedAdapter.OnItemClickedListener listener){
+    public void setOnItemClickedListener(OnItemClickedListener listener){
         mListener = listener;
     }
 
@@ -46,9 +46,9 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChecklistViewHolder checklistViewHolder, int i) {
+    public void onBindViewHolder(@NonNull ChecklistViewHolder studentViewHolder, int i) {
         Checklist checkList = mData.get(i);
-        checklistViewHolder.bind(checkList);
+        studentViewHolder.bind(checkList);
     }
 
     @Override
@@ -56,13 +56,13 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
         return mData.size();
     }
 
-    static class ChecklistViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
+    static class ChecklistViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         ImageView mImage;
         TextView mTitle;
         TextView mSubTitle;
         ProgressBar mImageProgressBar;
 
-        public ChecklistViewHolder(@NonNull View itemView, final CheckListsReportedAdapter.OnItemClickedListener listener) {
+        public ChecklistViewHolder(@NonNull View itemView, final OnItemClickedListener listener) {
             super(itemView);
             mImage = itemView.findViewById(R.id.image_iv);
             mTitle = itemView.findViewById(R.id.title_tv);
@@ -74,8 +74,8 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
                 @Override
                 public void onClick(View v) {
                     int index = getAdapterPosition();
-                    if(listener != null){
-                        if(index != RecyclerView.NO_POSITION){
+                    if (listener != null) {
+                        if (index != RecyclerView.NO_POSITION) {
                             listener.onClick(index);
                         }
                     }
@@ -129,7 +129,8 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.add(this.getAdapterPosition(), R.id.reportedDeleteOption, 0, "Delete Checklist");
+            menu.add(this.getAdapterPosition(), R.id.deleteOption, 0, "Delete Checklist");
+            menu.add(this.getAdapterPosition(), R.id.editOption, 1, "Edit Checklist");
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.ronen.smartvocallist;
+package com.example.ronen.smartvocallist.Controller;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,8 +7,9 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 
-import DataObjects.ChecklistItem;
-import DataObjects.ItemType;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
+import com.example.ronen.smartvocallist.DataObjects.ItemType;
+import com.example.ronen.smartvocallist.R;
 
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,8 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

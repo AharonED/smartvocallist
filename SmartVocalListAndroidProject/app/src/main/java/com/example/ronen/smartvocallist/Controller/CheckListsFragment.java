@@ -1,4 +1,4 @@
-package com.example.ronen.smartvocallist;
+package com.example.ronen.smartvocallist.Controller;
 
 
 import android.content.DialogInterface;
@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ronen.smartvocallist.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
@@ -25,8 +26,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
-import DataObjects.Checklist;
-import Model.ModelChecklists;
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.Model.ModelChecklists;
 
 
 /**

@@ -28,7 +28,7 @@
  * ====================================================================
  */
 
-package com.example.ronen.smartvocallist;
+package com.example.ronen.smartvocallist.Controller;
 
 import android.Manifest;
 import android.app.Activity;
@@ -62,10 +62,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import DataObjects.Checklist;
-import DataObjects.ChecklistItem;
-import Dialogs.DialogFlow;
-import Model.ModelChecklists;
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
+import com.example.ronen.smartvocallist.Dialogs.DialogFlow;
+import com.example.ronen.smartvocallist.Model.ModelChecklists;
+import com.example.ronen.smartvocallist.R;
+
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;

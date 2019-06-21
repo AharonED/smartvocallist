@@ -1,4 +1,4 @@
-package Model;
+package com.example.ronen.smartvocallist.Model;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import DataObjects.BaseModelObject;
+import com.example.ronen.smartvocallist.DataObjects.BaseModelObject;
 
 public  abstract class Model <T extends BaseModelObject> implements IModel, Serializable {
 

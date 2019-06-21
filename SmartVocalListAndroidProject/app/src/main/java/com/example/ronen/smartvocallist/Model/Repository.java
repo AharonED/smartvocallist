@@ -1,4 +1,4 @@
-package Model;
+package com.example.ronen.smartvocallist.Model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,8 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -28,10 +26,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-import DataObjects.BaseModelObject;
-import DataObjects.Checklist;
-import DataObjects.ChecklistItem;
-import DataObjects.ChecklistReported;
+import com.example.ronen.smartvocallist.DataObjects.BaseModelObject;
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 
 import static android.content.ContentValues.TAG;
 

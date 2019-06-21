@@ -7,7 +7,7 @@
 //  Copyright © 2018 Aharon.Garada. All rights reserved.
 //
 
-package DataObjects;
+package com.example.ronen.smartvocallist.DataObjects;
 
 import org.json.JSONException;
 import org.json.JSONObject;

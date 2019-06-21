@@ -1,4 +1,4 @@
-package Dialogs;
+package com.example.ronen.smartvocallist.Dialogs;
 
 import android.annotation.SuppressLint;
 
@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import DataObjects.ChecklistItem;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 
 public class DialogFlow<T extends ChecklistItem> {
 

@@ -1,4 +1,4 @@
-package com.example.ronen.smartvocallist;
+package com.example.ronen.smartvocallist.Controller;
 
 
 import android.content.DialogInterface;
@@ -16,16 +16,17 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
+import com.example.ronen.smartvocallist.Model.ModelChecklistsReported;
+import com.example.ronen.smartvocallist.R;
+
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-
-import DataObjects.Checklist;
-import DataObjects.ChecklistItem;
-import Model.ModelChecklistsReported;
 
 
 /**

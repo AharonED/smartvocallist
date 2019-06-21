@@ -1,4 +1,4 @@
-package DataObjects;
+package com.example.ronen.smartvocallist.DataObjects;
 
 public enum ItemType {
     Boolean,

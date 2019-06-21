@@ -1,4 +1,4 @@
-package DataObjects;
+package com.example.ronen.smartvocallist.DataObjects;
 
 import org.json.JSONException;
 import org.json.JSONObject;

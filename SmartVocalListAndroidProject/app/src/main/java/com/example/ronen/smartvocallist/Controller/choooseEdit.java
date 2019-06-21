@@ -1,8 +1,10 @@
-package com.example.ronen.smartvocallist;
+package com.example.ronen.smartvocallist.Controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.ronen.smartvocallist.R;
 
 public class choooseEdit extends AppCompatActivity {
 
