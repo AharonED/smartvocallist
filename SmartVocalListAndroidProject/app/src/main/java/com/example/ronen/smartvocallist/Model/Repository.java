@@ -5,7 +5,9 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.room.Room;
 
+import com.example.ronen.smartvocallist.Controller.MyApplication;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +39,7 @@ public class Repository {
 
     //public Model.ItemsLsnr<Checklist> OnDataChangeItemsLsnr;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
+    AppLocalDbRepository localDataBase = SqlDataBase.db;
 
     public Repository(){
     }

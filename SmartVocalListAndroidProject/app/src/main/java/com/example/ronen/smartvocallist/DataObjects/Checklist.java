@@ -1,5 +1,8 @@
 package com.example.ronen.smartvocallist.DataObjects;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,9 +11,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+@Entity
 public class Checklist extends BaseModelObject implements Serializable {
 
+    @ColumnInfo(name = "name")
     private String name;
+
+    @ColumnInfo(name = "description")
     private String description;
 
     public int getIsCompleted() {
@@ -21,6 +28,7 @@ public class Checklist extends BaseModelObject implements Serializable {
         IsCompleted = isCompleted;
     }
 
+    @ColumnInfo(name = "IsCompleted")
     private int IsCompleted=0;
 
     public String getName() {
@@ -47,10 +55,16 @@ public class Checklist extends BaseModelObject implements Serializable {
         this.url = url;
     }
 
+    @ColumnInfo(name = "url")
     private String url;
 
+    @ColumnInfo(name = "groupId")
     private String groupId;
+
+    @ColumnInfo(name = "owner")
     private String owner;
+
+    @ColumnInfo(name = "checklistType")
     private String checklistType;
 
     public String getGroupId() {

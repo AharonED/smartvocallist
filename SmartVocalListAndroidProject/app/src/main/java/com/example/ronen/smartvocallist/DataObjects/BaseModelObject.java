@@ -9,6 +9,10 @@
 
 package com.example.ronen.smartvocallist.DataObjects;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.PrimaryKey;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,8 +51,14 @@ public class BaseModelObject implements Serializable {
         this.lastUpdate = lastUpdate;
     }
 
+    @PrimaryKey
+    @NonNull
     public String id;
+
+    @ColumnInfo(name = "tableName")
     public String tableName = "BaseModelObject";
+
+    @ColumnInfo(name = "lastUpdate")
     public Double lastUpdate;
 
     public BaseModelObject(String _id)
