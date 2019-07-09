@@ -3,13 +3,17 @@ package com.example.ronen.smartvocallist.Model;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.example.ronen.smartvocallist.Controller.MyApplication;
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 
-@Database(entities = {Checklist.class}, version = 1)
+@Database(entities = {Checklist.class},
+            version = 2)
+@TypeConverters({Converters.class})
 abstract class AppLocalDbRepository extends RoomDatabase {
-        public abstract ChecklistDao checklistDao();
+    public abstract ChecklistDao checklistDao();
 }
 
 public class SqlDataBase{

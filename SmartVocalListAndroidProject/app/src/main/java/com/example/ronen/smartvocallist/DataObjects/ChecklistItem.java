@@ -1,5 +1,8 @@
 package com.example.ronen.smartvocallist.DataObjects;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,8 +37,11 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
     }
 
     private String name;
+
     private String description;
+
     private String url;
+
     private int index;
     private ItemType itemType=ItemType.Boolean;
 
@@ -76,7 +82,9 @@ public class ChecklistItem extends BaseModelObject implements Serializable {
     }
 
     private String checklistId;
+
     private String owner;
+
     private String result;
 
 
