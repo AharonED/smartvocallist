@@ -96,13 +96,11 @@ public class PocketSphinxActivity extends Activity implements
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-
         setContentView(R.layout.activity_pocket_sphinx);
 
         dlg = new DialogFlow<>();
         checkListId = (String)getIntent().getExtras().get("checkListId");
         mdl =  ModelChecklists.getInstance();
-        //(Model)getIntent().getSerializableExtra("model");
         chk = mdl.getItemByID(checkListId);
         dlg.items=chk.checklistItems;
 
@@ -110,6 +108,57 @@ public class PocketSphinxActivity extends Activity implements
         TextView checkListNameTextView = findViewById(R.id.SelectedCheckListTextView);
         checkListNameTextView.setText(checkListName);
 
+        ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
+        notListeningTextViewDisplay();
+
+        dlg = initDialogFlowControls(dlg);
+        initTextToSpeech();
+        initControlButtons(dlg);
+        initStateBar();
+
+        // Check if user has given permission to record audio
+        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSIONS_REQUEST_RECORD_AUDIO);
+            return;
+        }
+
+        // Recognizer initialization is a time-consuming and it involves IO,
+        // so we execute it in async task
+        SetupTask tsk= new SetupTask(this);
+        tsk.dlg = this.dlg;
+        tsk.execute();
+    }
+
+    private void initControlButtons(DialogFlow<ChecklistItem> dlg) {
+        ((Button)findViewById(R.id.back_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.previous();
+            }
+        });
+
+        ((Button)findViewById(R.id.next_Button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.next();
+            }
+        });
+
+        ((Button)findViewById(R.id.options_Button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.setCommand("options", "");
+            }
+        });
+    }
+
+    private void initTextToSpeech() {
+        textToSpeechMap = new HashMap<String, String>();
+        textToSpeechMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID");
+    }
+
+    private DialogFlow initDialogFlowControls(DialogFlow dlg){
         dlg.execute = (item)-> {
             ChecklistItem itm =((ChecklistItem)item);
             String text = itm.getName();
@@ -124,9 +173,10 @@ public class PocketSphinxActivity extends Activity implements
             String textToSpeech = "Step " + stepNumber + " out of " + dlg.items.size() + ": " + text;
 
             if(Starting){
-                textToSpeech = checkListName + ". " + textToSpeech;
+                textToSpeech = chk.getName() + ". " + textToSpeech;
                 Starting=false;
             }
+
             playTextToSpeechQeuestionRead(textToSpeech);
             updateStateBar();
             displayOptionsToTheQuestion((ChecklistItem) item);
@@ -190,47 +240,7 @@ public class PocketSphinxActivity extends Activity implements
             listenToKeyWords();
         };
 
-        textToSpeechMap = new HashMap<String, String>();
-        textToSpeechMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID");
-
-        ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
-        notListeningTextViewDisplay();
-
-        ((Button)findViewById(R.id.back_button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.previous();
-            }
-        });
-
-        ((Button)findViewById(R.id.next_Button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.next();
-            }
-        });
-
-        ((Button)findViewById(R.id.options_Button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.setCommand("options", "");
-            }
-        });
-
-        initStateBar();
-
-        // Check if user has given permission to record audio
-        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSIONS_REQUEST_RECORD_AUDIO);
-            return;
-        }
-
-        // Recognizer initialization is a time-consuming and it involves IO,
-        // so we execute it in async task
-        SetupTask tsk= new SetupTask(this);
-        tsk.dlg = this.dlg;
-        tsk.execute();
+        return dlg;
     }
 
     private void displayYouFinishedAlert() {
