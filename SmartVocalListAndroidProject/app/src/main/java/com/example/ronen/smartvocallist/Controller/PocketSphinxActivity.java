@@ -1,33 +1,3 @@
-/* ====================================================================
- * Copyright (c) 2014 Alpha Cephei Inc.  All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY ALPHA CEPHEI INC. ``AS IS'' AND
- * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL CARNEGIE MELLON UNIVERSITY
- * NOR ITS EMPLOYEES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * ====================================================================
- */
-
 package com.example.ronen.smartvocallist.Controller;
 
 import android.Manifest;
@@ -40,7 +10,6 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,9 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
@@ -82,8 +49,7 @@ public class PocketSphinxActivity extends Activity implements
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
 
     private SpeechRecognizer recognizer;
-    private HashMap<String, String> textToSpeechMap;
-    private TextToSpeech textToSpeech;
+    private TextToSpeechApi textToSpeech;
     private Checklist chk = null;
     private DialogFlow<ChecklistItem> dlg = null;
     private AsyncTask<Void,Void,Void> listenToKeyWordsWaiterTask = null;
@@ -112,7 +78,7 @@ public class PocketSphinxActivity extends Activity implements
         notListeningTextViewDisplay();
 
         dlg = initDialogFlowControls(dlg);
-        initTextToSpeech();
+        textToSpeech = new TextToSpeechApi();
         initControlButtons(dlg);
         initStateBar();
 
@@ -151,11 +117,6 @@ public class PocketSphinxActivity extends Activity implements
                 dlg.setCommand("options", "");
             }
         });
-    }
-
-    private void initTextToSpeech() {
-        textToSpeechMap = new HashMap<String, String>();
-        textToSpeechMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID");
     }
 
     private DialogFlow initDialogFlowControls(DialogFlow dlg){
@@ -375,7 +336,10 @@ public class PocketSphinxActivity extends Activity implements
             try {
                 Assets assets = new Assets(activityReference.get());
                 File assetDir = assets.syncAssets();
-                activityReference.get().setupTextToSpeech();
+                activityReference.get().textToSpeech.setupSuccessfulTask = ()->{
+                    dlg.setCommand("read","");
+                };
+                activityReference.get().textToSpeech.setupTextToSpeech();
                 activityReference.get().setupRecognizer(assetDir);
             } catch (IOException e) {
                 return e;
@@ -413,7 +377,6 @@ public class PocketSphinxActivity extends Activity implements
         super.onDestroy();
 
         if (textToSpeech != null){
-            textToSpeech.stop();
             textToSpeech.shutdown();
         }
 
@@ -500,7 +463,6 @@ public class PocketSphinxActivity extends Activity implements
     public void onResult(Hypothesis hypothesis) {
         if (hypothesis != null) {
             String text = hypothesis.getHypstr();
-            //
         }
     }
 
@@ -519,7 +481,6 @@ public class PocketSphinxActivity extends Activity implements
         if(!textToSpeech.isSpeaking()){
             if(recognizer != null){
                 recognizer.stop();
-                //recognizer.startListening(dlg.step + ".lst");
                 recognizer.startListening(dlg.getCurrentItemKeyWordsFileName());
                 listeningTextViewDisplay();
                 isReadingQuestion = false;
@@ -547,22 +508,6 @@ public class PocketSphinxActivity extends Activity implements
         for (File file : createdFiles) {
             recognizer.addKeywordSearch(file.getName(), file);
         }
-
-        // Create grammar-based search for digit recognition
-        //      File digitsGrammar = new File(assetsDir, "digits.gram");
-        //      recognizer.addGrammarSearch(DIGITS_SEARCH, digitsGrammar);
-    }
-
-    private void setupTextToSpeech(){
-        textToSpeech = new TextToSpeech(getApplicationContext(), status -> {
-            if(status != TextToSpeech.ERROR) {
-
-                textToSpeech.setLanguage(Locale.US);
-
-                String caption = chk.getName();
-                dlg.setCommand("read","");
-            }
-        });
     }
 
     private void playTextToSpeechNow(String text){
@@ -571,7 +516,7 @@ public class PocketSphinxActivity extends Activity implements
 
         recognizer.stop();
         notListeningTextViewDisplay();
-        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, textToSpeechMap);
+        textToSpeech.speakNow(text);
         while(!textToSpeech.isSpeaking());
     }
 
@@ -583,10 +528,10 @@ public class PocketSphinxActivity extends Activity implements
         notListeningTextViewDisplay();
 
         if(isReadingQuestion){
-            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, textToSpeechMap);
+            textToSpeech.speakNow(text);
         }else{
             isReadingQuestion = true;
-            textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, textToSpeechMap);
+            textToSpeech.speakWhenFinished(text);
         }
 
         while(!textToSpeech.isSpeaking());
@@ -598,7 +543,7 @@ public class PocketSphinxActivity extends Activity implements
 
         recognizer.stop();
         notListeningTextViewDisplay();
-        textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, textToSpeechMap);
+        textToSpeech.speakWhenFinished(text);
         while(!textToSpeech.isSpeaking());
     }
 
