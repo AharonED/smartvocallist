@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import java.io.BufferedReader;
@@ -33,7 +34,7 @@ import java.util.Set;
 
 //import edu.cmu.sphinx.pocketsphinx.R;
 
-public class AddListItemActivity extends Activity {
+public class AddListItemActivity extends AppCompatActivity {
     public static String Checklist_id;
     public static int Index;
     public static Set<String> availableWords;

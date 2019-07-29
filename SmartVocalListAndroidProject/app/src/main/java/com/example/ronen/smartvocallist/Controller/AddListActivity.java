@@ -1,6 +1,7 @@
 package com.example.ronen.smartvocallist.Controller;
 
 import android.app.Activity;
+import android.app.AppComponentFactory;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,7 +37,7 @@ import com.example.ronen.smartvocallist.Model.Model;
 import com.example.ronen.smartvocallist.Model.ModelChecklists;
 
 
-public class AddListActivity extends Activity {
+public class AddListActivity extends AppCompatActivity {
     private Checklist NewChecklist;
     private static String Checklist_id;
     private static int Items_count;
@@ -225,11 +228,9 @@ public class AddListActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(requestCode!=GET_FROM_GALLERY && resultCode == RESULT_OK) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != GET_FROM_GALLERY && resultCode == RESULT_OK) {
             ChecklistItem result = (ChecklistItem) data.getSerializableExtra("Item");
-
-
 
 
             Button newItem = new Button(getApplicationContext());
@@ -252,16 +253,13 @@ public class AddListActivity extends Activity {
             ll.invalidate();
 
 
-
-
             //TextView twitems = (TextView) findViewById(R.id.items);
             //StringBuilder stb = new StringBuilder();
             //stb.append(twitems.getText().toString());
             //stb.append("\n");
             //twitems.setText(stb);
             Items.add(result);
-        }
-        else  if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
             bitmap = null;
             try {

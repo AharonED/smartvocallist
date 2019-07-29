@@ -19,9 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProviders;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +46,7 @@ import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 
 import static android.widget.Toast.makeText;
 
-public class PocketSphinxActivity extends Activity implements
+public class PocketSphinxActivity extends AppCompatActivity implements
         RecognitionListener {
     /* Used to handle permission request */
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
