@@ -1,7 +1,6 @@
 package com.example.ronen.smartvocallist.Controller;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -30,19 +28,14 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.List;
 
-import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 import com.example.ronen.smartvocallist.Dialogs.DialogFlow;
-import com.example.ronen.smartvocallist.Model.ModelChecklists;
 import com.example.ronen.smartvocallist.R;
 
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
-import edu.cmu.pocketsphinx.SpeechRecognizer;
-import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
 
 import static android.widget.Toast.makeText;
 
@@ -50,40 +43,31 @@ public class PocketSphinxActivity extends AppCompatActivity implements
         RecognitionListener {
     /* Used to handle permission request */
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
-
-    private SpeechRecognizer recognizer;
-    private TextToSpeechApi textToSpeech;
-    private Checklist chk = null;
-    private DialogFlow<ChecklistItem> dlg = null;
+    private PocketSphinxViewModel model;
     private AsyncTask<Void,Void,Void> listenToKeyWordsWaiterTask = null;
-    private volatile boolean isWaitingTaskRunning = false;
-    private boolean isReadingQuestion = false;
-    private String checkListId;
-    private ModelChecklists mdl;
-    private boolean Starting=true;
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.activity_pocket_sphinx);
 
-        dlg = new DialogFlow<>();
-        checkListId = (String)getIntent().getExtras().get("checkListId");
-        mdl =  ModelChecklists.getInstance();
-        chk = mdl.getItemByID(checkListId);
-        dlg.items=chk.checklistItems;
+        model = ViewModelProviders.of(this).get(PocketSphinxViewModel.class);
+        String checkListId = (String)getIntent().getExtras().get("checkListId");
+        model.loadCheckList(checkListId);
+        model.initDialogFlow(model.getChecklist());
 
-        String checkListName = chk.getName();
+        String checkListName = model.getChecklist().getName();
         TextView checkListNameTextView = findViewById(R.id.SelectedCheckListTextView);
         checkListNameTextView.setText(checkListName);
 
         ((TextView) findViewById(R.id.caption_text)).setText("Preparing the recognizer");
         notListeningTextViewDisplay();
 
-        dlg = initDialogFlowControls(dlg);
-        textToSpeech = new TextToSpeechApi();
-        initControlButtons(dlg);
+        model.initTextToSpeech();
+        initDialogFlowControls(model.getDialogFlow());
+        initControlButtons(model.getDialogFlow());
         initStateBar();
+
 
         // Check if user has given permission to record audio
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
@@ -95,7 +79,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
         // Recognizer initialization is a time-consuming and it involves IO,
         // so we execute it in async task
         SetupTask tsk= new SetupTask(this);
-        tsk.dlg = this.dlg;
+        tsk.dlg = model.getDialogFlow();
         tsk.execute();
     }
 
@@ -122,7 +106,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
         });
     }
 
-    private DialogFlow initDialogFlowControls(DialogFlow dlg){
+    private void initDialogFlowControls(DialogFlow dlg){
         dlg.execute = (item)-> {
             ChecklistItem itm =((ChecklistItem)item);
             String text = itm.getName();
@@ -136,9 +120,9 @@ public class PocketSphinxActivity extends AppCompatActivity implements
             ((TextView) findViewById(R.id.caption_text)).setText(caption);
             String textToSpeech = "Step " + stepNumber + " out of " + dlg.items.size() + ": " + text;
 
-            if(Starting){
-                textToSpeech = chk.getName() + ". " + textToSpeech;
-                Starting=false;
+            if(model.firstSpeaking){
+                textToSpeech = model.getChecklist().getName() + ". " + textToSpeech;
+                model.firstSpeaking =false;
             }
 
             playTextToSpeechQeuestionRead(textToSpeech);
@@ -161,7 +145,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
         };
 
         dlg.eof  = (item)->{
-            if(chk.getIsCompleted() == 1) {
+            if(model.getChecklist().getIsCompleted() == 1) {
                 String res = ((ChecklistItem)item).getResult();
 
                 String caption = "Checklist reporting completed";
@@ -181,7 +165,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
         };
 
         dlg.readItem = (item)->{
-            this.dlg.execute.execute(((ChecklistItem)item));
+            model.getDialogFlow().execute.execute(((ChecklistItem)item));
         };
 
         dlg.readOptions = (item)->{
@@ -203,13 +187,11 @@ public class PocketSphinxActivity extends AppCompatActivity implements
             playTextToSpeechNow(text);
             listenToKeyWords();
         };
-
-        return dlg;
     }
 
     private void displayYouFinishedAlert() {
         // Stop recognizer while alert is on
-        recognizer.stop();
+        model.getRecognizer().stop();
 
         new AlertDialog.Builder(this)
                 .setTitle("Finished")
@@ -232,7 +214,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
     }
 
     private void initStateBar() {
-        ArrayList<ChecklistItem> items = dlg.items;
+        ArrayList<ChecklistItem> items = model.getDialogFlow().items;
         LinearLayout stateBar = findViewById(R.id.StateLinearLayout);
         stateBar.setVisibility(View.INVISIBLE);
 
@@ -249,7 +231,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
                     Button button = (Button)v;
                     int buttonTextNumber = Integer.parseInt(button.getText().toString());
                     int itemIndex = buttonTextNumber - 1;
-                    dlg.jumpToStep(itemIndex);
+                    model.getDialogFlow().jumpToStep(itemIndex);
                 }
             });
 
@@ -288,7 +270,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
             else
                 color = lightBlueColor;
 
-            if(itemIndex == dlg.step){
+            if(itemIndex == model.getDialogFlow().step){
                 ShapeDrawable shapedrawable = new ShapeDrawable();
                 shapedrawable.setShape(new RectShape());
                 shapedrawable.getPaint().setColor(color);
@@ -301,7 +283,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
             }
 
             TextView indexItemTextView = (TextView)linearLayout.getChildAt(1);
-            String indexItemResultString = dlg.items.get(itemIndex).getResult();
+            String indexItemResultString = model.getDialogFlow().items.get(itemIndex).getResult();
 
             if(indexItemResultString != null && !indexItemResultString.equals("")){
                 indexItemTextView.setText("Result: " + indexItemResultString);
@@ -339,10 +321,10 @@ public class PocketSphinxActivity extends AppCompatActivity implements
             try {
                 Assets assets = new Assets(activityReference.get());
                 File assetDir = assets.syncAssets();
-                activityReference.get().textToSpeech.setupSuccessfulTask = ()->{
+                activityReference.get().model.getTextToSpeech().setupSuccessfulTask = ()->{
                     dlg.setCommand("read","");
                 };
-                activityReference.get().textToSpeech.setupTextToSpeech();
+                activityReference.get().model.getTextToSpeech().setupTextToSpeech();
                 activityReference.get().setupRecognizer(assetDir);
             } catch (IOException e) {
                 return e;
@@ -379,8 +361,8 @@ public class PocketSphinxActivity extends AppCompatActivity implements
     public void onDestroy() {
         super.onDestroy();
 
-        if (textToSpeech != null){
-            textToSpeech.shutdown();
+        if (model.getTextToSpeech() != null){
+            model.getTextToSpeech().shutdown();
         }
 
         if(listenToKeyWordsWaiterTask != null &&
@@ -389,15 +371,15 @@ public class PocketSphinxActivity extends AppCompatActivity implements
             listenToKeyWordsWaiterTask.cancel(true);
         }
 
-        if (recognizer != null) {
-            recognizer.cancel();
-            recognizer.shutdown();
+        if (model.getRecognizer() != null) {
+            model.getRecognizer().cancel();
+            model.getRecognizer().shutdown();
         }
 
         try {
             Assets assets = new Assets(this);
             File assetDir = assets.syncAssets();
-            dlg.removeKeyWordsFiles(assetDir);
+            model.getDialogFlow().removeKeyWordsFiles(assetDir);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -418,23 +400,22 @@ public class PocketSphinxActivity extends AppCompatActivity implements
 
         for (String word:textSplited) {
             // A key work
-            if(dlg.keywords.contains(word)) {
+            if(model.getDialogFlow().keywords.contains(word)) {
                 makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
-                dlg.setCommand(word, "");
+                model.getDialogFlow().setCommand(word, "");
                 break;
             }
             // Answer word
-            else if(dlg.items.get(dlg.step).options.contains(word)) {
-                dlg.items.get(dlg.step).setResult(word);
+            else if(model.getDialogFlow().items.get(model.getDialogFlow().step).options.contains(word)) {
+                model.getDialogFlow().items.get(model.getDialogFlow().step).setResult(word);
                 checkIfCheckListComplete();
 
                 // Update model
-                chk = mdl.getItemByID(checkListId);
-                mdl.addItem(chk);
+                model.mdl.addItem(model.getChecklist());
 
                 makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
                 playTextToSpeechNow(word);
-                dlg.next();
+                model.getDialogFlow().next();
                 break;
             }
         }
@@ -443,7 +424,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
     private void checkIfCheckListComplete() {
         boolean isCompleted = true;
 
-        for (ChecklistItem item: dlg.items) {
+        for (ChecklistItem item: model.getDialogFlow().items) {
             if(item.getIsReq() == 1 &&
                     (item.getResult() == null || item.getResult().equals("")))
             {
@@ -453,9 +434,9 @@ public class PocketSphinxActivity extends AppCompatActivity implements
         }
 
         if(isCompleted)
-            chk.setIsCompleted(1);
+            model.getChecklist().setIsCompleted(1);
         else{
-            chk.setIsCompleted(0);
+            model.getChecklist().setIsCompleted(0);
         }
     }
 
@@ -481,73 +462,59 @@ public class PocketSphinxActivity extends AppCompatActivity implements
     }
 
     private void listenToKeyWords(){
-        if(!textToSpeech.isSpeaking()){
-            if(recognizer != null){
-                recognizer.stop();
-                recognizer.startListening(dlg.getCurrentItemKeyWordsFileName());
+        if(!model.getTextToSpeech().isSpeaking()){
+            if(model.getRecognizer() != null){
+                model.getRecognizer().stop();
+                model.getRecognizer().startListening(model.getDialogFlow().getCurrentItemKeyWordsFileName());
                 listeningTextViewDisplay();
-                isReadingQuestion = false;
+                model.isReadingQuestion = false;
             }
-        }else if(isWaitingTaskRunning == false){
-            isWaitingTaskRunning = true;
+        }else if(model.isWaitingTaskRunning == false){
+            model.isWaitingTaskRunning = true;
             listenToKeyWordsWaiterTask = new ListenToKeyWordsWaiter();
             listenToKeyWordsWaiterTask.execute();
         }
     }
 
     private void setupRecognizer(File assetsDir) throws IOException {
-        // The recognizer can be configured to perform multiple searches
-        // of different kind and switch between them
-
-        recognizer = SpeechRecognizerSetup.defaultSetup()
-                .setAcousticModel(new File(assetsDir, "en-us-ptm"))
-                .setDictionary(new File(assetsDir, "cmudict-en-us.dict"))
-                .getRecognizer();
-        recognizer.addListener(this);
-
-        // Create multiple keyword-activation search
-        List<File> createdFiles = dlg.createKeyWordsFiles(assetsDir);
-
-        for (File file : createdFiles) {
-            recognizer.addKeywordSearch(file.getName(), file);
-        }
+        model.initRecognizer(this, assetsDir);
     }
 
     private void playTextToSpeechNow(String text){
-        if(textToSpeech == null || text.equals(""))
+        if(model.getTextToSpeech() == null || text.equals(""))
             return;
 
-        recognizer.stop();
+        model.getRecognizer().stop();
         notListeningTextViewDisplay();
-        textToSpeech.speakNow(text);
-        while(!textToSpeech.isSpeaking());
+        model.getTextToSpeech().speakNow(text);
+        while(!model.getTextToSpeech().isSpeaking());
     }
 
     private void playTextToSpeechQeuestionRead(String text){
-        if(textToSpeech == null || text.equals(""))
+        if(model.getTextToSpeech() == null || text.equals(""))
             return;
 
-        recognizer.stop();
+        model.getRecognizer().stop();
         notListeningTextViewDisplay();
 
-        if(isReadingQuestion){
-            textToSpeech.speakNow(text);
+        if(model.isReadingQuestion){
+            model.getTextToSpeech().speakNow(text);
         }else{
-            isReadingQuestion = true;
-            textToSpeech.speakWhenFinished(text);
+            model.isReadingQuestion = true;
+            model.getTextToSpeech().speakWhenFinished(text);
         }
 
-        while(!textToSpeech.isSpeaking());
+        while(!model.getTextToSpeech().isSpeaking());
     }
 
     private void playTextToSpeechIfNotSpeaking(String text){
-        if(textToSpeech == null || text.equals("") || textToSpeech.isSpeaking())
+        if(model.getTextToSpeech() == null || text.equals("") || model.getTextToSpeech().isSpeaking())
             return;
 
-        recognizer.stop();
+        model.getRecognizer().stop();
         notListeningTextViewDisplay();
-        textToSpeech.speakWhenFinished(text);
-        while(!textToSpeech.isSpeaking());
+        model.getTextToSpeech().speakWhenFinished(text);
+        while(!model.getTextToSpeech().isSpeaking());
     }
 
     @Override
@@ -563,7 +530,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
     class ListenToKeyWordsWaiter extends AsyncTask<Void,Void,Void>{
         @Override
         protected Void doInBackground(Void... voids) {
-            while (textToSpeech.isSpeaking()){
+            while (model.getTextToSpeech().isSpeaking()){
                 try{Thread.sleep(200);}catch (Exception e){}
             }
             return null;
@@ -571,7 +538,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            isWaitingTaskRunning = false;
+            model.isWaitingTaskRunning = false;
             listenToKeyWords();
         }
     }
