@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 
@@ -40,17 +41,15 @@ public class AddListItemActivity extends AppCompatActivity {
     public static Set<String> availableWords;
     private static StringBuilder all_Props;
     public static AssetManager am;
-    private boolean is_checked =false;
     private static int ammount = 0;
     LinearLayout ll_items;
-    CoordinatorLayout CL;
+    private static String[] toIgnore = {"next","back","start","options","read"};
 
     public static void fill_dict()
     {
         availableWords = new HashSet<String>() ;
         try {
             InputStream assetDir = am.open("sync/cmudict-en-us.dict");
-            //String theString = (inputStream, encoding);
             BufferedReader r = new BufferedReader(new InputStreamReader(assetDir));
             StringBuilder total = new StringBuilder();
             for (String line; (line = r.readLine()) != null; ) {
@@ -59,13 +58,9 @@ public class AddListItemActivity extends AppCompatActivity {
                     availableWords.add(tmp);
                 }
             }
-            availableWords.remove("next");
-            availableWords.remove("back");
-            availableWords.remove("start");
-            availableWords.remove("options");
-            availableWords.remove("read");
-
-
+            for (String word:toIgnore) {
+                availableWords.remove(word);
+            }
         }
         catch (FileNotFoundException ex)
         {
@@ -99,10 +94,6 @@ public class AddListItemActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
-        //Detects request codes
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,7 +181,6 @@ public class AddListItemActivity extends AppCompatActivity {
                 TextView twname   = (TextView)findViewById(R.id.title_tv);
                 CheckBox isRequired = (CheckBox)findViewById(R.id.Required);
 
-
                 String name = twname.getText().toString();
                 Date currentTime = Calendar.getInstance().getTime();
                 Long time = currentTime.getTime();
@@ -201,9 +191,6 @@ public class AddListItemActivity extends AppCompatActivity {
 
                 if(isViewValid) {
                     item.setIndex(Index);
-
-
-                    //use item.setAttributes(atributes); instead of  above loop...
                     item.setAttributes(all_Props.toString());
 
                     item.setItemType(ItemType.Text);

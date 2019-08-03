@@ -103,9 +103,6 @@ public class AddListActivity extends AppCompatActivity {
             }
         });
 
-
-
-        String FilePath = "C:\\Project\\end project\\smartvocallist\\SmartVocalListAndroidProject\\app\\src\\main\\java\\com\\example\\ronen\\smartvocallist\\checklistsCount.txt";
         Items_count = 0;
         Checklist_id = java.util.UUID.randomUUID().toString();
 
