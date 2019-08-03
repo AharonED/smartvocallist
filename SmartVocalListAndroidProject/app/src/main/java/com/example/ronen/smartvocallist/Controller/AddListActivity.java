@@ -62,9 +62,9 @@ public class AddListActivity extends AppCompatActivity {
                 @Override
                 public void onBitmapLoaded(Bitmap Bbitmap, Picasso.LoadedFrom from) {
                     if (mImage.getTag() == this) {
-                        mImage.setImageBitmap(Bbitmap);
-                        mImageProgressBar.setVisibility(View.INVISIBLE);
+                        mImage.setImageBitmap(Bbitmap);mImageProgressBar.setVisibility(View.INVISIBLE);
                     }
+
                 }
 
                 @Override

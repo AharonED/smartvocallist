@@ -42,7 +42,7 @@ public class AddListItemActivity extends AppCompatActivity {
     public static AssetManager am;
     private boolean is_checked =false;
     private static int ammount = 0;
-    LinearLayout ll;
+    LinearLayout ll_items;
     CoordinatorLayout CL;
 
     public static void fill_dict()
@@ -112,15 +112,13 @@ public class AddListItemActivity extends AppCompatActivity {
 
         all_Props = new StringBuilder();
         //ll = (LinearLayout) findViewById(R.id.item);
-        ll = (LinearLayout) findViewById(R.id.llItem);
-        ll.setGravity(Gravity.CENTER_VERTICAL);
-        ll.setOrientation(LinearLayout.VERTICAL);
+        ll_items = (LinearLayout) findViewById(R.id.llItem);
+        ll_items.setGravity(Gravity.CENTER_VERTICAL);
+        ll_items.setOrientation(LinearLayout.VERTICAL);
 
         Intent Data = getIntent();
         Index = Data.getIntExtra("Index",0);
         Checklist_id = Data.getStringExtra("Checklist_id");
-
-        String FILE_PATH ="C:\\Project\\end project\\smartvocallist\\SmartVocalListAndroidProject\\app\\src\\main\\java\\com\\example\\ronen\\smartvocallist\\checklistsCount.txt";
 
         Button AddProperty = (Button) findViewById(R.id.fab2);
         AddProperty.setOnClickListener(new View.OnClickListener() {
@@ -167,17 +165,17 @@ public class AddListItemActivity extends AppCompatActivity {
                     newItem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ll.removeView(v);
+                            ll_items.removeView(v);
                             String tmp = all_Props.toString().replace(((Button) v).getText() + ";", "");
                             all_Props = new StringBuilder();
                             all_Props.append(tmp);
                             ammount--;
                         }
                     });
-                    ll.addView(newItem, ammount);
+                    ll_items.addView(newItem, ammount);
                     twtypes.setText("");
                     ammount++;
-                    ll.invalidate();
+                    ll_items.invalidate();
                 }
 
             }
