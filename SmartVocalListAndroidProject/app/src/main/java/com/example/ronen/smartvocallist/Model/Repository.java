@@ -1,13 +1,17 @@
 package com.example.ronen.smartvocallist.Model;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.room.Room;
+import androidx.lifecycle.LiveData;
 
-import com.example.ronen.smartvocallist.Controller.MyApplication;
+import com.example.ronen.smartvocallist.DataObjects.BaseModelObject;
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,10 +31,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
-
-import com.example.ronen.smartvocallist.DataObjects.BaseModelObject;
-import com.example.ronen.smartvocallist.DataObjects.Checklist;
-import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -77,9 +78,10 @@ public class Repository {
                         chk = new Checklist("-");
                         chk.Checklists(convertSnapshot2Json(dataSnapshot));
                         items.add(chk);
+                        new AddCheckListsAsyncTask(localDataBase.checklistDao()).execute(chk);
                     }
-                    itemsLsnr.OnDataChangeItemsLsnr(items);
 
+                    itemsLsnr.OnDataChangeItemsLsnr(items);
                 }
 
                 @Override
@@ -135,6 +137,48 @@ public class Repository {
 
         return items;
     }
+
+    public LiveData<List<Checklist>> GetCheckListsLocal(){
+        return localDataBase.checklistDao().getAll();
+    }
+
+/*
+    @SuppressLint("NewApi")
+    public class GetCheckListsAsyncTask extends AsyncTask<LiveData<List<Checklist>> , Void, Void> {
+
+        ChecklistDao checklistDao = null;
+        LiveData<List<Checklist>> allChecklists ;
+
+        GetCheckListsAsyncTask(ChecklistDao checklistDao ){
+            this.checklistDao = checklistDao;
+        }
+
+        @Override
+        protected Void doInBackground(LiveData<List<Checklist>>... liveData) {
+            allChecklists = checklistDao.getAll();
+            return null;
+        }
+    }
+*/
+
+    @SuppressLint("NewApi")
+    private class AddCheckListsAsyncTask extends AsyncTask<Checklist, Void, Void> {
+        ChecklistDao checklistDao = null;
+
+        AddCheckListsAsyncTask(ChecklistDao checklistDao ){
+            this.checklistDao = checklistDao;
+        }
+
+
+        @Override
+        protected Void doInBackground(Checklist... checklists) {
+            this.checklistDao.insertAll(checklists);
+            return null;
+        }
+
+
+    }
+
 
     public void saveImage(Bitmap imageBitmap, final Model.SaveImageListener listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
