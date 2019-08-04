@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 
@@ -40,17 +41,15 @@ public class AddListItemActivity extends AppCompatActivity {
     public static Set<String> availableWords;
     private static StringBuilder all_Props;
     public static AssetManager am;
-    private boolean is_checked =false;
     private static int ammount = 0;
-    LinearLayout ll;
-    CoordinatorLayout CL;
+    LinearLayout ll_items;
+    private static String[] toIgnore = {"next","back","start","options","read"};
 
     public static void fill_dict()
     {
         availableWords = new HashSet<String>() ;
         try {
             InputStream assetDir = am.open("sync/cmudict-en-us.dict");
-            //String theString = (inputStream, encoding);
             BufferedReader r = new BufferedReader(new InputStreamReader(assetDir));
             StringBuilder total = new StringBuilder();
             for (String line; (line = r.readLine()) != null; ) {
@@ -59,13 +58,9 @@ public class AddListItemActivity extends AppCompatActivity {
                     availableWords.add(tmp);
                 }
             }
-            availableWords.remove("next");
-            availableWords.remove("back");
-            availableWords.remove("start");
-            availableWords.remove("options");
-            availableWords.remove("read");
-
-
+            for (String word:toIgnore) {
+                availableWords.remove(word);
+            }
         }
         catch (FileNotFoundException ex)
         {
@@ -99,10 +94,6 @@ public class AddListItemActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
-        //Detects request codes
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,15 +103,13 @@ public class AddListItemActivity extends AppCompatActivity {
 
         all_Props = new StringBuilder();
         //ll = (LinearLayout) findViewById(R.id.item);
-        ll = (LinearLayout) findViewById(R.id.llItem);
-        ll.setGravity(Gravity.CENTER_VERTICAL);
-        ll.setOrientation(LinearLayout.VERTICAL);
+        ll_items = (LinearLayout) findViewById(R.id.llItem);
+        ll_items.setGravity(Gravity.CENTER_VERTICAL);
+        ll_items.setOrientation(LinearLayout.VERTICAL);
 
         Intent Data = getIntent();
         Index = Data.getIntExtra("Index",0);
         Checklist_id = Data.getStringExtra("Checklist_id");
-
-        String FILE_PATH ="C:\\Project\\end project\\smartvocallist\\SmartVocalListAndroidProject\\app\\src\\main\\java\\com\\example\\ronen\\smartvocallist\\checklistsCount.txt";
 
         Button AddProperty = (Button) findViewById(R.id.fab2);
         AddProperty.setOnClickListener(new View.OnClickListener() {
@@ -167,17 +156,17 @@ public class AddListItemActivity extends AppCompatActivity {
                     newItem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ll.removeView(v);
+                            ll_items.removeView(v);
                             String tmp = all_Props.toString().replace(((Button) v).getText() + ";", "");
                             all_Props = new StringBuilder();
                             all_Props.append(tmp);
                             ammount--;
                         }
                     });
-                    ll.addView(newItem, ammount);
+                    ll_items.addView(newItem, ammount);
                     twtypes.setText("");
                     ammount++;
-                    ll.invalidate();
+                    ll_items.invalidate();
                 }
 
             }
@@ -192,7 +181,6 @@ public class AddListItemActivity extends AppCompatActivity {
                 TextView twname   = (TextView)findViewById(R.id.title_tv);
                 CheckBox isRequired = (CheckBox)findViewById(R.id.Required);
 
-
                 String name = twname.getText().toString();
                 Date currentTime = Calendar.getInstance().getTime();
                 Long time = currentTime.getTime();
@@ -203,9 +191,6 @@ public class AddListItemActivity extends AppCompatActivity {
 
                 if(isViewValid) {
                     item.setIndex(Index);
-
-
-                    //use item.setAttributes(atributes); instead of  above loop...
                     item.setAttributes(all_Props.toString());
 
                     item.setItemType(ItemType.Text);

@@ -62,9 +62,9 @@ public class AddListActivity extends AppCompatActivity {
                 @Override
                 public void onBitmapLoaded(Bitmap Bbitmap, Picasso.LoadedFrom from) {
                     if (mImage.getTag() == this) {
-                        mImage.setImageBitmap(Bbitmap);
-                        mImageProgressBar.setVisibility(View.INVISIBLE);
+                        mImage.setImageBitmap(Bbitmap);mImageProgressBar.setVisibility(View.INVISIBLE);
                     }
+
                 }
 
                 @Override
@@ -103,9 +103,6 @@ public class AddListActivity extends AppCompatActivity {
             }
         });
 
-
-
-        String FilePath = "C:\\Project\\end project\\smartvocallist\\SmartVocalListAndroidProject\\app\\src\\main\\java\\com\\example\\ronen\\smartvocallist\\checklistsCount.txt";
         Items_count = 0;
         Checklist_id = java.util.UUID.randomUUID().toString();
 
