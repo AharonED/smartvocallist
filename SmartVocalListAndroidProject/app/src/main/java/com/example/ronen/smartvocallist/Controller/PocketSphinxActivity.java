@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 import com.example.ronen.smartvocallist.Dialogs.DialogFlow;
 import com.example.ronen.smartvocallist.R;
+import com.example.ronen.smartvocallist.ViewModel.PocketSphinxViewModel;
 
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;

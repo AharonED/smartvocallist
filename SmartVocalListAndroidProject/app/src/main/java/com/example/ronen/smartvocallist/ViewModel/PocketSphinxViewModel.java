@@ -1,9 +1,10 @@
-package com.example.ronen.smartvocallist.Controller;
+package com.example.ronen.smartvocallist.ViewModel;
 
 import android.app.Activity;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.ronen.smartvocallist.Controller.TextToSpeechApi;
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 import com.example.ronen.smartvocallist.Dialogs.DialogFlow;

@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface  ChecklistDao {
     @Query("select * from Checklist")
-    LiveData<List<Checklist>> getAll();
+    List<Checklist> getAll();
 
 //    @Query("SELECT * FROM user WHERE uid IN (:userIds)")
 //    List<User> loadAllByIds(int[] userIds);

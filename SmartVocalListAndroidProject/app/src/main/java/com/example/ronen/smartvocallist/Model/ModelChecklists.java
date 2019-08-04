@@ -73,7 +73,7 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
     }
 
 
-    public LiveData<List<Checklist>>  GetChecklist ()
+    public List<Checklist> GetChecklist ()
     {
         return  rep.GetCheckListsLocal();
     }

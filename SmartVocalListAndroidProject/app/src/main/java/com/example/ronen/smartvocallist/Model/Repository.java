@@ -138,7 +138,7 @@ public class Repository {
         return items;
     }
 
-    public LiveData<List<Checklist>> GetCheckListsLocal(){
+    public List<Checklist> GetCheckListsLocal(){
         return localDataBase.checklistDao().getAll();
     }
 

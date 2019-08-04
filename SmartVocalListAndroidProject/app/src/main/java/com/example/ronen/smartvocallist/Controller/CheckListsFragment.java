@@ -13,13 +13,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import com.example.ronen.smartvocallist.Model.ModelChecklists;
 import com.example.ronen.smartvocallist.R;
+import com.example.ronen.smartvocallist.ViewModel.ChecklistViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.common.collect.Lists;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,22 +30,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CheckListsFragment extends Fragment {
+    ChecklistViewModel modelView;
     RecyclerView checkListsRecyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    CheckListsAdapter adapter;
-    ArrayList<Checklist> mData = new ArrayList<>();
-    ModelChecklists model=null;
 
     public CheckListsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,9 +56,12 @@ public class CheckListsFragment extends Fragment {
             startActivity(myIntent);
         });
 
+        modelView = ViewModelProviders.of(this).get(ChecklistViewModel.class);
+        modelView.getData().observe(this, data -> displayNewData(data));
+
         checkListsRecyclerView = view.findViewById(R.id.checkListsRecyclerView);
         checkListsRecyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(view.getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         checkListsRecyclerView.setLayoutManager(layoutManager);
 
         return view;
@@ -68,12 +71,10 @@ public class CheckListsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        model =  ModelChecklists.getInstance();
         //Get data Async.
         //When data returned from Firebase, it will rise event onDataChange
         // - which execute the injected method-checkListsToDisplay
 
-        model.getItemsAsync(this::checkListsToDisplay);
 /*
         ChecklistViewModel checklistViewModel;
 
@@ -82,25 +83,16 @@ public class CheckListsFragment extends Fragment {
   */
     }
 
-
-    private void checkListsToDisplay(ArrayList<Checklist> checkLists) {
-        Collections.sort(checkLists, new Comparator<Checklist>() {
-            @Override
-            public int compare(Checklist checkList1, Checklist checkList2) {
-                String ckl1Name = checkList1.getName().toLowerCase();
-                String ckl2Name = checkList2.getName().toLowerCase();
-                return ckl1Name.compareTo(ckl2Name);
-            }
-        });
-
-        mData = checkLists;
-        adapter = new CheckListsAdapter(mData);
+    private void displayNewData(List<Checklist> data) {
+        ArrayList<Checklist> dataArrayList = new ArrayList<>();
+        dataArrayList.addAll(data);
+        CheckListsAdapter adapter = new CheckListsAdapter(dataArrayList);
         checkListsRecyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickedListener(new CheckListsAdapter.OnItemClickedListener() {
             @Override
             public void onClick(int index) {
-                Checklist clickedCheckList = mData.get(index);
+                Checklist clickedCheckList = dataArrayList.get(index);
 
                 if(clickedCheckList.getChecklistItems().size()>0) {
                     startCheckListPlay(clickedCheckList);
@@ -115,6 +107,8 @@ public class CheckListsFragment extends Fragment {
         });
     }
 
+//
+
     private void startCheckListPlay(Checklist checkList){
         Checklist newChk = checkList.CopyChecklist();
         newChk.setChecklistType("Reported");
@@ -126,9 +120,9 @@ public class CheckListsFragment extends Fragment {
         formatedDate = dfm.format(d).toString();
 
         newChk.setLastUpdate((double)d.getTime());
-        newChk.setDescription("Reported at: " + formatedDate + " By:" + model.getOwnerName());
-        newChk.setOwner(model.getOwnerID());
-        model.addItem(newChk);
+        newChk.setDescription("Reported at: " + formatedDate + " By:" + modelView.GetModel().getOwnerName());
+        newChk.setOwner(modelView.GetModel().getOwnerID());
+        modelView.GetModel().addItem(newChk);
         Intent myIntent = new Intent(getContext(), PocketSphinxActivity.class);
         myIntent.putExtra("checkListId", newChk.getId());
         startActivity(myIntent);
@@ -138,7 +132,7 @@ public class CheckListsFragment extends Fragment {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int itemPosition = item.getGroupId();
 
-        Checklist checkList = mData.get(itemPosition);
+        Checklist checkList = modelView.getData().getValue().get(itemPosition);
 
         switch (item.getItemId()){
             case R.id.deleteOption:
@@ -160,9 +154,8 @@ public class CheckListsFragment extends Fragment {
                             "Are you sure?")
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        model.deleteItem(checkList);
-                        mData.remove(checkList);
-                        checkListsToDisplay(mData);
+                        modelView.GetModel().deleteItem(checkList);
+                        modelView.getData().getValue().remove(checkList);
                     }
                 })
                 .setNegativeButton("Cancel", null)
