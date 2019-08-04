@@ -13,11 +13,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.Model.ModelChecklists;
 import com.example.ronen.smartvocallist.R;
+import com.example.ronen.smartvocallist.ViewModel.ChecklistViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.common.collect.Lists;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,9 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-
-import com.example.ronen.smartvocallist.DataObjects.Checklist;
-import com.example.ronen.smartvocallist.Model.ModelChecklists;
 
 
 /**
@@ -73,8 +75,13 @@ public class CheckListsFragment extends Fragment {
         //Get data Async.
         //When data returned from Firebase, it will rise event onDataChange
         // - which execute the injected method-checkListsToDisplay
+
         model.getItemsAsync(this::checkListsToDisplay);
-    }
+
+        ChecklistViewModel checklistViewModel;
+
+        checklistViewModel = ViewModelProviders.of(this).get(ChecklistViewModel.class);
+        checklistViewModel.getData().observe(this,t -> checkListsToDisplay(Lists.newArrayList(t)) );    }
 
 
     private void checkListsToDisplay(ArrayList<Checklist> checkLists) {

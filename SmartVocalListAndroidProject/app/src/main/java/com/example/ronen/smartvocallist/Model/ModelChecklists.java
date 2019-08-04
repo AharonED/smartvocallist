@@ -2,16 +2,17 @@ package com.example.ronen.smartvocallist.Model;
 
 
 import android.annotation.TargetApi;
-import android.os.AsyncTask;
 import android.os.Build;
+
+import androidx.lifecycle.LiveData;
+
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import com.example.ronen.smartvocallist.DataObjects.Checklist;
-import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 
 public class ModelChecklists  extends Model<Checklist> implements Serializable {
 
@@ -71,6 +72,12 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         //task.execute();
     }
 
+
+    public LiveData<List<Checklist>>  GetChecklist ()
+    {
+        return  rep.GetCheckListsLocal();
+    }
+
     @Override
     public void addItem(Checklist chk){
         if(chk.id=="-1") {
@@ -100,39 +107,5 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         super.deleteItem(chk);
     }
 
-
-    private class LocalGetCheckListsTask extends AsyncTask<Void, Void, ArrayList<Checklist>> {
-
-        ItemsLsnr<Checklist> lsnr;
-
-        public LocalGetCheckListsTask(Model.ItemsLsnr<Checklist> lsnr) {
-            this.lsnr = lsnr;
-        }
-
-        @Override
-        protected ArrayList<Checklist> doInBackground(Void... params) {
-            List<Checklist> checkLists = rep.localDataBase.checklistDao().getAll();
-            items = new ArrayList<>(checkLists);
-            return items;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Checklist> checkLists) {
-            this.lsnr.OnDataChangeItemsLsnr(items);
-        }
-    }
-
-    private class localAddCheckListsTask extends AsyncTask<Checklist, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Checklist... checklists) {
-            rep.localDataBase.checklistDao().insertAll(checklists);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void checkLists) {
-        }
-    }
 }
 
