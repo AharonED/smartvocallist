@@ -54,10 +54,6 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
                                }
                            }
                        }
-
-                       // update local db checklist
-                       localAddCheckListTask task = new localAddCheckListTask();
-                       task.execute(chks.toArray(new Checklist[chks.size()]));
                    }
                });
 
@@ -70,8 +66,7 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
 
     public void getLocalChecklistAsync(ItemsLsnr<Checklist> lsnr)
     {
-        LocalGetCheckListsTask task = new LocalGetCheckListsTask(lsnr);
-        task.execute();
+        rep.GetCheckListsLocal(lsnr);
     }
 
     @Override
@@ -97,40 +92,6 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
             ModelChecklistItems.getInstance().deleteItem(itm);
         }
         super.deleteItem(chk);
-    }
-
-    private class LocalGetCheckListsTask extends AsyncTask<Void, Void, ArrayList<Checklist>> {
-
-        ItemsLsnr<Checklist> lsnr;
-
-        public LocalGetCheckListsTask(Model.ItemsLsnr<Checklist> lsnr) {
-            this.lsnr = lsnr;
-        }
-
-        @Override
-        protected ArrayList<Checklist> doInBackground(Void... params) {
-            List<Checklist> checkLists = rep.localDataBase.checklistDao().getAll();
-            items = new ArrayList<>(checkLists);
-            return items;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Checklist> checkLists) {
-            this.lsnr.OnDataChangeItemsLsnr(items);
-        }
-    }
-
-    private class localAddCheckListTask extends AsyncTask<Checklist, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Checklist... checklists) {
-            rep.localDataBase.checklistDao().insertAll(checklists);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void checkLists) {
-        }
     }
 }
 

@@ -138,28 +138,31 @@ public class Repository {
         return items;
     }
 
-    public List<Checklist> GetCheckListsLocal(){
-        return localDataBase.checklistDao().getAll();
+    public void GetCheckListsLocal(Model.ItemsLsnr<Checklist> lsnr){
+        LocalGetCheckListsTask task = new LocalGetCheckListsTask(lsnr);
+        task.execute();
     }
 
-/*
-    @SuppressLint("NewApi")
-    public class GetCheckListsAsyncTask extends AsyncTask<LiveData<List<Checklist>> , Void, Void> {
+    private class LocalGetCheckListsTask extends AsyncTask<Void, Void, ArrayList<Checklist>> {
 
-        ChecklistDao checklistDao = null;
-        LiveData<List<Checklist>> allChecklists ;
+        Model.ItemsLsnr<Checklist> lsnr;
 
-        GetCheckListsAsyncTask(ChecklistDao checklistDao ){
-            this.checklistDao = checklistDao;
+        public LocalGetCheckListsTask(Model.ItemsLsnr<Checklist> lsnr) {
+            this.lsnr = lsnr;
         }
 
         @Override
-        protected Void doInBackground(LiveData<List<Checklist>>... liveData) {
-            allChecklists = checklistDao.getAll();
-            return null;
+        protected ArrayList<Checklist> doInBackground(Void... params) {
+            List<Checklist> checkLists = localDataBase.checklistDao().getAll();
+            ArrayList<Checklist> items = new ArrayList<>(checkLists);
+            return items;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Checklist> checkLists) {
+            this.lsnr.OnDataChangeItemsLsnr(checkLists);
         }
     }
-*/
 
     @SuppressLint("NewApi")
     private class AddCheckListsAsyncTask extends AsyncTask<Checklist, Void, Void> {
