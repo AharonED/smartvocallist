@@ -18,7 +18,6 @@ public class ChecklistViewModel extends ViewModel {
     ModelChecklists model;
 
     public ChecklistViewModel(){
-        //allChecklists.setValue(ModelChecklists.getInstance().GetChecklist());
         allChecklists = new MutableLiveData<>();
         model =  ModelChecklists.getInstance();
         model.getItemsAsync(this::checkListsToDisplay);
@@ -30,6 +29,12 @@ public class ChecklistViewModel extends ViewModel {
 
     public LiveData<List<Checklist>> getData() {
         return allChecklists;
+    }
+
+    public void displayLocalChecklists() {
+        model.getLocalChecklistAsync(checkLists -> {
+            checkListsToDisplay(checkLists);
+        });
     }
 
     private void checkListsToDisplay(ArrayList<Checklist> checklists) {

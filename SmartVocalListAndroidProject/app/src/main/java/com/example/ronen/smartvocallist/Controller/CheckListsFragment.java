@@ -70,17 +70,7 @@ public class CheckListsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        //Get data Async.
-        //When data returned from Firebase, it will rise event onDataChange
-        // - which execute the injected method-checkListsToDisplay
-
-/*
-        ChecklistViewModel checklistViewModel;
-
-        checklistViewModel = ViewModelProviders.of(this).get(ChecklistViewModel.class);
-        checklistViewModel.getData().observe(this,t -> checkListsToDisplay(Lists.newArrayList(t)) );
-  */
+        modelView.displayLocalChecklists();
     }
 
     private void displayNewData(List<Checklist> data) {

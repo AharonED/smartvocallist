@@ -2,9 +2,8 @@ package com.example.ronen.smartvocallist.Model;
 
 
 import android.annotation.TargetApi;
+import android.os.AsyncTask;
 import android.os.Build;
-
-import androidx.lifecycle.LiveData;
 
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
@@ -37,9 +36,6 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
     @Override
     @TargetApi(Build.VERSION_CODES.N)
     public void getItemsAsync(ItemsLsnr<Checklist> lsnr) {
-        //Repository rep = new Repository();
-        //items =  rep.GetChecklists(lsnr);
-
         items =  rep.GetChecklists(new ItemsLsnr<Checklist>() {
            @Override
            public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
@@ -57,25 +53,25 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
                                    chk.getChecklistItems().add(item);
                                }
                            }
+
+                           // update local db checklist
+                           //localAddCheckListTask task = new localAddCheckListTask();
+                           //task.execute(chk);
                        }
                    }
                });
 
                //Call the callback function (usually rise from GUI/Controller)
                lsnr.OnDataChangeItemsLsnr(items);
-               //::items = items;
            }
        });
-
-        // save in local db the new data
-        //LocalGetCheckListsTask task = new LocalGetCheckListsTask(lsnr);
-        //task.execute();
     }
 
 
-    public List<Checklist> GetChecklist ()
+    public void getLocalChecklistAsync(ItemsLsnr<Checklist> lsnr)
     {
-        return  rep.GetCheckListsLocal();
+        LocalGetCheckListsTask task = new LocalGetCheckListsTask(lsnr);
+        task.execute();
     }
 
     @Override
@@ -90,10 +86,6 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
             ModelChecklistItems.getInstance().addItem(itm);
         }
         super.addItem(chk);
-
-        // add new checklist to local db
-        //localAddCheckListsTask task = new localAddCheckListsTask();
-        //task.execute(chk);
     }
 
     @Override
@@ -107,5 +99,38 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         super.deleteItem(chk);
     }
 
+    private class LocalGetCheckListsTask extends AsyncTask<Void, Void, ArrayList<Checklist>> {
+
+        ItemsLsnr<Checklist> lsnr;
+
+        public LocalGetCheckListsTask(Model.ItemsLsnr<Checklist> lsnr) {
+            this.lsnr = lsnr;
+        }
+
+        @Override
+        protected ArrayList<Checklist> doInBackground(Void... params) {
+            List<Checklist> checkLists = rep.localDataBase.checklistDao().getAll();
+            items = new ArrayList<>(checkLists);
+            return items;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Checklist> checkLists) {
+            this.lsnr.OnDataChangeItemsLsnr(items);
+        }
+    }
+
+    private class localAddCheckListTask extends AsyncTask<Checklist, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Checklist... checklists) {
+            rep.localDataBase.checklistDao().insertAll(checklists);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void checkLists) {
+        }
+    }
 }
 
