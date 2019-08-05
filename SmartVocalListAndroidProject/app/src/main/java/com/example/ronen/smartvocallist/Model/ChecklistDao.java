@@ -8,7 +8,9 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao

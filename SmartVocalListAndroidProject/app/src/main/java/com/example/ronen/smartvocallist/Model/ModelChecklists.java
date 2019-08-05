@@ -53,11 +53,11 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
                                    chk.getChecklistItems().add(item);
                                }
                            }
-
-                           // update local db checklist
-                           //localAddCheckListTask task = new localAddCheckListTask();
-                           //task.execute(chk);
                        }
+
+                       // update local db checklist
+                       localAddCheckListTask task = new localAddCheckListTask();
+                       task.execute(chks.toArray(new Checklist[chks.size()]));
                    }
                });
 
