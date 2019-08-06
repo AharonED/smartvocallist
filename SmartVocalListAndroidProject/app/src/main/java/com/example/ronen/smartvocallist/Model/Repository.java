@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 
 import com.example.ronen.smartvocallist.DataObjects.BaseModelObject;
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
@@ -153,7 +152,7 @@ public class Repository {
 
         @Override
         protected ArrayList<Checklist> doInBackground(Void... params) {
-            List<Checklist> checkLists = localDataBase.checklistDao().getAll();
+            List<Checklist> checkLists = localDataBase.checklistDao().getAllCheckLists();
             ArrayList<Checklist> items = new ArrayList<>(checkLists);
             return items;
         }
