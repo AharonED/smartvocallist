@@ -12,32 +12,29 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
-import com.example.ronen.smartvocallist.Model.ModelChecklistsReported;
 import com.example.ronen.smartvocallist.R;
+import com.example.ronen.smartvocallist.ViewModel.ChecklistReportedViewModel;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ReportsListFragment extends Fragment {
+    ChecklistReportedViewModel modelView;
     RecyclerView checkListsRecyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    CheckListsReportedAdapter adapter;
-    ArrayList<Checklist> mData = new ArrayList<>();
-    ModelChecklistsReported model=null;
 
     public ReportsListFragment() {
         // Required empty public constructor
@@ -46,12 +43,15 @@ public class ReportsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reports_list, container, false);
+
+        modelView = ViewModelProviders.of(this).get(ChecklistReportedViewModel.class);
+        modelView.getData().observe(this, data -> displayNewData(data));
 
         checkListsRecyclerView = view.findViewById(R.id.checkListsRecyclerView);
         checkListsRecyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(view.getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         checkListsRecyclerView.setLayoutManager(layoutManager);
 
         return view;
@@ -60,33 +60,19 @@ public class ReportsListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        model =  ModelChecklistsReported.getInstance();
-        //Get data Async.
-        //When data returned from Firebase, it will rise event onDataChange
-        // - which execute the injected method-checkListsToDisplay
-        model.getItemsAsync(this::checkListsToDisplay);
+        modelView.displayLocalReportedChecklists();
     }
 
-    private void checkListsToDisplay(ArrayList<Checklist> checkLists) {
-        mData = checkLists;
-
-        Collections.sort(mData, new Comparator<Checklist>() {
-            @Override
-            public int compare(Checklist checkList1, Checklist checkList2) {
-                Double chk1LastUpdate = checkList1.getLastUpdate();
-                Double chk2LastUpdate = checkList2.getLastUpdate();
-                return chk2LastUpdate.compareTo(chk1LastUpdate);
-            }
-        });
-
-        adapter = new CheckListsReportedAdapter(mData);
+    private void displayNewData(List<Checklist> data) {
+        ArrayList<Checklist> dataArrayList = new ArrayList<>();
+        dataArrayList.addAll(data);
+        CheckListsReportedAdapter adapter = new CheckListsReportedAdapter(dataArrayList);
         checkListsRecyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickedListener(new CheckListsReportedAdapter.OnItemClickedListener() {
             @Override
             public void onClick(int index) {
-                Checklist clickedCheckList = mData.get(index);
+                Checklist clickedCheckList = dataArrayList.get(index);
 
                 if(clickedCheckList.getChecklistItems().size()>0) {
                     startCheckListPlay(clickedCheckList);
@@ -139,7 +125,7 @@ public class ReportsListFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int itemPosition = item.getGroupId();
-        Checklist reportedCheckList = mData.get(itemPosition);
+        Checklist reportedCheckList = modelView.getData().getValue().get(itemPosition);
 
         switch (item.getItemId()){
             case R.id.reportedDeleteOption:
@@ -158,14 +144,9 @@ public class ReportsListFragment extends Fragment {
                         "Are you sure?")
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // TODO: Delete not working....
-                        //model.deleteItem(reportedCheckList);
-
-
-                        model.deleteItem(reportedCheckList);
-                        mData.remove(reportedCheckList);
-                        checkListsToDisplay(mData);
-
+                        modelView.getData().getValue().remove(reportedCheckList);
+                        displayNewData(modelView.getData().getValue());
+                        modelView.getModel().deleteItem(reportedCheckList);
                     }
                 })
                 .setNegativeButton("Cancel", null)

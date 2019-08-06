@@ -66,6 +66,12 @@ public class ModelChecklistsReported extends Model<Checklist> implements Seriali
 
     }
 
+    public void getLocalChecklistAsync(ItemsLsnr<Checklist> lsnr)
+    {
+        rep.GetReportedCheckListsLocal(lsnr);
+    }
+
+
     @Override
     public void addItem(Checklist chk){
         if(chk.id=="-1") {

@@ -142,6 +142,11 @@ public class Repository {
         task.execute();
     }
 
+    public void GetReportedCheckListsLocal(Model.ItemsLsnr<Checklist> lsnr){
+        LocalGetReportedCheckListsTask task = new LocalGetReportedCheckListsTask(lsnr);
+        task.execute();
+    }
+
     private class LocalGetCheckListsTask extends AsyncTask<Void, Void, ArrayList<Checklist>> {
 
         Model.ItemsLsnr<Checklist> lsnr;
@@ -153,6 +158,27 @@ public class Repository {
         @Override
         protected ArrayList<Checklist> doInBackground(Void... params) {
             List<Checklist> checkLists = localDataBase.checklistDao().getAllCheckLists();
+            ArrayList<Checklist> items = new ArrayList<>(checkLists);
+            return items;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Checklist> checkLists) {
+            this.lsnr.OnDataChangeItemsLsnr(checkLists);
+        }
+    }
+
+    private class LocalGetReportedCheckListsTask extends AsyncTask<Void, Void, ArrayList<Checklist>> {
+
+        Model.ItemsLsnr<Checklist> lsnr;
+
+        public LocalGetReportedCheckListsTask(Model.ItemsLsnr<Checklist> lsnr) {
+            this.lsnr = lsnr;
+        }
+
+        @Override
+        protected ArrayList<Checklist> doInBackground(Void... params) {
+            List<Checklist> checkLists = localDataBase.checklistDao().getAllReportedCheckLists();
             ArrayList<Checklist> items = new ArrayList<>(checkLists);
             return items;
         }

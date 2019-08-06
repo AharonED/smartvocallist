@@ -9,7 +9,7 @@ import com.example.ronen.smartvocallist.Controller.MyApplication;
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
 
 @Database(entities = {Checklist.class},
-            version = 6)
+            version = 7)
 @TypeConverters({Converters.class})
 abstract class AppLocalDbRepository extends RoomDatabase {
     public abstract ChecklistDao checklistDao();
