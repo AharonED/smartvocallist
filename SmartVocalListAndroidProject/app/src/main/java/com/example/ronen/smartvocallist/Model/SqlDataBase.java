@@ -7,7 +7,6 @@ import androidx.room.TypeConverters;
 
 import com.example.ronen.smartvocallist.Controller.MyApplication;
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
-import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 
 @Database(entities = {Checklist.class},
             version = 5)
@@ -20,7 +19,7 @@ public class SqlDataBase{
         static public AppLocalDbRepository db =
                 Room.databaseBuilder(MyApplication.getContext(),
                         AppLocalDbRepository.class,
-                        "Local-Database.db")
+                        "Local-Database2.db")
                         .fallbackToDestructiveMigration()
                         .build();
 }

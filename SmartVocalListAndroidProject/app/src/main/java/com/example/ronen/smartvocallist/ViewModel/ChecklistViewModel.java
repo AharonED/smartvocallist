@@ -20,10 +20,11 @@ public class ChecklistViewModel extends ViewModel {
     public ChecklistViewModel(){
         allChecklists = new MutableLiveData<>();
         model =  ModelChecklists.getInstance();
-        model.getItemsAsync(this::checkListsToDisplay);
+//        model.getItemsAsync(this::checkListsToDisplay);
     }
 
-    public ModelChecklists GetModel(){
+
+        public ModelChecklists GetModel(){
         return model;
     }
 

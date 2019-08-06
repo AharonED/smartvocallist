@@ -2,7 +2,6 @@ package com.example.ronen.smartvocallist.Model;
 
 
 import android.annotation.TargetApi;
-import android.os.AsyncTask;
 import android.os.Build;
 
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
@@ -11,7 +10,6 @@ import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class ModelChecklists  extends Model<Checklist> implements Serializable {
 
@@ -22,6 +20,13 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         if (instance == null)
         {
             instance=new ModelChecklists();
+            instance.getItemsAsync(new ItemsLsnr<Checklist>() {
+                @Override
+                public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
+                    return;
+                }
+            });
+
         }
         return instance;
     }
@@ -57,8 +62,8 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
                    }
                });
 
-               //Call the callback function (usually rise from GUI/Controller)
-               lsnr.OnDataChangeItemsLsnr(items);
+               ////Call the callback function (usually rise from GUI/Controller)
+               //lsnr.OnDataChangeItemsLsnr(items);
            }
        });
     }
