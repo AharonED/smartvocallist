@@ -11,6 +11,7 @@ package com.example.ronen.smartvocallist.DataObjects;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
+import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import org.json.JSONException;
@@ -21,17 +22,35 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+@Entity
 public class BaseModelObject implements Serializable {
 
 
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "id")
+    public String id;
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
 
+    @ColumnInfo(name = "lastUpdate")
+    public Double lastUpdate;
+    public Double getLastUpdate() {
+        if(lastUpdate==null) {
+            lastUpdate = 0.0;
+        }
+        return lastUpdate;
+    }
+    public void setLastUpdate(Double lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+
+    public String tableName = "BaseModelObject";
     public String getTableName() {
         return tableName;
     }
@@ -39,27 +58,6 @@ public class BaseModelObject implements Serializable {
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
-
-    public Double getLastUpdate() {
-        if(lastUpdate==null) {
-            lastUpdate = 0.0;
-        }
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Double lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
-    @PrimaryKey
-    @NonNull
-    public String id;
-
-    @ColumnInfo(name = "tableName")
-    public String tableName = "BaseModelObject";
-
-    @ColumnInfo(name = "lastUpdate")
-    public Double lastUpdate;
 
     public BaseModelObject(String _id)
     {

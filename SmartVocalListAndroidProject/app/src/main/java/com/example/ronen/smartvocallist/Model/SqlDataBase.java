@@ -19,7 +19,7 @@ public class SqlDataBase{
         static public AppLocalDbRepository db =
                 Room.databaseBuilder(MyApplication.getContext(),
                         AppLocalDbRepository.class,
-                        "Local-Database2.db")
+                        "Local-Database5.db")
                         .fallbackToDestructiveMigration()
                         .build();
 }
