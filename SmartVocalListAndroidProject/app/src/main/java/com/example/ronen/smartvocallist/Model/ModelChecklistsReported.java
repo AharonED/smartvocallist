@@ -19,6 +19,12 @@ public class ModelChecklistsReported extends Model<Checklist> implements Seriali
         if (instance == null)
         {
             instance=new ModelChecklistsReported();
+            instance.getItemsAsync(new ItemsLsnr<Checklist>() {
+                @Override
+                public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
+                    return;
+                }
+            });
         }
         return instance;
     }
