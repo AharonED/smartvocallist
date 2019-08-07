@@ -29,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -81,8 +80,14 @@ public class Repository {
                         items.add(chk);
                     }
 
-                    ChecklistViewModel.getInstance().getData().setValue(items);
-                    //itemsLsnr.OnDataChangeItemsLsnr(items);
+                   // if(items.size()>0) {
+                        //if (((Checklist) items.get(0)).getChecklistType().toString() == "Reported") {
+                        //    ChecklistReportedViewModel.getInstance().getData().setValue(items);
+                        //} else {
+                           ChecklistViewModel.getInstance().getData().setValue(items);
+                       // }
+                   // }
+                    itemsLsnr.OnDataChangeItemsLsnr(items);
                 }
 
                 @Override

@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,7 +32,8 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class ReportsListFragment extends Fragment {
-    ChecklistReportedViewModel modelView;
+    ChecklistReportedViewModel modelView = ChecklistReportedViewModel.getInstance();
+
     RecyclerView checkListsRecyclerView;
 
     public ReportsListFragment() {
@@ -46,7 +46,7 @@ public class ReportsListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reports_list, container, false);
 
-        modelView = ViewModelProviders.of(this).get(ChecklistReportedViewModel.class);
+       // modelView = ViewModelProviders.of(this).get(ChecklistReportedViewModel.class);
         modelView.getData().observe(this, data -> displayNewData(data));
 
         checkListsRecyclerView = view.findViewById(R.id.checkListsRecyclerView);
