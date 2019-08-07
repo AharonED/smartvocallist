@@ -1,6 +1,5 @@
 package com.example.ronen.smartvocallist.ViewModel;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -14,10 +13,23 @@ import java.util.List;
 
 public class ChecklistViewModel extends ViewModel {
 
+
+    private static ChecklistViewModel instance ;
+
+    public static ChecklistViewModel getInstance()
+    {
+        if (instance == null)
+        {
+            instance=new ChecklistViewModel();
+        }
+        return instance;
+    }
+
+
     MutableLiveData<List<Checklist>> allChecklists;
     ModelChecklists model;
 
-    public ChecklistViewModel(){
+    private ChecklistViewModel(){
         allChecklists = new MutableLiveData<>();
         model =  ModelChecklists.getInstance();
 //        model.getItemsAsync(this::checkListsToDisplay);
@@ -28,7 +40,7 @@ public class ChecklistViewModel extends ViewModel {
         return model;
     }
 
-    public LiveData<List<Checklist>> getData() {
+    public MutableLiveData<List<Checklist>>  getData() {
         return allChecklists;
     }
 

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import com.example.ronen.smartvocallist.DataObjects.BaseModelObject;
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
+import com.example.ronen.smartvocallist.ViewModel.ChecklistViewModel;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -71,7 +72,7 @@ public class Repository {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     //Log.w(TAG, "onDataChange---" + snapshot.getChildrenCount() );
-
+                    items.clear();
                     Checklist chk = null;
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         chk = new Checklist("-");
@@ -80,7 +81,8 @@ public class Repository {
                         new AddCheckListsAsyncTask(localDataBase.checklistDao()).execute(chk);
                     }
 
-                    itemsLsnr.OnDataChangeItemsLsnr(items);
+                    ChecklistViewModel.getInstance().getData().setValue(items);
+                    //itemsLsnr.OnDataChangeItemsLsnr(items);
                 }
 
                 @Override
