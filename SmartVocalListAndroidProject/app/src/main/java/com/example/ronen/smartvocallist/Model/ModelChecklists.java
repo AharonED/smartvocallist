@@ -59,11 +59,12 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
                                }
                            }
                        }
+
+                       //Call the callback function (usually rise from GUI/Controller)
+                       lsnr.OnDataChangeItemsLsnr(chks);
+                       rep.saveCheckListsInLocalDB(chks);
                    }
                });
-
-               ////Call the callback function (usually rise from GUI/Controller)
-               //lsnr.OnDataChangeItemsLsnr(items);
            }
        });
     }
