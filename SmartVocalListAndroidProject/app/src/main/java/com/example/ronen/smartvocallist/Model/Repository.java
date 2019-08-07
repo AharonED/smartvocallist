@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,7 +79,6 @@ public class Repository {
                         chk = new Checklist("-");
                         chk.Checklists(convertSnapshot2Json(dataSnapshot));
                         items.add(chk);
-                        new AddCheckListsAsyncTask(localDataBase.checklistDao()).execute(chk);
                     }
 
                     ChecklistViewModel.getInstance().getData().setValue(items);
@@ -120,7 +120,6 @@ public class Repository {
                         items.add(chk);
                     }
                     getItemsLsnr.OnDataChangeItemsLsnr(items);
- //
                 }
 
                 @Override
@@ -137,6 +136,11 @@ public class Repository {
         }
 
         return items;
+    }
+
+    public void saveCheckListsInLocalDB(ArrayList<Checklist> checkLists){
+        AddCheckListsAsyncTask task = new AddCheckListsAsyncTask(localDataBase.checklistDao());
+        task.execute(checkLists.toArray(new Checklist[checkLists.size()]));
     }
 
     public void GetCheckListsLocal(Model.ItemsLsnr<Checklist> lsnr){

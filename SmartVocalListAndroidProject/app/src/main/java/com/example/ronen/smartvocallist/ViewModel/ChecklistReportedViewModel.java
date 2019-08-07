@@ -39,9 +39,9 @@ public class ChecklistReportedViewModel extends ViewModel {
         Collections.sort(checklists, new Comparator<Checklist>() {
             @Override
             public int compare(Checklist checkList1, Checklist checkList2) {
-                String ckl1Name = checkList1.getName().toLowerCase();
-                String ckl2Name = checkList2.getName().toLowerCase();
-                return ckl1Name.compareTo(ckl2Name);
+                Double chk1LastUpdate = checkList1.getLastUpdate();
+                Double chk2LastUpdate = checkList2.getLastUpdate();
+                return chk2LastUpdate.compareTo(chk1LastUpdate);
             }
         });
 
