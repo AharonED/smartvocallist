@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +33,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class CheckListsFragment extends Fragment {
-    ChecklistViewModel modelView = ChecklistViewModel.getInstance();
+    ChecklistViewModel modelView;
     RecyclerView checkListsRecyclerView;
 
     public CheckListsFragment() {
@@ -51,7 +52,7 @@ public class CheckListsFragment extends Fragment {
             startActivity(myIntent);
         });
 
-       // modelView = ViewModelProviders.of(this).get(ChecklistViewModel.class);
+        modelView = ViewModelProviders.of(this).get(ChecklistViewModel.class);
         modelView.getData().observe(this, data -> displayNewData(data));
 
         checkListsRecyclerView = view.findViewById(R.id.checkListsRecyclerView);

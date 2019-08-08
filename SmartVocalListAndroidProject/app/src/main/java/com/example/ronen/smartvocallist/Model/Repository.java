@@ -80,13 +80,6 @@ public class Repository {
                         items.add(chk);
                     }
 
-                   // if(items.size()>0) {
-                        //if (((Checklist) items.get(0)).getChecklistType().toString() == "Reported") {
-                        //    ChecklistReportedViewModel.getInstance().getData().setValue(items);
-                        //} else {
-                           ChecklistViewModel.getInstance().getData().setValue(items);
-                       // }
-                   // }
                     itemsLsnr.OnDataChangeItemsLsnr(items);
                 }
 

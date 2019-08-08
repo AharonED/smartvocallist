@@ -13,23 +13,13 @@ import java.util.List;
 
 public class ChecklistReportedViewModel extends ViewModel {
 
-    private static ChecklistReportedViewModel instance ;
-
-    public static ChecklistReportedViewModel getInstance()
-    {
-        if (instance == null)
-        {
-            instance=new ChecklistReportedViewModel();
-        }
-        return instance;
-    }
-
     MutableLiveData<List<Checklist>> allReportedChecklists;
     ModelChecklistsReported model;
 
-    private ChecklistReportedViewModel(){
+    public ChecklistReportedViewModel(){
         allReportedChecklists = new MutableLiveData<>();
         model =  ModelChecklistsReported.getInstance();
+        model.getItemsAsync(this::checkListsToDisplay);
     }
 
     public ModelChecklistsReported getModel(){

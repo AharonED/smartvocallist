@@ -14,34 +14,27 @@ import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 public class ModelChecklistsReported extends Model<Checklist> implements Serializable {
 
     private static ModelChecklistsReported instance ;
+
     public static ModelChecklistsReported getInstance()
     {
         if (instance == null)
         {
             instance=new ModelChecklistsReported();
-            instance.getItemsAsync(new ItemsLsnr<Checklist>() {
-                @Override
-                public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
-                    return;
-                }
-            });
         }
+
         return instance;
     }
 
     private ModelChecklistsReported()
     {
         super();
-        setTableName("ChecklistItems");
+        setTableName("ChecklistsReported");
     }
 
 
     @Override
     @TargetApi(Build.VERSION_CODES.N)
     public void getItemsAsync(ItemsLsnr<Checklist> lsnr) {
-        //Repository rep = new Repository();
-        //items =  rep.GetChecklists(lsnr);
-
         items =  rep.GetChecklistsReported(new ItemsLsnr<Checklist>() {
            @Override
            public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {

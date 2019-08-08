@@ -20,14 +20,8 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         if (instance == null)
         {
             instance=new ModelChecklists();
-            instance.getItemsAsync(new ItemsLsnr<Checklist>() {
-                @Override
-                public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
-                    return;
-                }
-            });
-
         }
+
         return instance;
     }
 
@@ -68,7 +62,6 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
            }
        });
     }
-
 
     public void getLocalChecklistAsync(ItemsLsnr<Checklist> lsnr)
     {
