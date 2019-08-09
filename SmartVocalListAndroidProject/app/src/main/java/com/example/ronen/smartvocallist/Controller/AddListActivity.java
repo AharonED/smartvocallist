@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -274,4 +275,14 @@ public class AddListActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com");
+            //You can replace it with your name
+            return !ipAddr.equals("");
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
