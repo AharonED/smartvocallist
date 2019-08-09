@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // set the view now
         setContentView(R.layout.activity_login);
 
         viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
@@ -104,41 +103,41 @@ public class LoginActivity extends AppCompatActivity {
 
                 //authenticate user
                 viewModel.getFirebaseAuth().signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Intent intent;
-                                progressBar.setVisibility(View.GONE);
+                    .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Intent intent;
+                            progressBar.setVisibility(View.GONE);
 
-                                /*------login by email only temporary------*/
-                                ModelChecklists model = ModelChecklists.getInstance();
-                                model.setOwnerID("-1");
-                                model.setOwnerName(email);
+                            /*------login by email only temporary------*/
+                            ModelChecklists model = ModelChecklists.getInstance();
+                            model.setOwnerID("-1");
+                            model.setOwnerName(email);
 
+                            intent = new Intent(LoginActivity.this, CheckListsActivity.class);
+                            startActivity(intent);
+                            finish();
+                            /*----------------------------*/
+
+
+                            // If sign in fails, display a message to the user. If sign in succeeds
+                            // the auth state listener will be notified and logic to handle the
+                            // signed in user can be handled in the listener.
+
+                            if (!task.isSuccessful()) {
+                                // there was an error
+                                if (password.length() < 6) {
+                                    inputPassword.setError(getString(R.string.minimum_password));
+                                } else {
+                                    // Toast.makeText(LoginActivity.this, getString(R.string.auth_failed) + " - " + task.getException(), Toast.LENGTH_LONG).show();
+                                }
+                            } else {
                                 intent = new Intent(LoginActivity.this, CheckListsActivity.class);
                                 startActivity(intent);
                                 finish();
-                                /*----------------------------*/
-
-
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
-
-                                if (!task.isSuccessful()) {
-                                    // there was an error
-                                    if (password.length() < 6) {
-                                        inputPassword.setError(getString(R.string.minimum_password));
-                                    } else {
-                                        // Toast.makeText(LoginActivity.this, getString(R.string.auth_failed) + " - " + task.getException(), Toast.LENGTH_LONG).show();
-                                    }
-                                } else {
-                                    intent = new Intent(LoginActivity.this, CheckListsActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
                             }
-                        });
+                        }
+                    });
             }
         });
     }
@@ -166,19 +165,19 @@ public class LoginActivity extends AppCompatActivity {
 
                 progressBar1.setVisibility(View.VISIBLE);
                 viewModel.getFirebaseAuth().sendPasswordResetEmail(email)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(LoginActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(LoginActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
-                                }
-
-                                progressBar1.setVisibility(View.GONE);
-                                dialog.dismiss();
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LoginActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
                             }
-                        });
+
+                            progressBar1.setVisibility(View.GONE);
+                            dialog.dismiss();
+                        }
+                    });
 
             }
         });
