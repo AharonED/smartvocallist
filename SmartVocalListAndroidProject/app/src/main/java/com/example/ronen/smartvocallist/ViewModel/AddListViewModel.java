@@ -15,11 +15,27 @@ import java.util.List;
 public class AddListViewModel extends ViewModel {
     MutableLiveData<List<Checklist>> allChecklists;
     ModelChecklists model;
+    public MutableLiveData<Checklist> CurrentChecklist;
 
     public AddListViewModel(){
         allChecklists = new MutableLiveData<>();
         model =  ModelChecklists.getInstance();
         model.getItemsAsync(this::checkListsToDisplay);
+        CurrentChecklist = new MutableLiveData<Checklist>();
+    }
+    public Checklist getCurrentChecklist()
+    {
+        return CurrentChecklist.getValue();
+    }
+
+    public void setCurrentChecklist(Checklist newChecklist)
+    {
+        if (this.CurrentChecklist == null)
+        {
+
+        }
+        this.CurrentChecklist.setValue(newChecklist);
+
     }
 
     public ModelChecklists getModel(){
