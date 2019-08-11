@@ -19,14 +19,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 
 import com.example.ronen.smartvocallist.R;
+import com.example.ronen.smartvocallist.ViewModel.AddListViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
@@ -38,7 +42,7 @@ import com.example.ronen.smartvocallist.Model.ModelChecklists;
 
 
 public class AddListActivity extends AppCompatActivity {
-    private Checklist NewChecklist;
+    private AddListViewModel model;
     private static String Checklist_id;
     private static int Items_count;
     private ArrayList<ChecklistItem> Items;
@@ -91,12 +95,14 @@ public class AddListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_add_list);
         super.onCreate(savedInstanceState);
+        model = ViewModelProviders.of(this).get(AddListViewModel.class);
+
 
         ll = (LinearLayout) findViewById(R.id.llItem);
         ll.setGravity(Gravity.CENTER_VERTICAL);
         ll.setOrientation(LinearLayout.VERTICAL);
         AddListItemActivity.am = getApplicationContext().getAssets();
-        Thread tmp = new Thread(new Runnable() {
+        Thread listFillerThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 AddListItemActivity.fill_dict();
@@ -105,7 +111,7 @@ public class AddListActivity extends AppCompatActivity {
 
         Items_count = 0;
         Checklist_id = java.util.UUID.randomUUID().toString();
-
+        model.setCurrentChecklist(new Checklist(Checklist_id,"","","", 0.0));
         this.Items = new ArrayList<ChecklistItem>();
 
         Button fab = (Button)findViewById(R.id.fab);
@@ -124,15 +130,17 @@ public class AddListActivity extends AppCompatActivity {
 
                 Date currentTime = Calendar.getInstance().getTime();
                 Long time = currentTime.getTime();
-                Double tmp = time.doubleValue();
-                Checklist temp = new Checklist(Checklist_id,ListName,twDescripton.getText().toString(),"", tmp);
-                temp.setChecklistType("Template");
-                temp.setOwner("10");
+                Double UpdateTime = time.doubleValue();
+                model.getCurrentChecklist().setName(ListName);
+                model.getCurrentChecklist().setDescription(twDescripton.getText().toString());
+                model.getCurrentChecklist().setLastUpdate(UpdateTime);
+                model.getCurrentChecklist().setChecklistType("Template");
+                model.getCurrentChecklist().setOwner(Model.getOwnerName());
 
                 for (ChecklistItem currItem:Items) {
                     currItem.setChecklistId(Checklist_id);
                 }
-                temp.checklistItems.addAll(Items);
+                model.getCurrentChecklist().checklistItems.addAll(Items);
 
                 ModelChecklists mod =  ModelChecklists.getInstance();
 
@@ -145,16 +153,17 @@ public class AddListActivity extends AppCompatActivity {
                     mod.saveImage(bitmap, new Model.SaveImageListener() {
                         @Override
                         public void onComplete(String url) {
-                            temp.setUrl(url);
-                            mod.addItem(temp);
+                            model.getCurrentChecklist().setUrl(url);
+                            mod.addItem(model.getCurrentChecklist());
+
                             savingProgressBar.setVisibility(View.INVISIBLE);
                             finish();
                         }
                     });
                 }
                 else{
-                    temp.setUrl(URL);
-                    mod.addItem(temp);
+                    model.getCurrentChecklist().setUrl(URL);
+                    mod.addItem(model.getCurrentChecklist());
                     savingProgressBar.setVisibility(View.INVISIBLE);
                     finish();
                 }
@@ -185,22 +194,25 @@ public class AddListActivity extends AppCompatActivity {
 
         Intent Data = getIntent();
         Checklist to_update = (Checklist)Data.getSerializableExtra("Checklist");
+
         if (to_update != null)
         {
+            model.setCurrentChecklist(to_update);
+            Old = to_update;
             TextView twtitle = (TextView)findViewById(R.id.textView3);
             twtitle.setText("Update Checklist");
             isUpdate = true;
-            Old = to_update;
             TextView twName = (TextView)findViewById(R.id.List_Name);
             TextView twDescripton = (TextView)findViewById(R.id.description);
-            twName.setText(to_update.getName());
-            twDescripton.setText(to_update.getDescription());
-            setCheckListImage(to_update);
+            twName.setText(model.getCurrentChecklist().getName());
+            twDescripton.setText(model.getCurrentChecklist().getDescription());
+            setCheckListImage(model.getCurrentChecklist());
+            Checklist templist = model.getCurrentChecklist();
 
-            for (ChecklistItem item:to_update.checklistItems) {
-                Items.add(item);
+            for (Iterator<ChecklistItem> iterator = templist.checklistItems.iterator(); iterator.hasNext(); ) {
+                ChecklistItem item= iterator.next();
                 Button newItem = new Button(getApplicationContext());
-                newItem.setTextSize(20);
+                newItem.setTextSize(10);
                 newItem.setText(item.getName());
                 newItem.setOnClickListener(new View.OnClickListener() {
                     private ChecklistItem itm = item;
@@ -208,7 +220,9 @@ public class AddListActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         ll.removeView(v);
                         Items_count--;
-                        Items.remove(Items.indexOf(itm));
+                        Checklist tmp = model.getCurrentChecklist();
+                        tmp.checklistItems.remove(tmp.checklistItems.indexOf(itm));
+                        model.setCurrentChecklist(tmp);
                     }
                 });
 
@@ -220,7 +234,7 @@ public class AddListActivity extends AppCompatActivity {
             }
         }
 
-        tmp.run();
+        listFillerThread.run();
     }
 
     @Override
@@ -236,11 +250,12 @@ public class AddListActivity extends AppCompatActivity {
             newItem.setOnClickListener(new View.OnClickListener() {
                 private ChecklistItem itm = result;
 
+
                 @Override
                 public void onClick(View v) {
                     ll.removeView(v);
                     Items_count--;
-                    Items.remove(itm.getIndex());
+                    model.getCurrentChecklist().checklistItems.remove(itm.getIndex());
                 }
             });
 
@@ -255,7 +270,7 @@ public class AddListActivity extends AppCompatActivity {
             //stb.append(twitems.getText().toString());
             //stb.append("\n");
             //twitems.setText(stb);
-            Items.add(result);
+            model.getCurrentChecklist().checklistItems.add(result);
         } else if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
             bitmap = null;
@@ -274,4 +289,14 @@ public class AddListActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com");
+            //You can replace it with your name
+            return !ipAddr.equals("");
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

@@ -14,8 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.ronen.smartvocallist.R;
+import com.example.ronen.smartvocallist.ViewModel.LoginViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -27,26 +29,20 @@ import com.example.ronen.smartvocallist.Model.ModelChecklists;
 
 import static android.content.ContentValues.TAG;
 
-/**
- * Created by Akshay Raj on 10/17/2016.
- * Snow Corporation Inc.
- * www.snowcorp.org
- */
-
 public class LoginActivity extends AppCompatActivity {
 
+    private LoginViewModel viewModel;
     private EditText inputEmail, inputPassword;
-    private FirebaseAuth auth;
     private ProgressBar progressBar;
     private Button btnSignup, btnLogin, btnReset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // set the view now
         setContentView(R.layout.activity_login);
 
-        //This Firebase init code should be moved to global place....
+        viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+
         try {
             FirebaseOptions.Builder builder = new FirebaseOptions.Builder()
                     .setApplicationId("1:0123456789012:android:0123456789abcdef")
@@ -54,17 +50,13 @@ public class LoginActivity extends AppCompatActivity {
                     .setDatabaseUrl("https://smartvocallist1.firebaseio.com/")
                     .setStorageBucket("smartvocallist1.appspot.com");
             FirebaseApp.initializeApp(this.getBaseContext(), builder.build());
-
         }
         catch (Exception ex)
         {
             Log.d(TAG, "Value is: " + ex.getMessage());
         }
 
-        //Get Firebase auth instance
-        auth = FirebaseAuth.getInstance();
-
-        if (auth.getCurrentUser() != null) {
+        if (viewModel.getFirebaseAuth().getCurrentUser() != null) {
             startActivity(new Intent(LoginActivity.this, CheckListsActivity.class));
             finish();
         }
@@ -75,9 +67,6 @@ public class LoginActivity extends AppCompatActivity {
         btnSignup = (Button) findViewById(R.id.btn_signup);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnReset = (Button) findViewById(R.id.btn_reset_password);
-
-        //Get Firebase auth instance
-        auth = FirebaseAuth.getInstance();
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,41 +102,42 @@ public class LoginActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 //authenticate user
-                auth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Intent intent;
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
+                viewModel.getFirebaseAuth().signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Intent intent;
+                            progressBar.setVisibility(View.GONE);
+
+                            /*------login by email only temporary------*/
+                            ModelChecklists model = ModelChecklists.getInstance();
+                            model.setOwnerID("-1");
+                            model.setOwnerName(email);
+
+                            intent = new Intent(LoginActivity.this, CheckListsActivity.class);
+                            startActivity(intent);
+                            finish();
+                            /*----------------------------*/
 
 
-                                /*----------------------------*/
-                                ModelChecklists model = ModelChecklists.getInstance();
-                                model.setOwnerID("-1");
-                                model.setOwnerName( email);
+                            // If sign in fails, display a message to the user. If sign in succeeds
+                            // the auth state listener will be notified and logic to handle the
+                            // signed in user can be handled in the listener.
 
-
+                            if (!task.isSuccessful()) {
+                                // there was an error
+                                if (password.length() < 6) {
+                                    inputPassword.setError(getString(R.string.minimum_password));
+                                } else {
+                                    // Toast.makeText(LoginActivity.this, getString(R.string.auth_failed) + " - " + task.getException(), Toast.LENGTH_LONG).show();
+                                }
+                            } else {
                                 intent = new Intent(LoginActivity.this, CheckListsActivity.class);
                                 startActivity(intent);
                                 finish();
-
-                                progressBar.setVisibility(View.GONE);
-                                if (!task.isSuccessful()) {
-                                    // there was an error
-                                    if (password.length() < 6) {
-                                        inputPassword.setError(getString(R.string.minimum_password));
-                                    } else {
-                                       // Toast.makeText(LoginActivity.this, getString(R.string.auth_failed) + " - " + task.getException(), Toast.LENGTH_LONG).show();
-                                    }
-                                } else {
-                                    intent = new Intent(LoginActivity.this, CheckListsActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
                             }
-                        });
+                        }
+                    });
             }
         });
     }
@@ -162,7 +152,6 @@ public class LoginActivity extends AppCompatActivity {
         final Button btnReset = (Button) dialogView.findViewById(R.id.btn_reset_password);
         final ProgressBar progressBar1 = (ProgressBar) dialogView.findViewById(R.id.progressBar);
 
-        //dialogBuilder.setTitle("Send Photos");
         final AlertDialog dialog = dialogBuilder.create();
 
         btnReset.setOnClickListener(new View.OnClickListener() {
@@ -175,20 +164,20 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 progressBar1.setVisibility(View.VISIBLE);
-                auth.sendPasswordResetEmail(email)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(LoginActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(LoginActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
-                                }
-
-                                progressBar1.setVisibility(View.GONE);
-                                dialog.dismiss();
+                viewModel.getFirebaseAuth().sendPasswordResetEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LoginActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
                             }
-                        });
+
+                            progressBar1.setVisibility(View.GONE);
+                            dialog.dismiss();
+                        }
+                    });
 
             }
         });

@@ -92,12 +92,14 @@ public class ModelChecklistsReported extends Model<Checklist> implements Seriali
 
     @Override
     public void deleteItem(Checklist chk){
+        rep.DeleteLocalCheckList(chk);
 
         for (ChecklistItem itm: chk.checklistItems) {
             //itm.id = java.util.UUID.randomUUID().toString();
             //itm.setChecklistId(chk.id);
             ModelChecklistItems.getInstance().deleteItem(itm);
         }
+
         super.deleteItem(chk);
     }
 
