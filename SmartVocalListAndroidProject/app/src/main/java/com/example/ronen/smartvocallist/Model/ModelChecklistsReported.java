@@ -63,7 +63,7 @@ public class ModelChecklistsReported extends Model<Checklist> implements Seriali
                             }
                         });
                     }
-                });
+                },lastUpdate);
 
             }
         });

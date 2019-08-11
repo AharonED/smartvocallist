@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import com.example.ronen.smartvocallist.DataObjects.BaseModelObject;
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
-import com.example.ronen.smartvocallist.ViewModel.ChecklistViewModel;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -45,19 +44,23 @@ public class Repository {
     public Repository(){
     }
 
-        public  ArrayList<Checklist> GetChecklists(Model.ItemsLsnr itemsLsnr) {
+        public  ArrayList<Checklist> GetChecklists(Model.ItemsLsnr itemsLsnr, Double lastUpdate) {
             DatabaseReference myRef = database.getReference("/Checklists");
-            Query query = myRef.orderByChild("checklistType").startAt("Template");
-            return  GetChecklistsByQuery(itemsLsnr,query);
+            Query query = myRef
+                    //.orderByChild("checklistType").startAt("Template")
+                    .orderByChild("lastUpdate").startAt(lastUpdate);
+            return  GetChecklistsByQuery(itemsLsnr,query,"Template");
         }
 
-        public  ArrayList<Checklist> GetChecklistsReported(Model.ItemsLsnr itemsLsnr) {
+        public  ArrayList<Checklist> GetChecklistsReported(Model.ItemsLsnr itemsLsnr, Double lastUpdate) {
             DatabaseReference myRef = database.getReference("/Checklists");
-            Query query = myRef.orderByChild("checklistType").endAt("Reported");
-            return  GetChecklistsByQuery(itemsLsnr,query);
+            Query query = myRef
+                    //.orderByChild("checklistType").endAt("Reported")
+                    .orderByChild("lastUpdate").startAt(lastUpdate);
+            return  GetChecklistsByQuery(itemsLsnr,query,"Reported");
         }
 
-        public  ArrayList GetChecklistsByQuery(Model.ItemsLsnr<BaseModelObject> itemsLsnr, Query query ) {
+        public  ArrayList GetChecklistsByQuery(Model.ItemsLsnr<BaseModelObject> itemsLsnr, Query query, String checklistType ) {
         ArrayList items = new ArrayList<>();
 
         try {
@@ -77,7 +80,9 @@ public class Repository {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         chk = new Checklist("-");
                         chk.Checklists(convertSnapshot2Json(dataSnapshot));
-                        items.add(chk);
+                        if(chk.getChecklistType().equals(checklistType)) {
+                            items.add(chk);
+                        }
                     }
 
                     itemsLsnr.OnDataChangeItemsLsnr(items);
@@ -99,14 +104,17 @@ public class Repository {
         return items;
     }
 
-    public  ArrayList<ChecklistItem> GetChecklistItems(Model.ItemsLsnr<ChecklistItem> getItemsLsnr) {
+    public  ArrayList<ChecklistItem> GetChecklistItems(Model.ItemsLsnr<ChecklistItem> getItemsLsnr, Double lastUpdate) {
 
         ArrayList<ChecklistItem> items = new ArrayList<>();
 
         try {
-            DatabaseReference myRef = database.getReference("/ChecklistItems");
 
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseReference myRef = database.getReference("/ChecklistItems");
+            Query query = myRef.orderByChild("lastUpdate").startAt(lastUpdate);
+
+
+            query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     //Log.w(TAG, "onDataChange---" + snapshot.getChildrenCount() );

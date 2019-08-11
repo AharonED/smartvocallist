@@ -63,7 +63,7 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
                            }
                        });
                    }
-               });
+               },lastUpdate);
 
             }
         });
