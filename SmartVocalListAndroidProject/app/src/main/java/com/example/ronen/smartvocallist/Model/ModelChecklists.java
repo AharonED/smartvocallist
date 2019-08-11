@@ -35,32 +35,39 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
     @Override
     @TargetApi(Build.VERSION_CODES.N)
     public void getItemsAsync(ItemsLsnr<Checklist> lsnr) {
-        items =  rep.GetChecklists(new ItemsLsnr<Checklist>() {
-           @Override
-           public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
-                //Get All Checklists
-               ArrayList <Checklist> chks = items;
-               //For each Checklist get its all ChecklistItems
-               ModelChecklistItems.getInstance().getItemsAsync(new ItemsLsnr<ChecklistItem>() {
+        super.getItemsAsyncByLastUpdate(new SyncLsnr<Checklist>() {
+            @Override
+            public void OnSync(Double lastUpdate) {
+                items =  rep.GetChecklists(new ItemsLsnr<Checklist>() {
                    @Override
-                   public void OnDataChangeItemsLsnr(ArrayList<ChecklistItem> items) {
-                       for (Checklist chk: chks) {
-                           Iterator<ChecklistItem> iterator = items.iterator();
-                           while (iterator.hasNext()) {
-                               ChecklistItem item = iterator.next();
-                               if (item.getChecklistId() != null &&  item.getChecklistId().equals(chk.getId())) {
-                                   chk.getChecklistItems().add(item);
+                   public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
+                        //Get All Checklists
+                       ArrayList <Checklist> chks = items;
+                       //For each Checklist get its all ChecklistItems
+                       ModelChecklistItems.getInstance().getItemsAsync(new ItemsLsnr<ChecklistItem>() {
+                           @Override
+                           public void OnDataChangeItemsLsnr(ArrayList<ChecklistItem> items) {
+                               for (Checklist chk: chks) {
+                                   Iterator<ChecklistItem> iterator = items.iterator();
+                                   while (iterator.hasNext()) {
+                                       ChecklistItem item = iterator.next();
+                                       if (item.getChecklistId() != null &&  item.getChecklistId().equals(chk.getId())) {
+                                           chk.getChecklistItems().add(item);
+                                       }
+                                   }
                                }
-                           }
-                       }
 
-                       //Call the callback function (usually rise from GUI/Controller)
-                       lsnr.OnDataChangeItemsLsnr(chks);
-                       rep.saveCheckListsInLocalDB(chks);
+                               //Call the callback function (usually rise from GUI/Controller)
+                               lsnr.OnDataChangeItemsLsnr(chks);
+                               rep.saveCheckListsInLocalDB(chks);
+                           }
+                       });
                    }
                });
-           }
-       });
+
+            }
+        });
+
     }
 
     public void getLocalChecklistAsync(ItemsLsnr<Checklist> lsnr)

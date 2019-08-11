@@ -1,23 +1,29 @@
 package com.example.ronen.smartvocallist.DataObjects;
 
-import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+
+import java.io.Serializable;
 
 @Entity
-public class TablesLastSync {
+public class TablesLastSync extends BaseModelObject implements Serializable {
 
-    @PrimaryKey
+    public TablesLastSync(String id) {
+        super(id);
+    }
+
+    /*
+   // @PrimaryKey
     @NonNull
     @ColumnInfo(name = "tableName")
     public String tableName = "";
+
     public String getTableName() {
         return tableName;
     }
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
+
 
     @ColumnInfo(name = "lastUpdate")
     public Double lastUpdate;
@@ -30,5 +36,5 @@ public class TablesLastSync {
     public void setLastUpdate(Double lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
-
+*/
 }

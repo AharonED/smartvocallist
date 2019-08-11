@@ -7,7 +7,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import com.example.ronen.smartvocallist.DataObjects.TablesLastSync;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public interface TablesLastSyncDao {
     List<TablesLastSync> getAll();
 
     @Query("SELECT * FROM TablesLastSync WHERE tableName LIKE :tableName LIMIT 1")
-    Checklist findByName(String tableName);
+    TablesLastSync findByName(String tableName);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(TablesLastSync... tablesLastSync);
