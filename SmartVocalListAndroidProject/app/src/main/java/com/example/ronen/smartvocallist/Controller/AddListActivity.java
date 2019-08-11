@@ -135,7 +135,7 @@ public class AddListActivity extends AppCompatActivity {
                 model.getCurrentChecklist().setDescription(twDescripton.getText().toString());
                 model.getCurrentChecklist().setLastUpdate(UpdateTime);
                 model.getCurrentChecklist().setChecklistType("Template");
-                model.getCurrentChecklist().setOwner("10");
+                model.getCurrentChecklist().setOwner(Model.getOwnerName());
 
                 for (ChecklistItem currItem:Items) {
                     currItem.setChecklistId(Checklist_id);
