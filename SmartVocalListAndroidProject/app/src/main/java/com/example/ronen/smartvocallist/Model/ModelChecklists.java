@@ -41,27 +41,33 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
                 items =  rep.GetChecklists(new ItemsLsnr<Checklist>() {
                    @Override
                    public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
-                        //Get All Checklists
-                       ArrayList <Checklist> chks = items;
+                       //Get All Checklists
+                       ArrayList<Checklist> chks = items;
                        //For each Checklist get its all ChecklistItems
-                       ModelChecklistItems.getInstance().getItemsAsync(new ItemsLsnr<ChecklistItem>() {
+                       String checklistID;
+                       //For each Checklist get its all ChecklistItems
+                       for (Checklist chk: chks) {
+                           checklistID = chk.getId();
+
+                           ModelChecklistItems.getInstance().getItemsByChecklistAsync(new ItemsLsnr<ChecklistItem>() {
                            @Override
                            public void OnDataChangeItemsLsnr(ArrayList<ChecklistItem> items) {
-                               for (Checklist chk: chks) {
+                               // for (Checklist chk: chks) {
                                    Iterator<ChecklistItem> iterator = items.iterator();
                                    while (iterator.hasNext()) {
                                        ChecklistItem item = iterator.next();
-                                       if (item.getChecklistId() != null &&  item.getChecklistId().equals(chk.getId())) {
+                                       if (item.getChecklistId() != null && item.getChecklistId().equals(chk.getId())) {
                                            chk.getChecklistItems().add(item);
                                        }
                                    }
-                               }
+                                   // }
 
-                               //Call the callback function (usually rise from GUI/Controller)
-                               lsnr.OnDataChangeItemsLsnr(chks);
-                               rep.saveCheckListsInLocalDB(chks);
-                           }
-                       });
+                                   //Call the callback function (usually rise from GUI/Controller)
+                                   lsnr.OnDataChangeItemsLsnr(chks);
+                                   rep.saveCheckListsInLocalDB(chks);
+                                }
+                            }, checklistID);
+                        }
                    }
                },lastUpdate);
 

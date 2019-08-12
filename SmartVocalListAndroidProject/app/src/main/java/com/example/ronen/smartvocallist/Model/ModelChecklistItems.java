@@ -29,6 +29,10 @@ public class  ModelChecklistItems extends Model<ChecklistItem> implements Serial
         items =  rep.GetChecklistItems(lsnr, 0.0);
     }
 
+    public void getItemsByChecklistAsync(ItemsLsnr<ChecklistItem> lsnr, String checklistID) {
+        items =  rep.GetChecklistItems(lsnr, 0.0, checklistID);
+    }
+
     @Override
     public void addItem(ChecklistItem chk){
         super.addItem(chk);

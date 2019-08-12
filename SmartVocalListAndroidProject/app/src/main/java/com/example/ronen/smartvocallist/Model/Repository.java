@@ -105,6 +105,10 @@ public class Repository {
     }
 
     public  ArrayList<ChecklistItem> GetChecklistItems(Model.ItemsLsnr<ChecklistItem> getItemsLsnr, Double lastUpdate) {
+        return GetChecklistItems(getItemsLsnr,lastUpdate,null);
+    }
+
+        public  ArrayList<ChecklistItem> GetChecklistItems(Model.ItemsLsnr<ChecklistItem> getItemsLsnr, Double lastUpdate, String checklistID) {
 
         ArrayList<ChecklistItem> items = new ArrayList<>();
 
@@ -112,7 +116,10 @@ public class Repository {
 
             DatabaseReference myRef = database.getReference("/ChecklistItems");
             Query query = myRef.orderByChild("lastUpdate").startAt(lastUpdate);
-
+            if(checklistID != null)
+            {
+                query = myRef.orderByChild("lastUpdate").startAt(lastUpdate).equalTo(checklistID);
+            }
 
             query.addValueEventListener(new ValueEventListener() {
                 @Override
