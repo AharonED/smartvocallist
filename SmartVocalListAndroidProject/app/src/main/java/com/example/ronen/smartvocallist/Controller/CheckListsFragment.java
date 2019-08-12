@@ -111,6 +111,7 @@ public class CheckListsFragment extends Fragment {
         modelView.GetModel().addItem(newChk);
         Intent myIntent = new Intent(getContext(), PocketSphinxActivity.class);
         myIntent.putExtra("checkListId", newChk.getId());
+        myIntent.putExtra("checkList", newChk);
         startActivity(myIntent);
     }
 

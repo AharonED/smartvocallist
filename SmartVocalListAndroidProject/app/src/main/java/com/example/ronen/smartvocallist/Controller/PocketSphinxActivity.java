@@ -24,15 +24,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 import com.example.ronen.smartvocallist.Dialogs.DialogFlow;
 import com.example.ronen.smartvocallist.R;
 import com.example.ronen.smartvocallist.ViewModel.PocketSphinxViewModel;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
@@ -46,6 +47,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
     private PocketSphinxViewModel model;
     private AsyncTask<Void,Void,Void> listenToKeyWordsWaiterTask = null;
+    private Checklist checkList;
 
     @Override
     public void onCreate(Bundle state) {
@@ -54,10 +56,13 @@ public class PocketSphinxActivity extends AppCompatActivity implements
 
         model = ViewModelProviders.of(this).get(PocketSphinxViewModel.class);
         String checkListId = (String)getIntent().getExtras().get("checkListId");
-        model.loadCheckList(checkListId);
-        model.initDialogFlow(model.getChecklist());
 
-        String checkListName = model.getChecklist().getName();
+        this.checkList = (Checklist)getIntent().getExtras().get("checkList");
+
+        model.loadCheckList(checkListId);
+        model.initDialogFlow(this.checkList);
+
+        String checkListName = this.checkList.getName();
         TextView checkListNameTextView = findViewById(R.id.SelectedCheckListTextView);
         checkListNameTextView.setText(checkListName);
 
@@ -122,7 +127,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
             String textToSpeech = "Step " + stepNumber + " out of " + dlg.items.size() + ": " + text;
 
             if(model.firstSpeaking){
-                textToSpeech = model.getChecklist().getName() + ". " + textToSpeech;
+                textToSpeech = this.checkList.getName() + ". " + textToSpeech;
                 model.firstSpeaking =false;
             }
 
@@ -146,7 +151,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
         };
 
         dlg.eof  = (item)->{
-            if(model.getChecklist().getIsCompleted() == 1) {
+            if(this.checkList.getIsCompleted() == 1) {
                 String res = ((ChecklistItem)item).getResult();
 
                 String caption = "Checklist reporting completed";
@@ -412,7 +417,7 @@ public class PocketSphinxActivity extends AppCompatActivity implements
                 checkIfCheckListComplete();
 
                 // Update model
-                model.mdl.addItem(model.getChecklist());
+                model.mdl.addItem(this.checkList);
 
                 makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
                 playTextToSpeechNow(word);
@@ -435,9 +440,9 @@ public class PocketSphinxActivity extends AppCompatActivity implements
         }
 
         if(isCompleted)
-            model.getChecklist().setIsCompleted(1);
+            this.checkList.setIsCompleted(1);
         else{
-            model.getChecklist().setIsCompleted(0);
+            this.checkList.setIsCompleted(0);
         }
     }
 

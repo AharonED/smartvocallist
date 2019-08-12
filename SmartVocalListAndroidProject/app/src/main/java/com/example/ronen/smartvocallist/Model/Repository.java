@@ -119,6 +119,8 @@ public class Repository {
                 public void onDataChange(DataSnapshot snapshot) {
                     //Log.w(TAG, "onDataChange---" + snapshot.getChildrenCount() );
 
+                    items.clear();
+
                     ChecklistItem chk = null;
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         chk = new ChecklistItem("-",0," "," ","", (double) 0);
