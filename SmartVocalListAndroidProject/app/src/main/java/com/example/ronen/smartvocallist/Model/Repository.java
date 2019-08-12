@@ -115,11 +115,9 @@ public class Repository {
         try {
 
             DatabaseReference myRef = database.getReference("/ChecklistItems");
-            Query query = myRef.orderByChild("lastUpdate").startAt(lastUpdate);
-            if(checklistID != null)
-            {
-                query = myRef.orderByChild("lastUpdate").startAt(lastUpdate).equalTo(checklistID);
-            }
+            Query query = myRef
+                    //.orderByChild("lastUpdate").startAt(lastUpdate)
+                    .orderByChild("checklistId").equalTo(checklistID);
 
             query.addValueEventListener(new ValueEventListener() {
                 @Override
