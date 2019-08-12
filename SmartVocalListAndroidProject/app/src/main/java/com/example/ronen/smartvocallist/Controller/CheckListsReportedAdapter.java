@@ -91,9 +91,10 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
             mSubTitle.setText(checkList.getDescription());
             setCheckListImage(checkList);
 
+            // *** Disabled delete of reports ***
             // Only owner can edit and delete checklist
-            if(ModelChecklists.getInstance().getOwnerName().equals(checkList.getOwner()))
-                itemView.setOnCreateContextMenuListener(this);
+            //if(ModelChecklists.getInstance().getOwnerName().equals(checkList.getOwner()))
+                //itemView.setOnCreateContextMenuListener(this);
         }
 
         private void setCheckListImage(Checklist checkList) {
