@@ -1,5 +1,7 @@
 package com.example.ronen.smartvocallist.ViewModel;
 
+import android.content.res.AssetManager;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -13,16 +15,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 public class AddListItemViewModel  extends ViewModel {
+    public String Checklist_id;
+    public int Index;
+    public static Set<String> availableWords;
+    public StringBuilder all_Props;
+    public int ammount = 0;
     MutableLiveData<List<ChecklistItem>> allChecklistItemss;
+    public static String[] toIgnore = {"next","back","start","options","read"};
     ModelChecklistItems model;
 
     public AddListItemViewModel(){
         allChecklistItemss = new MutableLiveData<>();
         model = ModelChecklistItems.getInstance();
-
-        model.getItemsAsync( model.getItemsLsnr());
     }
 
     public ModelChecklistItems getModel(){

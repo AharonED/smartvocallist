@@ -43,15 +43,8 @@ import com.example.ronen.smartvocallist.Model.ModelChecklists;
 
 public class AddListActivity extends AppCompatActivity {
     private AddListViewModel model;
-    private static String Checklist_id;
-    private static int Items_count;
-    private ArrayList<ChecklistItem> Items;
-    int GET_FROM_GALLERY = 17;
+
     LinearLayout ll;
-    Bitmap bitmap = null;
-    String URL ="";
-    private boolean isUpdate = false;
-    private Checklist Old;
 
     private void setCheckListImage(Checklist checkList) {
         ImageView mImage  = findViewById(R.id.listImage);
@@ -85,7 +78,7 @@ public class AddListActivity extends AppCompatActivity {
             // Used to set a strong reference, also validity check
             mImage.setTag(target);
             RequestCreator request = Picasso.get().load(checkList.getUrl()).placeholder(R.drawable.default_icon);
-            URL = checkList.getUrl();
+            model.URL = checkList.getUrl();
             request.into(target);
         }
     }
@@ -109,10 +102,10 @@ public class AddListActivity extends AppCompatActivity {
             }
         });
 
-        Items_count = 0;
-        Checklist_id = java.util.UUID.randomUUID().toString();
-        model.setCurrentChecklist(new Checklist(Checklist_id,"","","", 0.0));
-        this.Items = new ArrayList<ChecklistItem>();
+        model.Items_count = 0;
+        model.Checklist_id = java.util.UUID.randomUUID().toString();
+        model.setCurrentChecklist(new Checklist(model.Checklist_id,"","","", 0.0));
+        model.Items = new ArrayList<ChecklistItem>();
 
         Button fab = (Button)findViewById(R.id.fab);
 
@@ -137,20 +130,20 @@ public class AddListActivity extends AppCompatActivity {
                 model.getCurrentChecklist().setChecklistType("Template");
                 model.getCurrentChecklist().setOwner("10");
 
-                for (ChecklistItem currItem:Items) {
-                    currItem.setChecklistId(Checklist_id);
+                for (ChecklistItem currItem:model.Items) {
+                    currItem.setChecklistId(model.Checklist_id);
                 }
-                model.getCurrentChecklist().checklistItems.addAll(Items);
+                model.getCurrentChecklist().checklistItems.addAll(model.Items);
 
                 ModelChecklists mod =  ModelChecklists.getInstance();
 
-                if (isUpdate)
+                if (model.isUpdate)
                 {
-                    mod.deleteItem(Old);
+                    mod.deleteItem(model.Old);
                 }
 
- 		        if(bitmap != null){
-                    mod.saveImage(bitmap, new Model.SaveImageListener() {
+ 		        if(model.bitmap != null){
+                    mod.saveImage(model.bitmap, new Model.SaveImageListener() {
                         @Override
                         public void onComplete(String url) {
                             model.getCurrentChecklist().setUrl(url);
@@ -162,7 +155,7 @@ public class AddListActivity extends AppCompatActivity {
                     });
                 }
                 else{
-                    model.getCurrentChecklist().setUrl(URL);
+                    model.getCurrentChecklist().setUrl(model.URL);
                     mod.addItem(model.getCurrentChecklist());
                     savingProgressBar.setVisibility(View.INVISIBLE);
                     finish();
@@ -175,8 +168,8 @@ public class AddListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(AddListActivity.this, AddListItemActivity.class);
-                myIntent.putExtra("Checklist_id",Checklist_id);
-                myIntent.putExtra("Index",Items_count);
+                myIntent.putExtra("Checklist_id",model.Checklist_id);
+                myIntent.putExtra("Index",model.Items_count);
 
                 AddListActivity.this.startActivityForResult(myIntent,1);
 
@@ -187,7 +180,7 @@ public class AddListActivity extends AppCompatActivity {
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+                startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), model.GET_FROM_GALLERY);
             }
 
         });
@@ -198,10 +191,11 @@ public class AddListActivity extends AppCompatActivity {
         if (to_update != null)
         {
             model.setCurrentChecklist(to_update);
-            Old = to_update;
+            model.Old = to_update.CopyChecklist();
+            model.Old.setId(to_update.getId());
             TextView twtitle = (TextView)findViewById(R.id.textView3);
             twtitle.setText("Update Checklist");
-            isUpdate = true;
+            model.isUpdate = true;
             TextView twName = (TextView)findViewById(R.id.List_Name);
             TextView twDescripton = (TextView)findViewById(R.id.description);
             twName.setText(model.getCurrentChecklist().getName());
@@ -219,7 +213,7 @@ public class AddListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         ll.removeView(v);
-                        Items_count--;
+                        model.Items_count--;
                         Checklist tmp = model.getCurrentChecklist();
                         tmp.checklistItems.remove(tmp.checklistItems.indexOf(itm));
                         model.setCurrentChecklist(tmp);
@@ -227,8 +221,8 @@ public class AddListActivity extends AppCompatActivity {
                 });
 
 
-                ll.addView(newItem, Items_count);
-                Items_count++;
+                ll.addView(newItem, model.Items_count);
+                model.Items_count++;
                 ll.invalidate();
 
             }
@@ -240,12 +234,12 @@ public class AddListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode != GET_FROM_GALLERY && resultCode == RESULT_OK) {
+        if (requestCode != model.GET_FROM_GALLERY && resultCode == RESULT_OK) {
             ChecklistItem result = (ChecklistItem) data.getSerializableExtra("Item");
 
 
             Button newItem = new Button(getApplicationContext());
-            newItem.setTextSize(20);
+            newItem.setTextSize(10);
             newItem.setText(result.getName());
             newItem.setOnClickListener(new View.OnClickListener() {
                 private ChecklistItem itm = result;
@@ -254,16 +248,15 @@ public class AddListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     ll.removeView(v);
-                    Items_count--;
+                    model.Items_count--;
                     model.getCurrentChecklist().checklistItems.remove(itm.getIndex());
                 }
             });
 
 
-            ll.addView(newItem, Items_count);
-            Items_count++;
+            ll.addView(newItem, model.Items_count);
+            model.Items_count++;
             ll.invalidate();
-
 
             //TextView twitems = (TextView) findViewById(R.id.items);
             //StringBuilder stb = new StringBuilder();
@@ -271,11 +264,11 @@ public class AddListActivity extends AppCompatActivity {
             //stb.append("\n");
             //twitems.setText(stb);
             model.getCurrentChecklist().checklistItems.add(result);
-        } else if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == model.GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
-            bitmap = null;
+            model.bitmap = null;
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                model.bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -284,7 +277,7 @@ public class AddListActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             ImageView iv = (ImageView) findViewById(R.id.listImage);
-            iv.setImageBitmap(bitmap);
+            iv.setImageBitmap(model.bitmap);
 
         }
     }

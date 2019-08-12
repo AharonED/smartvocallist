@@ -10,6 +10,8 @@ import android.view.View;
 import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
 import com.example.ronen.smartvocallist.DataObjects.ItemType;
 import com.example.ronen.smartvocallist.R;
+import com.example.ronen.smartvocallist.ViewModel.AddListItemViewModel;
+import com.example.ronen.smartvocallist.ViewModel.AddListViewModel;
 
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.lifecycle.ViewModelProviders;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -36,30 +39,29 @@ import java.util.Set;
 //import edu.cmu.sphinx.pocketsphinx.R;
 
 public class AddListItemActivity extends AppCompatActivity {
-    public static String Checklist_id;
-    public static int Index;
-    public static Set<String> availableWords;
-    private static StringBuilder all_Props;
+    private AddListItemViewModel model;
     public static AssetManager am;
-    private static int ammount = 0;
+
+
     LinearLayout ll_items;
-    private static String[] toIgnore = {"next","back","start","options","read"};
 
     public static void fill_dict()
     {
-        availableWords = new HashSet<String>() ;
+
+        AddListItemViewModel.availableWords = new HashSet<String>() ;
         try {
+
             InputStream assetDir = am.open("sync/cmudict-en-us.dict");
             BufferedReader r = new BufferedReader(new InputStreamReader(assetDir));
             StringBuilder total = new StringBuilder();
             for (String line; (line = r.readLine()) != null; ) {
                 String tmp = line.split(" ")[0].toLowerCase();
-                if(!availableWords.contains(tmp)) {
-                    availableWords.add(tmp);
+                if(!AddListItemViewModel.availableWords.contains(tmp)) {
+                    AddListItemViewModel.availableWords.add(tmp);
                 }
             }
-            for (String word:toIgnore) {
-                availableWords.remove(word);
+            for (String word:AddListItemViewModel.toIgnore) {
+                AddListItemViewModel.availableWords.remove(word);
             }
         }
         catch (FileNotFoundException ex)
@@ -74,11 +76,11 @@ public class AddListItemActivity extends AppCompatActivity {
 
     private boolean WordExistsInDict(String word)
     {
-        if (availableWords == null)
+        if (model.availableWords == null)
         {
-            availableWords = new HashSet<String>();
+            model.availableWords = new HashSet<String>();
         }
-        return availableWords.contains(word.toLowerCase());
+        return model.availableWords.contains(word.toLowerCase());
 
     }
     public boolean isAlpha(String name) {
@@ -98,18 +100,20 @@ public class AddListItemActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_list_item);
-        ammount = 0;
+        model = ViewModelProviders.of(this).get(AddListItemViewModel.class);
 
-        all_Props = new StringBuilder();
+        setContentView(R.layout.activity_add_list_item);
+        model.ammount = 0;
+
+        model.all_Props = new StringBuilder();
         //ll = (LinearLayout) findViewById(R.id.item);
         ll_items = (LinearLayout) findViewById(R.id.llItem);
         ll_items.setGravity(Gravity.CENTER_VERTICAL);
         ll_items.setOrientation(LinearLayout.VERTICAL);
 
         Intent Data = getIntent();
-        Index = Data.getIntExtra("Index",0);
-        Checklist_id = Data.getStringExtra("Checklist_id");
+        model.Index = Data.getIntExtra("Index",0);
+        model.Checklist_id = Data.getStringExtra("Checklist_id");
 
         Button AddProperty = (Button) findViewById(R.id.fab2);
         AddProperty.setOnClickListener(new View.OnClickListener() {
@@ -147,8 +151,8 @@ public class AddListItemActivity extends AppCompatActivity {
                 else {
                     TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);
                     ErrorMessage.setVisibility(View.INVISIBLE);
-                    all_Props.append(seperated);
-                    all_Props.append(";");
+                    model.all_Props.append(seperated);
+                    model.all_Props.append(";");
 
                     Button newItem = new Button(getApplicationContext());
                     newItem.setTextSize(20);
@@ -157,15 +161,15 @@ public class AddListItemActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             ll_items.removeView(v);
-                            String tmp = all_Props.toString().replace(((Button) v).getText() + ";", "");
-                            all_Props = new StringBuilder();
-                            all_Props.append(tmp);
-                            ammount--;
+                            String tmp = model.all_Props.toString().replace(((Button) v).getText() + ";", "");
+                            model.all_Props = new StringBuilder();
+                            model.all_Props.append(tmp);
+                            model.ammount--;
                         }
                     });
-                    ll_items.addView(newItem, ammount);
+                    ll_items.addView(newItem, model.ammount);
                     twtypes.setText("");
-                    ammount++;
+                    model.ammount++;
                     ll_items.invalidate();
                 }
 
@@ -186,16 +190,16 @@ public class AddListItemActivity extends AppCompatActivity {
                 Long time = currentTime.getTime();
                 Double tmp = time.doubleValue();
 
-                ChecklistItem item =new ChecklistItem(java.util.UUID.randomUUID().toString(),Index,name,"", "",tmp);
+                ChecklistItem item =new ChecklistItem(java.util.UUID.randomUUID().toString(),model.Index,name,"", "",tmp);
 
 
                 if(isViewValid) {
-                    item.setIndex(Index);
-                    item.setAttributes(all_Props.toString());
+                    item.setIndex(model.Index);
+                    item.setAttributes(model.all_Props.toString());
 
                     item.setItemType(ItemType.Text);
                     Intent resultIntent = new Intent();
-                    item.setChecklistId(Checklist_id);
+                    item.setChecklistId(model.Checklist_id);
                     item.setIsReq(isRequired.isChecked() ? 1 : 0);
                     resultIntent.putExtra("Item", item);
                     setResult(RESULT_OK, resultIntent);
