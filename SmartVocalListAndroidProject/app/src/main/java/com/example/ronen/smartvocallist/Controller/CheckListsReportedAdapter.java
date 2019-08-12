@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ronen.smartvocallist.Model.ModelChecklists;
 import com.example.ronen.smartvocallist.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -82,8 +83,6 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
                     }
                 }
             });
-
-            itemView.setOnCreateContextMenuListener(this);
         }
 
         // Binding data to the view
@@ -91,6 +90,10 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
             mTitle.setText(checkList.getName());
             mSubTitle.setText(checkList.getDescription());
             setCheckListImage(checkList);
+
+            // Only owner can edit and delete checklist
+            if(ModelChecklists.getInstance().getOwnerName().equals(checkList.getOwner()))
+                itemView.setOnCreateContextMenuListener(this);
         }
 
         private void setCheckListImage(Checklist checkList) {

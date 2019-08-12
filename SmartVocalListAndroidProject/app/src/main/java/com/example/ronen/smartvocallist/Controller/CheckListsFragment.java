@@ -66,7 +66,7 @@ public class CheckListsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        modelView.displayLocalChecklists();
+        modelView.displayLocalChecklists(null);
     }
 
     private void displayNewData(List<Checklist> data) {
@@ -107,7 +107,7 @@ public class CheckListsFragment extends Fragment {
 
         newChk.setLastUpdate((double)d.getTime());
         newChk.setDescription("Reported at: " + formatedDate + " By:" + modelView.GetModel().getOwnerName());
-        newChk.setOwner(modelView.GetModel().getOwnerID());
+        newChk.setOwner(modelView.GetModel().getOwnerName());
         modelView.GetModel().addItem(newChk);
         Intent myIntent = new Intent(getContext(), PocketSphinxActivity.class);
         myIntent.putExtra("checkListId", newChk.getId());
@@ -153,7 +153,6 @@ public class CheckListsFragment extends Fragment {
     private void editOptionSelected(Checklist checkList) {
         Intent myIntent = new Intent(getActivity(),AddListActivity.class);
         myIntent.putExtra("Checklist",checkList);
-
         CheckListsFragment.this.startActivity(myIntent);
     }
 }

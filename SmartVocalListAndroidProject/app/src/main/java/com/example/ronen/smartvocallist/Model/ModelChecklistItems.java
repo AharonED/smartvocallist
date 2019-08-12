@@ -1,9 +1,9 @@
 package com.example.ronen.smartvocallist.Model;
 
 
-import java.io.Serializable;
-
 import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
+
+import java.io.Serializable;
 //
 public class  ModelChecklistItems extends Model<ChecklistItem> implements Serializable {
 
@@ -26,7 +26,7 @@ public class  ModelChecklistItems extends Model<ChecklistItem> implements Serial
 
     @Override
     public void getItemsAsync(ItemsLsnr<ChecklistItem> lsnr) {
-        items =  rep.GetChecklistItems(lsnr);
+        items =  rep.GetChecklistItems(lsnr, 0.0);
     }
 
     @Override

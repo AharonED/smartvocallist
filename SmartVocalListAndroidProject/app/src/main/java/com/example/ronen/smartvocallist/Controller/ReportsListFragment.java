@@ -61,7 +61,7 @@ public class ReportsListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        modelView.displayLocalReportedChecklists();
+        modelView.displayLocalReportedChecklists(null);
     }
 
     private void displayNewData(List<Checklist> data) {

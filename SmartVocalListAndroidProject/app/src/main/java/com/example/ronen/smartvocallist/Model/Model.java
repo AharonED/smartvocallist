@@ -1,23 +1,28 @@
 package com.example.ronen.smartvocallist.Model;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.ronen.smartvocallist.DataObjects.BaseModelObject;
+import com.example.ronen.smartvocallist.DataObjects.TablesLastSync;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-
-import com.example.ronen.smartvocallist.DataObjects.BaseModelObject;
 
 public  abstract class Model <T extends BaseModelObject> implements IModel, Serializable {
 
@@ -64,6 +69,10 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
         void OnDataChangeItemsLsnr(ArrayList<E> items);
     }
 
+    public interface SyncLsnr<E extends BaseModelObject> {
+        void OnSync( Double lastUpdate);
+    }
+
     private ItemsLsnr<T> ItemsLsnr;
 
     public void setItemsLsnr(Model.ItemsLsnr<T> itemsLsnr) {
@@ -82,11 +91,60 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
     //public static Model model;
     public  ArrayList<T> items = new ArrayList<>();
 
+    public Double lastUpdate;
+    public Double getLastUpdate() {
+        if(lastUpdate==null) {
+            lastUpdate = 0.0;
+        }
+        return lastUpdate;
+    }
+    public void setLastUpdate(Double lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
 
     public Model()
     {
+        /*
+        AppLocalDbRepository localDataBase = SqlDataBase.db;
 
-    }
+        //List<TablesLastSync> tbls = localDataBase.tablesLastSyncDao().getAll();
+
+        LocalGetTablesLastSync local = new LocalGetTablesLastSync(new ItemsLsnr<TablesLastSync>() {
+            @Override
+            public void OnDataChangeItemsLsnr(ArrayList<TablesLastSync> items) {
+                ArrayList<TablesLastSync> tbls = items;
+
+                Double tmpLastUpdated=0.0;
+
+                for(int i=0; i<tbls.size();i++)
+                {
+                    if(tbls.get(i).tableName == tableName) {
+                        tmpLastUpdated= tbls.get(i).getLastUpdate();
+                    }
+                }
+                if(tmpLastUpdated==0.0) {
+
+                    TablesLastSync tbl = new TablesLastSync(java.util.UUID.randomUUID().toString());
+                    tbl.setTableName(tableName);
+
+                    Date currentTime = Calendar.getInstance().getTime();
+                    Long time = currentTime.getTime();
+                    Double tmp = time.doubleValue();
+                    tbl.setLastUpdate(tmp);
+
+                    //localDataBase.tablesLastSyncDao().insertAll(tbl);
+                    tbls.add(tbl);
+                    AddTablesLastSyncsAsyncTask task = new AddTablesLastSyncsAsyncTask(localDataBase.tablesLastSyncDao());
+                    task.execute(tbls.toArray(new TablesLastSync[tbls.size()]));
+                }
+
+
+            }
+        });
+        local.execute();
+        */
+       }
 
     public void addItem(T chk)
     {
@@ -101,13 +159,11 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
 
         DatabaseReference myRef = rep.database.getReference("/" + getTableName());
 
-        //myRef.child(chk.getId()).setValue(chk.toJson());
-
 try {
         //String key = myRef.push().push().getKey();
         String key = chk.id;
 
-        //Convert checklist to Hashmap for sending to Firebase
+        //Convert TablesLastSync to Hashmap for sending to Firebase
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/" + key, chk.toMap());
 
@@ -125,46 +181,6 @@ try {
         Log.println(1,"t","Data could not be saved: " + ex.getMessage());
 
     }
-        /*
-        DatabaseReference myRef = rep.database.getReference("/" + getTableName());
-
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(user.getUid()).getValue() == null) {
-                    myRef.child(user.getUid()).setValue(1);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        });
-
-
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                                                 //fairebase.addChild( chk.tableName  , chk);
-
-                            myRef.child(collectionName).
-
-                                                 child(instance.id).
-
-                                                 setValue(instance.toJson())
-
-                                                 {
-                                                     (error:Error ?, ref:DatabaseReference)in
-                                                     if let error = error {
-                                                     print("Data could not be saved: \(error).")
-                                                 } else{
-                                                     print("Data saved successfully!")
-                                                 }
-                                                 }
-                                             }
-        );
-        */
 
         items.add(chk);
 
@@ -172,8 +188,47 @@ try {
 
 
     public void getItemsAsync(Model.ItemsLsnr<T> lsnr) {
-       // Repository rep = new Repository();
-        ////items = (ArrayList<T>) rep.GetChecklists(lsnr);
+        //Abstract method
+    }
+    public void getItemsAsyncByLastUpdate(Model.SyncLsnr<T> lsnrSync) {
+        //Abstract method
+        AppLocalDbRepository localDataBase = SqlDataBase.db;
+
+        //List<TablesLastSync> tbls = localDataBase.tablesLastSyncDao().getAll();
+
+        LocalGetTablesLastSync local = new LocalGetTablesLastSync(new ItemsLsnr<TablesLastSync>() {
+            @Override
+            public void OnDataChangeItemsLsnr(ArrayList<TablesLastSync> items) {
+                ArrayList<TablesLastSync> tbls = items;
+
+                Double tmpLastUpdated=0.0;
+
+                String tableID=java.util.UUID.randomUUID().toString();
+                for(int i=0; i<tbls.size();i++)
+                {
+                    if(tbls.get(0).tableName.equals(tableName)) {
+                        tmpLastUpdated= tbls.get(i).getLastUpdate();
+                        tableID = tbls.get(i).id;
+                    }
+                }
+
+                TablesLastSync tbl = new TablesLastSync(tableID);
+                tbl.setTableName(tableName);
+                lsnrSync.OnSync(tmpLastUpdated);
+
+
+                Date currentTime = Calendar.getInstance().getTime();
+                Long time = currentTime.getTime();
+                Double tmp = time.doubleValue();
+                tbl.setLastUpdate(tmp);
+
+                tbls.add(tbl);
+
+                AddTablesLastSyncsAsyncTask task = new AddTablesLastSyncsAsyncTask(localDataBase.tablesLastSyncDao());
+                task.execute(tbls.toArray(new TablesLastSync[tbls.size()]));
+            }
+        });
+        local.execute();
 
     }
 
@@ -197,6 +252,48 @@ try {
     public void saveImage(Bitmap imageBitmap, SaveImageListener listener) {
         rep.saveImage(imageBitmap, listener);
     }
+
+
+    public class LocalGetTablesLastSync extends AsyncTask<Void, Void, ArrayList<TablesLastSync>> {
+
+        Model.ItemsLsnr<TablesLastSync> lsnr;
+        AppLocalDbRepository localDataBase = SqlDataBase.db;
+
+        public LocalGetTablesLastSync(Model.ItemsLsnr<TablesLastSync> lsnr) {
+            this.lsnr = lsnr;
+        }
+
+        @Override
+        protected ArrayList<TablesLastSync> doInBackground(Void... params) {
+            List<TablesLastSync> tbls = localDataBase.tablesLastSyncDao().getAll();
+            ArrayList<TablesLastSync> items = new ArrayList<>(tbls);
+            return items;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<TablesLastSync> tbls) {
+            this.lsnr.OnDataChangeItemsLsnr(tbls);
+        }
+    }
+
+    @SuppressLint("NewApi")
+    public class AddTablesLastSyncsAsyncTask extends AsyncTask<TablesLastSync, Void, Void> {
+        TablesLastSyncDao TablesLastSyncDao = null;
+
+        AddTablesLastSyncsAsyncTask(TablesLastSyncDao TablesLastSyncDao ){
+            this.TablesLastSyncDao = TablesLastSyncDao;
+        }
+
+
+        @Override
+        protected Void doInBackground(TablesLastSync... TablesLastSyncs) {
+            this.TablesLastSyncDao.insertAll(TablesLastSyncs);
+            return null;
+        }
+
+
+    }
+
 
 }
 
