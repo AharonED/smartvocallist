@@ -15,13 +15,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.ronen.smartvocallist.Model.ModelChecklists;
 import com.example.ronen.smartvocallist.R;
-import com.example.ronen.smartvocallist.ViewModel.LoginViewModel;
 import com.example.ronen.smartvocallist.ViewModel.SignupViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -96,6 +95,10 @@ public class SignupActivity extends AppCompatActivity {
                                 Toast.makeText(SignupActivity.this, "Authentication failed." + " - " + task.getException(),
                                         Toast.LENGTH_SHORT).show();
                             } else {
+                                ModelChecklists model = ModelChecklists.getInstance();
+                                model.setOwnerID(viewModel.getFirebaseAuth().getCurrentUser().getUid());
+                                model.setOwnerName(viewModel.getFirebaseAuth().getCurrentUser().getEmail());
+
                                 startActivity(new Intent(SignupActivity.this, CheckListsActivity.class));
                                 finish();
                             }

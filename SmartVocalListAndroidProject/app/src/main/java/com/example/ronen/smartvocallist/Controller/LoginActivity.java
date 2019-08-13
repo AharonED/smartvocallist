@@ -37,6 +37,10 @@ public class LoginActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
 
         if (viewModel.getFirebaseAuth().getCurrentUser() != null) {
+            ModelChecklists model = ModelChecklists.getInstance();
+            model.setOwnerID(viewModel.getFirebaseAuth().getCurrentUser().getUid());
+            model.setOwnerName(viewModel.getFirebaseAuth().getCurrentUser().getEmail());
+
             startActivity(new Intent(LoginActivity.this, CheckListsActivity.class));
             finish();
         }
