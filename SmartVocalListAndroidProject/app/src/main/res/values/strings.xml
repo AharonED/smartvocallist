@@ -5,7 +5,7 @@
 
     <string name="title_activity_add_list_activity">Add list activity</string>
     <string name="title_activity_add_list_item">add List Item</string>
-    <string name="title_activity_check_lists">Flights CheckLists</string>
+    <string name="title_activity_check_lists">Flights Checklists</string>
 
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
