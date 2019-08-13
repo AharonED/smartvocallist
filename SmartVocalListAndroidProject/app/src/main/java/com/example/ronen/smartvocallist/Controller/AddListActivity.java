@@ -113,8 +113,13 @@ public class AddListActivity extends AppCompatActivity {
             }
         });
 
+        Intent Data = getIntent();
+        Checklist to_update = (Checklist)Data.getSerializableExtra("Checklist");
+
         model.Items_count = 0;
-        model.Checklist_id = java.util.UUID.randomUUID().toString();
+        if (to_update == null) {
+            model.Checklist_id = java.util.UUID.randomUUID().toString();
+        }
         model.setCurrentChecklist(new Checklist(model.Checklist_id,"","","", 0.0));
         model.Items = new ArrayList<ChecklistItem>();
 
@@ -200,8 +205,6 @@ public class AddListActivity extends AppCompatActivity {
 
         });
 
-        Intent Data = getIntent();
-        Checklist to_update = (Checklist)Data.getSerializableExtra("Checklist");
 
         if (to_update != null)
         {
