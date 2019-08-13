@@ -104,7 +104,7 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
             ModelChecklistItems.getInstance().deleteItem(null, itm);
         }
 
-        super.deleteItem(lsnr, chk);
+        super.deleteItem(null, chk);
         rep.DeleteLocalCheckList(lsnr, chk);
     }
 }

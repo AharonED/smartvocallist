@@ -37,7 +37,7 @@ public class ChecklistViewModel extends ViewModel {
     }
 
     public void deleteChechlist(Checklist checkList) {
-        model.deleteItem(data -> checkListsToDisplay(data), checkList);
+        model.deleteItem(data -> displayLocalChecklists(null), checkList);
     }
 
     private void checkListsToDisplay(ArrayList<Checklist> checklists) {
