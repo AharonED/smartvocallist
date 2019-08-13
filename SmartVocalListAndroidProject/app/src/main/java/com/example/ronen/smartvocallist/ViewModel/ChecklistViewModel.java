@@ -36,6 +36,10 @@ public class ChecklistViewModel extends ViewModel {
         });
     }
 
+    public void deleteChechlist(Checklist checkList) {
+        model.deleteItem(data -> checkListsToDisplay(data), checkList);
+    }
+
     private void checkListsToDisplay(ArrayList<Checklist> checklists) {
         Collections.sort(checklists, new Comparator<Checklist>() {
             @Override
