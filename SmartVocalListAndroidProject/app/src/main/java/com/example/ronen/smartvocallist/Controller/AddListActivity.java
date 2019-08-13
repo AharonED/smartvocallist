@@ -154,33 +154,15 @@ public class AddListActivity extends AppCompatActivity {
                         mod.deleteItem(new Model.ItemsLsnr<Checklist>() {
                             @Override
                             public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
-                                
+                                AddCheckList( mod , savingProgressBar );
                             }
                         }, model.Old);
                     }
 
                 }
+                else {
 
- 		        if(model.bitmap != null){
-                    mod.saveImage(model.bitmap, new Model.SaveImageListener() {
-                        @Override
-                        public void onComplete(String url) {
-                            model.getCurrentChecklist().setUrl(url);
-                            if (isInternetAvailable()) {
-                                mod.addItem(model.getCurrentChecklist());
-                            }
-                            savingProgressBar.setVisibility(View.INVISIBLE);
-                            finish();
-                        }
-                    });
-                }
-                else{
-                    model.getCurrentChecklist().setUrl(model.URL);
-                    if (isInternetAvailable()) {
-                        mod.addItem(model.getCurrentChecklist());
-                    }
-                    savingProgressBar.setVisibility(View.INVISIBLE);
-                    finish();
+                    AddCheckList(mod, savingProgressBar);
                 }
             }
         });
@@ -261,6 +243,30 @@ public class AddListActivity extends AppCompatActivity {
         }
 
         listFillerThread.run();
+    }
+
+    private void AddCheckList(ModelChecklists mod,  ProgressBar savingProgressBar  ) {
+        if(model.bitmap != null){
+            mod.saveImage(model.bitmap, new Model.SaveImageListener() {
+                @Override
+                public void onComplete(String url) {
+                    model.getCurrentChecklist().setUrl(url);
+                    if (isInternetAvailable()) {
+                        mod.addItem(model.getCurrentChecklist());
+                    }
+                    savingProgressBar.setVisibility(View.INVISIBLE);
+                    finish();
+                }
+            });
+        }
+        else{
+            model.getCurrentChecklist().setUrl(model.URL);
+            if (isInternetAvailable()) {
+                mod.addItem(model.getCurrentChecklist());
+            }
+            savingProgressBar.setVisibility(View.INVISIBLE);
+            finish();
+        }
     }
 
     @Override
