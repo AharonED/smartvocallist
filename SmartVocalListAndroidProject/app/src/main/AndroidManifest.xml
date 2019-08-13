@@ -46,10 +46,12 @@
             android:name=".Controller.AddListItemActivity"
             android:launchMode = "singleTop"
             android:label="@string/title_activity_add_list_item"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:windowSoftInputMode="adjustPan"
+        android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Controller.AddListActivity"
             android:launchMode = "singleTop"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_add_list_activity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
