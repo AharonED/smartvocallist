@@ -1,13 +1,11 @@
 package com.example.ronen.smartvocallist.Controller;
 
 import android.app.Activity;
-import android.app.AppComponentFactory;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
@@ -21,6 +19,16 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.ronen.smartvocallist.DataObjects.Checklist;
+import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
+import com.example.ronen.smartvocallist.Model.Model;
+import com.example.ronen.smartvocallist.Model.ModelChecklists;
+import com.example.ronen.smartvocallist.R;
+import com.example.ronen.smartvocallist.ViewModel.AddListViewModel;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
+import com.squareup.picasso.Target;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -28,17 +36,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-
-import com.example.ronen.smartvocallist.R;
-import com.example.ronen.smartvocallist.ViewModel.AddListViewModel;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
-import com.squareup.picasso.Target;
-
-import com.example.ronen.smartvocallist.DataObjects.Checklist;
-import com.example.ronen.smartvocallist.DataObjects.ChecklistItem;
-import com.example.ronen.smartvocallist.Model.Model;
-import com.example.ronen.smartvocallist.Model.ModelChecklists;
 
 
 public class AddListActivity extends AppCompatActivity {
@@ -139,7 +136,7 @@ public class AddListActivity extends AppCompatActivity {
 
                 if (model.isUpdate)
                 {
-                    mod.deleteItem(model.Old);
+                    mod.deleteItem(null,model.Old);
                 }
 
  		        if(model.bitmap != null){

@@ -141,9 +141,9 @@ public class CheckListsFragment extends Fragment {
                             "Are you sure?")
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        modelView.getData().getValue().remove(checkList);
-                        displayNewData(modelView.getData().getValue());
-                        modelView.GetModel().deleteItem(checkList);
+                        //modelView.getData().getValue().remove(checkList);
+                        //displayNewData(modelView.getData().getValue());
+                        modelView.GetModel().deleteItem(data -> displayNewData(data), checkList);
                     }
                 })
                 .setNegativeButton("Cancel", null)

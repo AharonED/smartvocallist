@@ -39,8 +39,8 @@ public class  ModelChecklistItems extends Model<ChecklistItem> implements Serial
     }
 
     @Override
-    public void deleteItem(ChecklistItem chk){
-        super.deleteItem(chk);
+    public void deleteItem(ItemsLsnr<ChecklistItem> lsnr, ChecklistItem chk){
+        super.deleteItem(lsnr, chk);
     }
 
 }

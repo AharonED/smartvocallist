@@ -166,8 +166,8 @@ public class Repository {
         task.execute();
     }
 
-    public void DeleteLocalCheckList(Checklist checklist){
-        deleteLocalCheckListTask task = new deleteLocalCheckListTask(checklist);
+    public void DeleteLocalCheckList(Model.ItemsLsnr<Checklist> lsnr,Checklist checklist){
+        deleteLocalCheckListTask task = new deleteLocalCheckListTask(lsnr, checklist);
         task.execute();
     }
 
@@ -215,9 +215,11 @@ public class Repository {
 
     private class deleteLocalCheckListTask extends AsyncTask<Void, Void, Void> {
         Checklist checklist;
+        Model.ItemsLsnr<Checklist> lsnr;
 
-        deleteLocalCheckListTask(Checklist checklist){
+        deleteLocalCheckListTask( Model.ItemsLsnr<Checklist> lsnr, Checklist checklist){
             this.checklist = checklist;
+            this.lsnr = lsnr;
         }
 
         @Override
@@ -225,6 +227,13 @@ public class Repository {
             localDataBase.checklistDao().delete(checklist);
             return null;
         }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            LocalGetCheckListsTask task = new LocalGetCheckListsTask(lsnr);
+            task.execute();
+        }
+
     }
 
     @SuppressLint("NewApi")
