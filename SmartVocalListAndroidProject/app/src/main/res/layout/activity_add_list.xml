@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Controller.AddListActivity">
@@ -56,6 +57,7 @@
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/listImage"
             app:layout_constraintEnd_toEndOf="@+id/listImage"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/listImage"
             app:layout_constraintTop_toTopOf="@+id/listImage"
             app:layout_constraintVertical_bias="0.0" />
@@ -138,41 +140,40 @@
             android:layout_marginStart="340dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="260dp"
             android:background="#009688"
             android:src="@android:drawable/ic_input_add"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/items"
-            app:layout_constraintVertical_bias="0.64"
             tools:targetApi="lollipop" />
 
         <Button
             android:id="@+id/fab"
             android:layout_width="79dp"
             android:layout_height="62dp"
-            android:layout_marginStart="208dp"
-            android:layout_marginTop="196dp"
+            android:layout_marginStart="32dp"
             android:layout_marginEnd="8dp"
             android:background="#029789"
             android:foreground="@android:drawable/ic_menu_save"
+            app:layout_constraintBottom_toBottomOf="@+id/fab2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.961"
             app:layout_constraintStart_toEndOf="@+id/fab2"
-            app:layout_constraintTop_toBottomOf="@+id/addnewitem" />
+            app:layout_constraintTop_toTopOf="@+id/fab2"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/fab2"
             android:layout_width="68dp"
             android:layout_height="64dp"
             android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
             android:background="#029789"
             android:foreground="@android:drawable/ic_menu_camera"
-            app:layout_constraintBottom_toBottomOf="@+id/fab"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/fab" />
+            android:gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ProgressBar
             android:id="@+id/save_progressBar"
@@ -181,26 +182,15 @@
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:layoutDirection="locale"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
