@@ -99,6 +99,7 @@ public class ModelChecklistsReported extends Model<Checklist> implements Seriali
 
     @Override
     public void deleteItem(ItemsLsnr<Checklist> lsnr, Checklist chk){
+        super.deleteItem(lsnr, chk);
         rep.DeleteLocalCheckList(lsnr, chk);
 
         for (ChecklistItem itm: chk.checklistItems) {
@@ -106,8 +107,6 @@ public class ModelChecklistsReported extends Model<Checklist> implements Seriali
             //itm.setChecklistId(chk.id);
             ModelChecklistItems.getInstance().deleteItem(null, itm);
         }
-
-        super.deleteItem(lsnr, chk);
     }
 
 }
