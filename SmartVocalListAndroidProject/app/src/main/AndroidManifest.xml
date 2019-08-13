@@ -12,8 +12,7 @@
         android:name=".Controller.MyApplication"
         android:allowBackup="false"
         android:icon="@drawable/vocal"
-        android:label="@string/app_name"
-        android:screenOrientation="portrait">
+        android:label="@string/app_name">
         <activity android:name=".Controller.choooseEdit"></activity>
         <activity
             android:name=".Controller.CheckListsActivity"
@@ -57,7 +56,8 @@
             android:name=".Controller.PocketSphinxActivity"
             android:launchMode = "singleTop"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"  />
     </application>
 
 </manifest>
