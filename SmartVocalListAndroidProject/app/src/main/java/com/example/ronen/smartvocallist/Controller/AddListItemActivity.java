@@ -122,6 +122,7 @@ public class AddListItemActivity extends AppCompatActivity {
                 TextView twtypes = (TextView)findViewById(R.id.atributes);
 
                 String seperated = twtypes.getText().toString();
+                seperated = seperated.trim();
 
                 if (seperated.contains(" ")) {
                     TextView ErrorMessage= (TextView) findViewById(R.id.ErrorMessage);

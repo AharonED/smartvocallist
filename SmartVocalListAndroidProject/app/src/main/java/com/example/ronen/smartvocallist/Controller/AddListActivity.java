@@ -1,11 +1,14 @@
 package com.example.ronen.smartvocallist.Controller;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AppComponentFactory;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
@@ -85,7 +88,19 @@ public class AddListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_add_list);
         super.onCreate(savedInstanceState);
+
         model = ViewModelProviders.of(this).get(AddListViewModel.class);
+
+
+
+        if (!isInternetAvailable())
+        {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("Check internet connection if you are offline your acctions won't be saved");
+            alertDialogBuilder.setCancelable(true);
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
 
 
         ll = (LinearLayout) findViewById(R.id.llItem);
@@ -136,7 +151,10 @@ public class AddListActivity extends AppCompatActivity {
 
                 if (model.isUpdate)
                 {
-                    mod.deleteItem(null,model.Old);
+                    if (isInternetAvailable()) {
+                        mod.deleteItem(null,model.Old);
+                    }
+
                 }
 
  		        if(model.bitmap != null){
@@ -144,7 +162,9 @@ public class AddListActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(String url) {
                             model.getCurrentChecklist().setUrl(url);
-                            mod.addItem(model.getCurrentChecklist());
+                            if (isInternetAvailable()) {
+                                mod.addItem(model.getCurrentChecklist());
+                            }
                             savingProgressBar.setVisibility(View.INVISIBLE);
                             finish();
                         }
@@ -152,7 +172,9 @@ public class AddListActivity extends AppCompatActivity {
                 }
                 else{
                     model.getCurrentChecklist().setUrl(model.URL);
-                    mod.addItem(model.getCurrentChecklist());
+                    if (isInternetAvailable()) {
+                        mod.addItem(model.getCurrentChecklist());
+                    }
                     savingProgressBar.setVisibility(View.INVISIBLE);
                     finish();
                 }
@@ -292,9 +314,16 @@ public class AddListActivity extends AppCompatActivity {
 
     private boolean isInternetAvailable() {
         try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.ThreadPolicy safePolicy = StrictMode.getThreadPolicy();
+            StrictMode.setThreadPolicy(policy);
+
             InetAddress ipAddr = InetAddress.getByName("google.com");
+
+            StrictMode.setThreadPolicy(safePolicy);
             //You can replace it with your name
             return !ipAddr.equals("");
+
 
         } catch (Exception e) {
             return false;
