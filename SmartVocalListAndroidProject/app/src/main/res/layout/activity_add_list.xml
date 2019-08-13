@@ -151,8 +151,8 @@
 
         <Button
             android:id="@+id/fab"
-            android:layout_width="82dp"
-            android:layout_height="72dp"
+            android:layout_width="79dp"
+            android:layout_height="62dp"
             android:layout_marginStart="208dp"
             android:layout_marginTop="196dp"
             android:layout_marginEnd="8dp"
@@ -165,8 +165,8 @@
 
         <Button
             android:id="@+id/fab2"
-            android:layout_width="76dp"
-            android:layout_height="71dp"
+            android:layout_width="68dp"
+            android:layout_height="64dp"
             android:layout_marginStart="16dp"
             android:background="#029789"
             android:foreground="@android:drawable/ic_menu_camera"
