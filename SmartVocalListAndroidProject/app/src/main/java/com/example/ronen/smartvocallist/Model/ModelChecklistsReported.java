@@ -41,13 +41,10 @@ public class ModelChecklistsReported extends Model<Checklist> implements Seriali
                 items = rep.GetChecklistsReported(new ItemsLsnr<Checklist>() {
                     @Override
                     public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
-                        //Get All Checklists
                         ArrayList<Checklist> chks = items;
                         //For each Checklist get its all ChecklistItems
-                        String checklistID;
-                        //For each Checklist get its all ChecklistItems
                         for (Checklist chk: chks) {
-                            checklistID = chk.getId();
+                            String checklistID = chk.getId();
 
                             ModelChecklistItems.getInstance().getItemsByChecklistAsync(new ItemsLsnr<ChecklistItem>() {
                                 @Override
@@ -60,11 +57,15 @@ public class ModelChecklistsReported extends Model<Checklist> implements Seriali
                                             chk.getChecklistItems().add(item);
                                         }
                                     }
-                                    // }
 
-                                    //Call the callback function (usually rise from GUI/Controller)
-                                    lsnr.OnDataChangeItemsLsnr(chks);
-                                    rep.saveCheckListsInLocalDB(chks, lsnr);
+                                    // Save in local db
+                                    rep.saveCheckListsInLocalDB(chks, new Repository.LocalDbUpdatedLsnr() {
+                                        @Override
+                                        public void OnLocalDbUpdateLsnr() {
+                                            //Call the callback function (usually rise from GUI/Controller)
+                                            lsnr.OnDataChangeItemsLsnr(chks);
+                                        }
+                                    });
                                 }
                             }, checklistID);
                         }
