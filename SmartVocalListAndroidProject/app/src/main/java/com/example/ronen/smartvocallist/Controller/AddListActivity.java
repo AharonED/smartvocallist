@@ -151,7 +151,12 @@ public class AddListActivity extends AppCompatActivity {
                 if (model.isUpdate)
                 {
                     if (isInternetAvailable()) {
-                        mod.deleteItem(null,model.Old);
+                        mod.deleteItem(new Model.ItemsLsnr<Checklist>() {
+                            @Override
+                            public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
+                                
+                            }
+                        }, model.Old);
                     }
 
                 }
