@@ -148,7 +148,6 @@ public class AddListActivity extends AppCompatActivity {
                         public void onComplete(String url) {
                             model.getCurrentChecklist().setUrl(url);
                             mod.addItem(model.getCurrentChecklist());
-
                             savingProgressBar.setVisibility(View.INVISIBLE);
                             finish();
                         }
@@ -169,7 +168,18 @@ public class AddListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent myIntent = new Intent(AddListActivity.this, AddListItemActivity.class);
                 myIntent.putExtra("Checklist_id",model.Checklist_id);
-                myIntent.putExtra("Index",model.Items_count);
+
+                int maxId = 0;
+                for (ChecklistItem listItem:model.getCurrentChecklist().getChecklistItems())
+                {
+                    if (maxId < listItem.getIndex())
+                    {
+                        maxId = listItem.getIndex();
+                    }
+                }
+
+                maxId++;
+                myIntent.putExtra("Index",maxId);
 
                 AddListActivity.this.startActivityForResult(myIntent,1);
 
@@ -190,9 +200,8 @@ public class AddListActivity extends AppCompatActivity {
 
         if (to_update != null)
         {
-            model.setCurrentChecklist(to_update);
-            model.Old = to_update.CopyChecklist();
-            model.Old.setId(to_update.getId());
+            model.setCurrentChecklist(to_update.CopyChecklist());
+            model.Old = to_update;
             TextView twtitle = (TextView)findViewById(R.id.textView3);
             twtitle.setText("Update Checklist");
             model.isUpdate = true;
@@ -263,6 +272,8 @@ public class AddListActivity extends AppCompatActivity {
             //stb.append(twitems.getText().toString());
             //stb.append("\n");
             //twitems.setText(stb);
+            result.setChecklistId(model.getCurrentChecklist().getId());
+            result.setOwner(Model.getOwnerID());
             model.getCurrentChecklist().checklistItems.add(result);
         } else if (requestCode == model.GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
