@@ -151,8 +151,8 @@ public class Repository {
         return items;
     }
 
-    public void saveCheckListsInLocalDB(ArrayList<Checklist> checkLists){
-        AddCheckListsAsyncTask task = new AddCheckListsAsyncTask(localDataBase.checklistDao());
+    public void saveCheckListsInLocalDB(ArrayList<Checklist> checkLists, LocalDbUpdatedLsnr lsnr){
+        AddCheckListsAsyncTask task = new AddCheckListsAsyncTask(localDataBase.checklistDao(), lsnr);
         task.execute(checkLists.toArray(new Checklist[checkLists.size()]));
     }
 
@@ -230,9 +230,11 @@ public class Repository {
     @SuppressLint("NewApi")
     private class AddCheckListsAsyncTask extends AsyncTask<Checklist, Void, Void> {
         ChecklistDao checklistDao = null;
+        LocalDbUpdatedLsnr lsnr;
 
-        AddCheckListsAsyncTask(ChecklistDao checklistDao ){
+        AddCheckListsAsyncTask(ChecklistDao checklistDao, LocalDbUpdatedLsnr lsnr){
             this.checklistDao = checklistDao;
+            this.lsnr = lsnr;
         }
 
 
@@ -242,7 +244,10 @@ public class Repository {
             return null;
         }
 
-
+        @Override
+        protected void onPostExecute(Void checkLists) {
+            this.lsnr.OnLocalDbUpdateLsnr();
+        }
     }
 
 
@@ -308,5 +313,9 @@ public class Repository {
         }
 
         return json;
+    }
+
+    public interface LocalDbUpdatedLsnr {
+        void OnLocalDbUpdateLsnr();
     }
 }
