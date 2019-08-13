@@ -64,7 +64,7 @@ public class ModelChecklistsReported extends Model<Checklist> implements Seriali
 
                                     //Call the callback function (usually rise from GUI/Controller)
                                     lsnr.OnDataChangeItemsLsnr(chks);
-                                    rep.saveCheckListsInLocalDB(chks);
+                                    rep.saveCheckListsInLocalDB(chks, lsnr);
                                 }
                             }, checklistID);
                         }

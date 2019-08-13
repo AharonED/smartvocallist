@@ -41,13 +41,10 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
                 items =  rep.GetChecklists(new ItemsLsnr<Checklist>() {
                    @Override
                    public void OnDataChangeItemsLsnr(ArrayList<Checklist> items) {
-                       //Get All Checklists
                        ArrayList<Checklist> chks = items;
                        //For each Checklist get its all ChecklistItems
-                       String checklistID;
-                       //For each Checklist get its all ChecklistItems
                        for (Checklist chk: chks) {
-                           checklistID = chk.getId();
+                           String checklistID = chk.getId();
 
                            ModelChecklistItems.getInstance().getItemsByChecklistAsync(new ItemsLsnr<ChecklistItem>() {
                            @Override
@@ -60,11 +57,15 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
                                            chk.getChecklistItems().add(item);
                                        }
                                    }
-                                   // }
 
-                                   //Call the callback function (usually rise from GUI/Controller)
-                                   lsnr.OnDataChangeItemsLsnr(chks);
-                                   rep.saveCheckListsInLocalDB(chks);
+                                   // Save in local db
+                                   rep.saveCheckListsInLocalDB(chks, new Repository.LocalDbUpdatedLsnr() {
+                                       @Override
+                                       public void OnLocalDbUpdateLsnr() {
+                                           //Call the callback function (usually rise from GUI/Controller)
+                                           lsnr.OnDataChangeItemsLsnr(chks);
+                                       }
+                                   });
                                 }
                             }, checklistID);
                         }
@@ -97,8 +98,6 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
 
     @Override
     public void deleteItem(Checklist chk){
-        rep.DeleteLocalCheckList(chk);
-
         for (ChecklistItem itm: chk.checklistItems) {
             //itm.id = java.util.UUID.randomUUID().toString();
             //itm.setChecklistId(chk.id);
@@ -106,6 +105,7 @@ public class ModelChecklists  extends Model<Checklist> implements Serializable {
         }
 
         super.deleteItem(chk);
+        rep.DeleteLocalCheckList(chk);
     }
 }
 
