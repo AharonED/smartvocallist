@@ -3,7 +3,6 @@ package com.example.ronen.smartvocallist.Controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -16,18 +15,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.ronen.smartvocallist.Model.ModelChecklists;
 import com.example.ronen.smartvocallist.R;
 import com.example.ronen.smartvocallist.ViewModel.LoginViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-
-import com.example.ronen.smartvocallist.Model.ModelChecklists;
-
-import static android.content.ContentValues.TAG;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -42,19 +35,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
-
-        try {
-            FirebaseOptions.Builder builder = new FirebaseOptions.Builder()
-                    .setApplicationId("1:0123456789012:android:0123456789abcdef")
-                    .setApiKey("AIzaSyDMIVUTpX7i0L__KDhiQb4zfzvMxmjwNec ")
-                    .setDatabaseUrl("https://smartvocallist1.firebaseio.com/")
-                    .setStorageBucket("smartvocallist1.appspot.com");
-            FirebaseApp.initializeApp(this.getBaseContext(), builder.build());
-        }
-        catch (Exception ex)
-        {
-            Log.d(TAG, "Value is: " + ex.getMessage());
-        }
 
         if (viewModel.getFirebaseAuth().getCurrentUser() != null) {
             startActivity(new Intent(LoginActivity.this, CheckListsActivity.class));
@@ -110,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.GONE);
 
                             /*------login by email only temporary------*/
+                            /*
                             ModelChecklists model = ModelChecklists.getInstance();
                             model.setOwnerID("-1");
                             model.setOwnerName(email);
@@ -117,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                             intent = new Intent(LoginActivity.this, CheckListsActivity.class);
                             startActivity(intent);
                             finish();
+                            */
                             /*----------------------------*/
 
 
@@ -129,9 +111,15 @@ public class LoginActivity extends AppCompatActivity {
                                 if (password.length() < 6) {
                                     inputPassword.setError(getString(R.string.minimum_password));
                                 } else {
-                                    // Toast.makeText(LoginActivity.this, getString(R.string.auth_failed) + " - " + task.getException(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, getString(R.string.auth_failed) + " - " + task.getException(), Toast.LENGTH_LONG).show();
                                 }
                             } else {
+
+                                ModelChecklists model = ModelChecklists.getInstance();
+                                model.setOwnerID(viewModel.getFirebaseAuth().getCurrentUser().getUid());
+                                model.setOwnerName(viewModel.getFirebaseAuth().getCurrentUser().getEmail());
+
+
                                 intent = new Intent(LoginActivity.this, CheckListsActivity.class);
                                 startActivity(intent);
                                 finish();

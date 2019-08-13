@@ -1,14 +1,38 @@
 {
   "ChecklistItems" : {
-    "B3E45A85-66D2-4596-998A-C2B006D7FDD1" : {
-      "attributes" : "NORMAL",
-      "checklistId" : "2D388EFD-AEB0-433D-9514-AE88D8B3DEFC",
-      "description" : "BRAKE PRESSURE",
-      "id" : "B3E45A85-66D2-4596-998A-C2B006D7FDD1",
-      "itemIndex" : 2,
+    "173A5C07-41FC-4088-AF97-AAAC1DDCAD7A" : {
+      "attributes" : "ON;OFF",
+      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
+      "description" : "HYDRAULIC DEMAND PUMPS",
+      "id" : "173A5C07-41FC-4088-AF97-AAAC1DDCAD7A",
+      "itemIndex" : 4,
       "itemType" : "Text",
-      "lastUpdate" : 1552562209464,
-      "name" : "BRAKE PRESSURE",
+      "lastUpdate" : 1552561278649,
+      "name" : "HYDRAULIC DEMAND PUMPS",
+      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
+      "result" : ""
+    },
+    "27E7B38B-27DB-4FE4-8CDB-19A829435EE6" : {
+      "attributes" : "CHECKED",
+      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
+      "description" : "Check CIRCUIT BREAKERS",
+      "id" : "27E7B38B-27DB-4FE4-8CDB-19A829435EE6",
+      "itemIndex" : 1,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561294981,
+      "name" : "CIRCUIT BREAKERS",
+      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
+      "result" : ""
+    },
+    "296FA97F-2288-4322-8864-A31F256349F5" : {
+      "attributes" : "automatic,MANUAL",
+      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
+      "description" : "STANDBY POWER",
+      "id" : "296FA97F-2288-4322-8864-A31F256349F5",
+      "itemIndex" : 3,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561312561,
+      "name" : "STANDBY POWER",
       "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
       "result" : ""
     },
@@ -24,6 +48,30 @@
       "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
       "result" : ""
     },
+    "62149316-0197-4B05-968E-5D69720DE693" : {
+      "attributes" : "DOWN,up",
+      "checklistId" : "4533DB99-7262-4201-BA52-5EC8F0B14863",
+      "description" : "GEAR LEVER",
+      "id" : "62149316-0197-4B05-968E-5D69720DE693",
+      "itemIndex" : 2,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562857893,
+      "name" : "GEAR LEVER",
+      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
+      "result" : ""
+    },
+    "66B17DF9-77B9-4B57-BFE2-1DAC44F4B9D9" : {
+      "attributes" : "verified",
+      "checklistId" : "4533DB99-7262-4201-BA52-5EC8F0B14863",
+      "description" : "FLIGHT ATTENDANTS…",
+      "id" : "66B17DF9-77B9-4B57-BFE2-1DAC44F4B9D9",
+      "itemIndex" : 1,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562839936,
+      "name" : "FLIGHT ATTENDANTS",
+      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
+      "result" : ""
+    },
     "7193C5B6-136D-4C87-9A8E-122D4F337B25" : {
       "attributes" : "AUTOMATIC; MANUAL",
       "checklistId" : "2D388EFD-AEB0-433D-9514-AE88D8B3DEFC",
@@ -36,7 +84,55 @@
       "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
       "result" : ""
     },
-      "B7BF550F-F654-48F6-92EE-38BD2742305B" : {
+    "92861D3E-35E7-489F-8F8E-3E0CF09A4EA0" : {
+      "attributes" : "CHECKED",
+      "checklistId" : "6A4FB837-41A3-4BB3-BF46-58B42FC0F1D4",
+      "description" : "EMERGENCY EQUIPMENT",
+      "id" : "92861D3E-35E7-489F-8F8E-3E0CF09A4EA0",
+      "itemIndex" : 1,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561937270,
+      "name" : "EMERGENCY EQUIPMENT",
+      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
+      "result" : ""
+    },
+    "9D9FC6E9-EC44-42E3-9951-E7279CF4169B" : {
+      "attributes" : "CHECKED",
+      "checklistId" : "6A4FB837-41A3-4BB3-BF46-58B42FC0F1D4",
+      "description" : "FIRE PROTECTION…",
+      "id" : "9D9FC6E9-EC44-42E3-9951-E7279CF4169B",
+      "itemIndex" : 2,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561965550,
+      "name" : "FIRE PROTECTION",
+      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
+      "result" : ""
+    },
+    "A186509D-F3C3-4D76-B1BE-F8689894A5B9" : {
+      "attributes" : "ON;OFF",
+      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
+      "description" : "BATTERY",
+      "id" : "A186509D-F3C3-4D76-B1BE-F8689894A5B9",
+      "itemIndex" : 2,
+      "itemType" : "Text",
+      "lastUpdate" : 1552561302950,
+      "name" : "BATTERY",
+      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
+      "result" : ""
+    },
+    "B3E45A85-66D2-4596-998A-C2B006D7FDD1" : {
+      "attributes" : "NORMAL",
+      "checklistId" : "2D388EFD-AEB0-433D-9514-AE88D8B3DEFC",
+      "description" : "BRAKE PRESSURE",
+      "id" : "B3E45A85-66D2-4596-998A-C2B006D7FDD1",
+      "itemIndex" : 2,
+      "itemType" : "Text",
+      "lastUpdate" : 1552562209464,
+      "name" : "BRAKE PRESSURE",
+      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
+      "result" : ""
+    },
+    "B7BF550F-F654-48F6-92EE-38BD2742305B" : {
       "attributes" : "verified",
       "checklistId" : "28FA3EF8-1B8A-4EA8-BB17-4256B7779277",
       "description" : "FLIGHT ATTENDANTS",
@@ -48,27 +144,27 @@
       "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
       "result" : ""
     },
-    "E9ADA8BA-9E2E-46A1-A78B-ADC965167EF6" : {
-      "attributes" : "ANNOUNCED",
-      "checklistId" : "28FA3EF8-1B8A-4EA8-BB17-4256B7779277",
-      "description" : "PREPARE FOR TAKEOFF.",
-      "id" : "E9ADA8BA-9E2E-46A1-A78B-ADC965167EF6",
-      "itemIndex" : 2,
+    "B86B8B69-EDB8-4AD2-AC7D-FBE246C6A9C7" : {
+      "attributes" : "ON;OFF",
+      "checklistId" : "C9353637-B89B-4557-BB0C-58E713B86453",
+      "description" : "INTEGRAL LIGHTS",
+      "id" : "B86B8B69-EDB8-4AD2-AC7D-FBE246C6A9C7",
+      "itemIndex" : 1,
       "itemType" : "Text",
-      "lastUpdate" : 1552562693508,
-      "name" : "PREPARE FOR TAKEOFF.",
+      "lastUpdate" : 1552566881271,
+      "name" : "INTEGRAL LIGHTS",
       "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
       "result" : ""
     },
-    "F825DEB3-C77E-4B63-837A-F529C36994ED" : {
+    "C2D9EB46-0B4D-4026-A699-91453F4F35DF" : {
       "attributes" : "ON;OFF",
-      "checklistId" : "28FA3EF8-1B8A-4EA8-BB17-4256B7779277",
-      "description" : "TAXI OFF, STROBE ON, LANDING",
-      "id" : "F825DEB3-C77E-4B63-837A-F529C36994ED",
-      "itemIndex" : 3,
+      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
+      "description" : "WINDSHIELD WIPERS",
+      "id" : "C2D9EB46-0B4D-4026-A699-91453F4F35DF",
+      "itemIndex" : 5,
       "itemType" : "Text",
-      "lastUpdate" : 1552562731208,
-      "name" : "EXTERIOR LIGHTS",
+      "lastUpdate" : 1552561333933,
+      "name" : "WINDSHIELD WIPERS",
       "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
       "result" : ""
     },
@@ -108,51 +204,15 @@
       "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
       "result" : ""
     },
-    "62149316-0197-4B05-968E-5D69720DE693" : {
-      "attributes" : "DOWN,up",
-      "checklistId" : "4533DB99-7262-4201-BA52-5EC8F0B14863",
-      "description" : "GEAR LEVER",
-      "id" : "62149316-0197-4B05-968E-5D69720DE693",
+    "E9ADA8BA-9E2E-46A1-A78B-ADC965167EF6" : {
+      "attributes" : "ANNOUNCED",
+      "checklistId" : "28FA3EF8-1B8A-4EA8-BB17-4256B7779277",
+      "description" : "PREPARE FOR TAKEOFF.",
+      "id" : "E9ADA8BA-9E2E-46A1-A78B-ADC965167EF6",
       "itemIndex" : 2,
       "itemType" : "Text",
-      "lastUpdate" : 1552562857893,
-      "name" : "GEAR LEVER",
-      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
-      "result" : ""
-    },
-    "66B17DF9-77B9-4B57-BFE2-1DAC44F4B9D9" : {
-      "attributes" : "verified",
-      "checklistId" : "4533DB99-7262-4201-BA52-5EC8F0B14863",
-      "description" : "FLIGHT ATTENDANTS…",
-      "id" : "66B17DF9-77B9-4B57-BFE2-1DAC44F4B9D9",
-      "itemIndex" : 1,
-      "itemType" : "Text",
-      "lastUpdate" : 1552562839936,
-      "name" : "FLIGHT ATTENDANTS",
-      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
-      "result" : ""
-    },
-    "92861D3E-35E7-489F-8F8E-3E0CF09A4EA0" : {
-      "attributes" : "CHECKED",
-      "checklistId" : "6A4FB837-41A3-4BB3-BF46-58B42FC0F1D4",
-      "description" : "EMERGENCY EQUIPMENT",
-      "id" : "92861D3E-35E7-489F-8F8E-3E0CF09A4EA0",
-      "itemIndex" : 1,
-      "itemType" : "Text",
-      "lastUpdate" : 1552561937270,
-      "name" : "EMERGENCY EQUIPMENT",
-      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
-      "result" : ""
-    },
-    "9D9FC6E9-EC44-42E3-9951-E7279CF4169B" : {
-      "attributes" : "CHECKED",
-      "checklistId" : "6A4FB837-41A3-4BB3-BF46-58B42FC0F1D4",
-      "description" : "FIRE PROTECTION…",
-      "id" : "9D9FC6E9-EC44-42E3-9951-E7279CF4169B",
-      "itemIndex" : 2,
-      "itemType" : "Text",
-      "lastUpdate" : 1552561965550,
-      "name" : "FIRE PROTECTION",
+      "lastUpdate" : 1552562693508,
+      "name" : "PREPARE FOR TAKEOFF.",
       "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
       "result" : ""
     },
@@ -168,75 +228,15 @@
       "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
       "result" : ""
     },
-    "173A5C07-41FC-4088-AF97-AAAC1DDCAD7A" : {
+    "F825DEB3-C77E-4B63-837A-F529C36994ED" : {
       "attributes" : "ON;OFF",
-      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
-      "description" : "HYDRAULIC DEMAND PUMPS",
-      "id" : "173A5C07-41FC-4088-AF97-AAAC1DDCAD7A",
-      "itemIndex" : 4,
-      "itemType" : "Text",
-      "lastUpdate" : 1552561278649,
-      "name" : "HYDRAULIC DEMAND PUMPS",
-      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
-      "result" : ""
-    },
-    "27E7B38B-27DB-4FE4-8CDB-19A829435EE6" : {
-      "attributes" : "CHECKED",
-      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
-      "description" : "Check CIRCUIT BREAKERS",
-      "id" : "27E7B38B-27DB-4FE4-8CDB-19A829435EE6",
-      "itemIndex" : 1,
-      "itemType" : "Text",
-      "lastUpdate" : 1552561294981,
-      "name" : "CIRCUIT BREAKERS",
-      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
-      "result" : ""
-    },
-    "296FA97F-2288-4322-8864-A31F256349F5" : {
-      "attributes" : "automatic,MANUAL",
-      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
-      "description" : "STANDBY POWER",
-      "id" : "296FA97F-2288-4322-8864-A31F256349F5",
+      "checklistId" : "28FA3EF8-1B8A-4EA8-BB17-4256B7779277",
+      "description" : "TAXI OFF, STROBE ON, LANDING",
+      "id" : "F825DEB3-C77E-4B63-837A-F529C36994ED",
       "itemIndex" : 3,
       "itemType" : "Text",
-      "lastUpdate" : 1552561312561,
-      "name" : "STANDBY POWER",
-      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
-      "result" : ""
-    },
-    "A186509D-F3C3-4D76-B1BE-F8689894A5B9" : {
-      "attributes" : "ON;OFF",
-      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
-      "description" : "BATTERY",
-      "id" : "A186509D-F3C3-4D76-B1BE-F8689894A5B9",
-      "itemIndex" : 2,
-      "itemType" : "Text",
-      "lastUpdate" : 1552561302950,
-      "name" : "BATTERY",
-      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
-      "result" : ""
-    },
-    "C2D9EB46-0B4D-4026-A699-91453F4F35DF" : {
-      "attributes" : "ON;OFF",
-      "checklistId" : "A8411F4A-8121-4FBD-B17A-A7038C113A28",
-      "description" : "WINDSHIELD WIPERS",
-      "id" : "C2D9EB46-0B4D-4026-A699-91453F4F35DF",
-      "itemIndex" : 5,
-      "itemType" : "Text",
-      "lastUpdate" : 1552561333933,
-      "name" : "WINDSHIELD WIPERS",
-      "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
-      "result" : ""
-    },
-    "B86B8B69-EDB8-4AD2-AC7D-FBE246C6A9C7" : {
-      "attributes" : "ON;OFF",
-      "checklistId" : "C9353637-B89B-4557-BB0C-58E713B86453",
-      "description" : "INTEGRAL LIGHTS",
-      "id" : "B86B8B69-EDB8-4AD2-AC7D-FBE246C6A9C7",
-      "itemIndex" : 1,
-      "itemType" : "Text",
-      "lastUpdate" : 1552566881271,
-      "name" : "INTEGRAL LIGHTS",
+      "lastUpdate" : 1552562731208,
+      "name" : "EXTERIOR LIGHTS",
       "owner" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
       "result" : ""
     },
@@ -262,9 +262,9 @@
       "name" : "Gear down",
       "url" : ""
     }
-},
+  },
   "Checklists" : {
-          "28FA3EF8-1B8A-4EA8-BB17-4256B7779277" : {
+    "28FA3EF8-1B8A-4EA8-BB17-4256B7779277" : {
       "checklistType" : "Template",
       "description" : "BEFORE TAKEOFF CHECK [TO]",
       "groupId" : "B843C09D-CB52-4C1E-9AD5-5E5DBE5EEA37",
@@ -393,17 +393,10 @@
   },
   "Users" : {
     "Hl2BUNTr6BepUKtW90lh6ssK7Iw2" : {
-      "email" : "angular1@gmail.com",
-      "firstName" : "Angular1",
+      "email" : "pilot1@airbus.com",
+      "firstName" : "Pilot1",
       "id" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
-      "lastName" : "Ang1",
-      "password" : 123456
-    },
-    "Hl2BUNTr6BepUKtW90lh6ssK7Iw2" : {
-      "email" : "Angular5@gmail.com",
-      "firstName" : "Angular5",
-      "id" : "Hl2BUNTr6BepUKtW90lh6ssK7Iw2",
-      "lastName" : "Ang5",
+      "lastName" : "Airbus",
       "password" : "123456"
     }
   }
