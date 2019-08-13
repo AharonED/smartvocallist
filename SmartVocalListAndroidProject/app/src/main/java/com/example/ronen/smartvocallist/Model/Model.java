@@ -53,7 +53,7 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
         return ItemsLsnr;
     }
 
-    public void deleteItem(T chk){
+    public void deleteItem(ItemsLsnr<T> lsnr, T chk){
         DatabaseReference myRef = rep.database.getReference("/" + getTableName());
         try {
             String key = chk.id;
