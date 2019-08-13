@@ -2,7 +2,6 @@ package com.example.ronen.smartvocallist.Controller;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AppComponentFactory;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -292,7 +291,7 @@ public class AddListActivity extends AppCompatActivity {
             //stb.append("\n");
             //twitems.setText(stb);
             result.setChecklistId(model.getCurrentChecklist().getId());
-            result.setOwner(Model.getOwnerID());
+            result.setOwner(Model.getOwnerName());
             model.getCurrentChecklist().checklistItems.add(result);
         } else if (requestCode == model.GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
