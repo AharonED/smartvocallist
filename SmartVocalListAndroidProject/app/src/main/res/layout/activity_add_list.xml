@@ -16,9 +16,10 @@
             android:layout_width="323dp"
             android:layout_height="279dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="360dp"
+            android:layout_marginTop="344dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:gravity="top"
             android:orientation="horizontal"
             android:overScrollMode="always"
             android:scrollbarAlwaysDrawHorizontalTrack="true"
@@ -26,12 +27,11 @@
             android:scrollbarStyle="insideInset"
             android:scrollbars="horizontal|vertical"
             android:verticalScrollbarPosition="left"
-            app:layout_constraintBottom_toBottomOf="@+id/save_progressBar"
+            app:layout_constraintBottom_toTopOf="@+id/fab2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.111"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
@@ -182,13 +182,14 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:layoutDirection="locale"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
