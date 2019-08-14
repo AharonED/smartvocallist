@@ -40,9 +40,7 @@ public class LoginActivity extends AppCompatActivity {
             ModelChecklists model = ModelChecklists.getInstance();
             model.setOwnerID(viewModel.getFirebaseAuth().getCurrentUser().getUid());
             model.setOwnerName(viewModel.getFirebaseAuth().getCurrentUser().getEmail());
-
-            startActivity(new Intent(LoginActivity.this, CheckListsActivity.class));
-            finish();
+            startActivity(new Intent(getApplicationContext(), CheckListsActivity.class));
         }
 
         inputEmail = (EditText) findViewById(R.id.email);

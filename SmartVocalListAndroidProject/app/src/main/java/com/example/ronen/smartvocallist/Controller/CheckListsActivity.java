@@ -1,8 +1,11 @@
 package com.example.ronen.smartvocallist.Controller;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -15,12 +18,11 @@ import com.example.ronen.smartvocallist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 import static android.content.ContentValues.TAG;
 
 public class CheckListsActivity extends AppCompatActivity {
-
-    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +54,18 @@ public class CheckListsActivity extends AppCompatActivity {
             Log.d(TAG, "Value is: " + ex.getMessage());
         }
 
-        navController = Navigation.findNavController(this, R.id.main_navigation);
+        NavController navController = Navigation.findNavController(this, R.id.main_navigation);
         BottomNavigationView nav = findViewById(R.id.main_bottonNavigation);
         NavigationUI.setupWithNavController(nav, navController);
 
+        TextView logoutTextView = findViewById(R.id.logout_btn);
+        logoutTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            }
+        });
     }
 
 }
