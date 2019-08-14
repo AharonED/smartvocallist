@@ -105,45 +105,7 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
 
     public Model()
     {
-        /*
-        AppLocalDbRepository localDataBase = SqlDataBase.db;
 
-        //List<TablesLastSync> tbls = localDataBase.tablesLastSyncDao().getAll();
-
-        LocalGetTablesLastSync local = new LocalGetTablesLastSync(new ItemsLsnr<TablesLastSync>() {
-            @Override
-            public void OnDataChangeItemsLsnr(ArrayList<TablesLastSync> items) {
-                ArrayList<TablesLastSync> tbls = items;
-
-                Double tmpLastUpdated=0.0;
-
-                for(int i=0; i<tbls.size();i++)
-                {
-                    if(tbls.get(i).tableName == tableName) {
-                        tmpLastUpdated= tbls.get(i).getLastUpdate();
-                    }
-                }
-                if(tmpLastUpdated==0.0) {
-
-                    TablesLastSync tbl = new TablesLastSync(java.util.UUID.randomUUID().toString());
-                    tbl.setTableName(tableName);
-
-                    Date currentTime = Calendar.getInstance().getTime();
-                    Long time = currentTime.getTime();
-                    Double tmp = time.doubleValue();
-                    tbl.setLastUpdate(tmp);
-
-                    //localDataBase.tablesLastSyncDao().insertAll(tbl);
-                    tbls.add(tbl);
-                    AddTablesLastSyncsAsyncTask task = new AddTablesLastSyncsAsyncTask(localDataBase.tablesLastSyncDao());
-                    task.execute(tbls.toArray(new TablesLastSync[tbls.size()]));
-                }
-
-
-            }
-        });
-        local.execute();
-        */
        }
 
     public void addItem(T chk)
@@ -152,10 +114,6 @@ public  abstract class Model <T extends BaseModelObject> implements IModel, Seri
             chk.id = java.util.UUID.randomUUID().toString();
         }
 
-        //HashMap<String, Object> timestampCreated = new HashMap<>();
-        //timestampCreated.put("timestamp", ServerValue.TIMESTAMP);
-
-        //////chk.lastUpdate =  (double)timestampCreated.get("timestamp");
 
         DatabaseReference myRef = rep.database.getReference("/" + getTableName());
 
