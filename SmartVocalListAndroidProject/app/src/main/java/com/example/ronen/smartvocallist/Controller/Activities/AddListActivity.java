@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+
+import static android.widget.Toast.makeText;
 
 
 public class AddListActivity extends AppCompatActivity {
@@ -133,6 +136,16 @@ public class AddListActivity extends AppCompatActivity {
                 TextView twDescripton = (TextView)findViewById(R.id.description);
 
                 String ListName = twName.getText().toString();
+
+                if(ListName.length() == 0){
+                    makeText(getApplicationContext(), "Please enter list name", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(model.Items_count == 0){
+                    makeText(getApplicationContext(), "Please enter items", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 ProgressBar savingProgressBar = findViewById(R.id.save_progressBar);
                 savingProgressBar.setVisibility(View.VISIBLE);

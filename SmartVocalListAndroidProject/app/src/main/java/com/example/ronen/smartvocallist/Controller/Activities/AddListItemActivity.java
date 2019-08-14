@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -34,6 +35,8 @@ import java.util.HashSet;
 
 import java.util.Date;
 import java.util.Set;
+
+import static android.widget.Toast.makeText;
 
 
 //import edu.cmu.sphinx.pocketsphinx.R;
@@ -187,6 +190,17 @@ public class AddListItemActivity extends AppCompatActivity {
                 CheckBox isRequired = (CheckBox)findViewById(R.id.Required);
 
                 String name = twname.getText().toString();
+
+                if(twname.length() == 0){
+                    makeText(getApplicationContext(), "Please enter item name", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(model.all_Props.length() == 0){
+                    makeText(getApplicationContext(), "Please enter attributes", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Date currentTime = Calendar.getInstance().getTime();
                 Long time = currentTime.getTime();
                 Double tmp = time.doubleValue();
