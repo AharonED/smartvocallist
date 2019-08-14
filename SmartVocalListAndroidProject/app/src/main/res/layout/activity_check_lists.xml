@@ -7,6 +7,7 @@
     tools:context=".Controller.CheckListsActivity">
 
     <TextView
+        android:id="@+id/ApplicationTitle_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Smart Vocal List"
@@ -25,11 +26,15 @@
         android:id="@+id/logout_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:background="@null"
         android:text="LogOut"
         android:textAllCaps="false"
         android:textColor="@color/btn_login_register"
         android:textSize="12sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logout_btn"
+        app:layout_constraintTop_toBottomOf="@+id/ApplicationTitle_tv"
         app:layout_constraintVertical_bias="0.0"
         app:navGraph="@navigation/navigation_graph" />
 
