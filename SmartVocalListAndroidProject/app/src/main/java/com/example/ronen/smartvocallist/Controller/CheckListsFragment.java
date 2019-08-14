@@ -106,7 +106,7 @@ public class CheckListsFragment extends Fragment {
         formatedDate = dfm.format(d).toString();
 
         newChk.setLastUpdate((double)d.getTime());
-        newChk.setDescription("Reported at: " + formatedDate + " By:" + modelView.GetModel().getOwnerName());
+        newChk.setDescription("Reported at: " + formatedDate);
         newChk.setOwner(modelView.GetModel().getOwnerName());
         modelView.GetModel().addItem(newChk);
         Intent myIntent = new Intent(getContext(), PocketSphinxActivity.class);

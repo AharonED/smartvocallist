@@ -63,6 +63,7 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
         TextView mTitle;
         TextView mSubTitle;
         ProgressBar mImageProgressBar;
+        TextView mCreatedByMe;
 
         public ChecklistViewHolder(@NonNull View itemView, final CheckListsReportedAdapter.OnItemClickedListener listener) {
             super(itemView);
@@ -71,6 +72,7 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
             mSubTitle = itemView.findViewById(R.id.subTitle_tv);
             mImageProgressBar = itemView.findViewById(R.id.image_progressBar);
             mImageProgressBar.setVisibility(View.INVISIBLE);
+            mCreatedByMe = itemView.findViewById(R.id.createdBy_tv);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -90,11 +92,14 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
             mTitle.setText(checkList.getName());
             mSubTitle.setText(checkList.getDescription());
             setCheckListImage(checkList);
+            mCreatedByMe.setText("By: " + checkList.getOwner());
 
-            // *** Disabled delete of reports ***
-            // Only owner can edit and delete checklist
-            //if(ModelChecklists.getInstance().getOwnerName().equals(checkList.getOwner()))
+            if(ModelChecklists.getInstance().getOwnerName().equals(checkList.getOwner())){
+                // *** Disabled delete of reports ***
+                // Only owner can edit and delete checklist
                 //itemView.setOnCreateContextMenuListener(this);
+                mCreatedByMe.setText("By: You");
+            }
         }
 
         private void setCheckListImage(Checklist checkList) {

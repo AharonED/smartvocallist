@@ -11,14 +11,13 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:background="@android:color/darker_gray"
         android:maxWidth="100dp"
         android:maxHeight="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createdBy_tv"
         tools:src="@drawable/default_icon" />
 
     <TextView
@@ -26,7 +25,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:textColor="@android:color/black"
         android:textSize="24sp"
@@ -34,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/image_iv"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createdBy_tv"
         tools:text="Ronen - Check List Name" />
 
     <TextView
@@ -42,7 +40,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="Description"
         android:textColor="@android:color/black"
@@ -65,4 +62,20 @@
         app:layout_constraintEnd_toEndOf="@+id/image_iv"
         app:layout_constraintStart_toStartOf="@+id/image_iv"
         app:layout_constraintTop_toTopOf="@+id/image_iv" />
+
+    <TextView
+        android:id="@+id/createdBy_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="By: Ronen"
+        android:textAlignment="viewStart"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
