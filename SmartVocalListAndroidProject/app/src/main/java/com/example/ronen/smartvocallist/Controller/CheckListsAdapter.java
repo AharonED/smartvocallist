@@ -96,7 +96,7 @@ public class CheckListsAdapter extends RecyclerView.Adapter<CheckListsAdapter.Ch
             if(ModelChecklists.getInstance().getOwnerName().equals(checkList.getOwner())){
                 // Only owner can edit and delete checklist
                 itemView.setOnCreateContextMenuListener(this);
-                mCreatedByMe.setText("By: You");
+                mCreatedByMe.setText("By: Me");
             }
         }
 

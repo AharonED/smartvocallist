@@ -98,7 +98,7 @@ public class CheckListsReportedAdapter  extends RecyclerView.Adapter<CheckListsR
                 // *** Disabled delete of reports ***
                 // Only owner can edit and delete checklist
                 //itemView.setOnCreateContextMenuListener(this);
-                mCreatedByMe.setText("By: You");
+                mCreatedByMe.setText("By: Me");
             }
         }
 

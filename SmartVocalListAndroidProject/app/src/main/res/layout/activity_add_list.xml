@@ -7,60 +7,54 @@
     android:layout_height="match_parent"
     tools:context=".Controller.Activities.AddListActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".Controller.Activities.AddListActivity">
-
-        <LinearLayout
-            android:id="@+id/llItem"
-            android:layout_width="323dp"
-            android:layout_height="279dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="344dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:gravity="top"
-            android:orientation="horizontal"
-            android:overScrollMode="always"
-            android:scrollbarAlwaysDrawHorizontalTrack="true"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarStyle="insideInset"
-            android:scrollbars="horizontal|vertical"
-            android:verticalScrollbarPosition="left"
-            app:layout_constraintBottom_toTopOf="@+id/fab2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.111"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <ImageView
-            android:id="@+id/listImage"
-            android:layout_width="0dp"
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:src="@android:drawable/sym_def_app_icon"
-            app:layout_constraintBottom_toTopOf="@+id/description"
+            app:layout_constraintBottom_toTopOf="@+id/fab"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/List_Name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/items">
+
+            <LinearLayout
+                android:id="@+id/llItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:orientation="horizontal"
+                android:overScrollMode="always"
+                android:scrollbarAlwaysDrawHorizontalTrack="true"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:verticalScrollbarPosition="left" />
+        </ScrollView>
+
+
+        <ImageView
+            android:id="@+id/listImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@android:drawable/sym_def_app_icon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <ProgressBar
             android:id="@+id/image_progressBar"
             style="?android:attr/progressBarStyle"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/listImage"
             app:layout_constraintEnd_toEndOf="@+id/listImage"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/listImage"
-            app:layout_constraintTop_toTopOf="@+id/listImage"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/listImage" />
 
         <TextView
             android:id="@+id/textView3"
@@ -86,14 +80,16 @@
         <EditText
             android:id="@+id/List_Name"
             style="@style/Widget.AppCompat.EditText"
-            android:layout_width="204dp"
-            android:layout_height="59dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:hint="List Name"
             android:selectAllOnFocus="false"
             android:singleLine="false"
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toTopOf="@+id/description"
+            app:layout_constraintEnd_toStartOf="@+id/listImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -102,18 +98,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
             android:hint="Description"
             android:inputType="textMultiLine"
             android:textColor="@android:color/black"
-            app:layout_constraintBottom_toTopOf="@+id/items"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/List_Name" />
+            app:layout_constraintTop_toBottomOf="@+id/listImage" />
 
         <TextView
             android:id="@+id/items"
@@ -122,8 +114,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:text="items"
+            android:text="Items"
             android:textColor="@android:color/black"
+            android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -135,38 +128,33 @@
         <ImageButton
             android:id="@+id/addnewitem"
             style="@android:style/Widget.Material.Light.ImageButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="65dp"
             android:layout_marginStart="340dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="#009688"
             android:src="@android:drawable/ic_input_add"
+            app:layout_constraintBottom_toBottomOf="@+id/items"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/items"
             tools:targetApi="lollipop" />
 
         <Button
             android:id="@+id/fab"
-            android:layout_width="79dp"
-            android:layout_height="62dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="80dp"
+            android:layout_height="65dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:background="#029789"
             android:foreground="@android:drawable/ic_menu_save"
-            app:layout_constraintBottom_toBottomOf="@+id/fab2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.961"
-            app:layout_constraintStart_toEndOf="@+id/fab2"
-            app:layout_constraintTop_toTopOf="@+id/fab2"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/fab2"
-            android:layout_width="68dp"
-            android:layout_height="64dp"
+            android:layout_width="80dp"
+            android:layout_height="65dp"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
             android:background="#029789"
@@ -188,9 +176,5 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
