@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1054791255668",
+    "firebase_url": "https://smartvocallist1.firebaseio.com",
+    "project_id": "smartvocallist1",
+    "storage_bucket": "smartvocallist1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1054791255668:android:ea919a79e244b818",
+        "android_client_info": {
+          "package_name": "edu.cmu.sphinx.pocketsphinx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1054791255668-ivfeh9jvnqrmk1lsejk49i3l4asfcjna.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.cmu.sphinx.pocketsphinx",
+            "certificate_hash": "ee683d954d601f54ab3a5d7b14fc7a7fc2a456dd"
+          }
+        },
+        {
+          "client_id": "1054791255668-8rd2oke5m2n0750dvkmqpm26vmcf0q71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLM5yMcl9TJyKv-R0haMyUWLk2OiYgQ4I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1054791255668-8rd2oke5m2n0750dvkmqpm26vmcf0q71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
