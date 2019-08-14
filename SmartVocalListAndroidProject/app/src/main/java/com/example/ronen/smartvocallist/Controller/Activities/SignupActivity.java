@@ -1,4 +1,4 @@
-package com.example.ronen.smartvocallist.Controller;
+package com.example.ronen.smartvocallist.Controller.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;

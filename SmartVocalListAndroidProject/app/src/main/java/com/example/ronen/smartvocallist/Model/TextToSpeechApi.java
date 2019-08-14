@@ -1,6 +1,8 @@
-package com.example.ronen.smartvocallist.Controller;
+package com.example.ronen.smartvocallist.Model;
 
 import android.speech.tts.TextToSpeech;
+
+import com.example.ronen.smartvocallist.Controller.MyApplication;
 
 import java.util.HashMap;
 import java.util.Locale;

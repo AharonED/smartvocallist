@@ -1,4 +1,4 @@
-package com.example.ronen.smartvocallist.Controller;
+package com.example.ronen.smartvocallist.Controller.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;

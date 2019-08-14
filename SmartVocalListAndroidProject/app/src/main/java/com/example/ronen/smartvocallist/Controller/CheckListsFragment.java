@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ronen.smartvocallist.Controller.Activities.AddListActivity;
+import com.example.ronen.smartvocallist.Controller.Activities.PocketSphinxActivity;
 import com.example.ronen.smartvocallist.DataObjects.Checklist;
 import com.example.ronen.smartvocallist.R;
 import com.example.ronen.smartvocallist.ViewModel.ChecklistViewModel;
