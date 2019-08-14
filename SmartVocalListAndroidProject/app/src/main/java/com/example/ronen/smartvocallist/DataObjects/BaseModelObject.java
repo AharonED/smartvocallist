@@ -61,45 +61,7 @@ public class BaseModelObject implements Serializable {
 
     public BaseModelObject(String _id)
     {
-        /*
-        try {
-            JSONObject json = new JSONObject(
-                    "{\"id\":\"" + _id + "}"
-            );
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        */
 
-        /*
-        JSONObject jo = new JSONObject();
-        jo.put("name", "jon doe");
-        jo.put("age", "22");
-        jo.put("city", "chicago");
-         */
-
-        /*
-        DemoBean demo = new DemoBean();
-        demo.setId(1);
-        demo.setName("lorem ipsum");
-        demo.setActive(true);
-
-        JSONObject jo = new JSONObject(demo);
-         */
-
-        /*
-        JSONArray ja = new JSONArray();
-        ja.put(Boolean.TRUE);
-        ja.put("lorem ipsum");
-
-        JSONObject jo = new JSONObject();
-        jo.put("name", "jon doe");
-        jo.put("age", "22");
-        jo.put("city", "chicago");
-
-        ja.put(jo);
-
-         */
 
         JSONObject json=null;
 
@@ -130,7 +92,6 @@ public class BaseModelObject implements Serializable {
                // if (json.get("lastUpdate") instanceof Long)
                     lastUpdate =  Double.parseDouble(json.get("lastUpdate").toString());
 
-            //lastUpdate = (Double) json.get("lastUpdate");
 
             } catch (JSONException e) {
             e.printStackTrace();
@@ -138,7 +99,6 @@ public class BaseModelObject implements Serializable {
 
     }
 
-    //@SuppressWarnings({ "rawtypes", "unchecked" })
     public JSONObject toJson()  {
         JSONObject json = null;
         try {

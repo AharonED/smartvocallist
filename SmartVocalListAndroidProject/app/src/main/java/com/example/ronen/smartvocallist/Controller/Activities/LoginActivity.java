@@ -92,19 +92,6 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent;
                             progressBar.setVisibility(View.GONE);
 
-                            /*------login by email only temporary------*/
-                            /*
-                            ModelChecklists model = ModelChecklists.getInstance();
-                            model.setOwnerID("-1");
-                            model.setOwnerName(email);
-
-                            intent = new Intent(LoginActivity.this, CheckListsActivity.class);
-                            startActivity(intent);
-                            finish();
-                            */
-                            /*----------------------------*/
-
-
                             // If sign in fails, display a message to the user. If sign in succeeds
                             // the auth state listener will be notified and logic to handle the
                             // signed in user can be handled in the listener.
